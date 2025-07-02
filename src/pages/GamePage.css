@@ -1,0 +1,245 @@
+.game-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  padding: 20px;
+}
+
+.game-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.game-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-info {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.preparation-screen {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.preparation-screen h3 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.preparation-screen p {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+.game-text-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.game-text {
+  color: white;
+  font-size: 48px;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: pulse 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.8; }
+  to { opacity: 1; }
+}
+
+.game-field {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 0 auto;
+  max-width: 1000px;
+  position: relative;
+  min-height: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.race-track {
+  position: relative;
+  height: 300px;
+  background: linear-gradient(to right, #e8f5e8 0%, #fff3cd 100%);
+  border-radius: 15px;
+  border: 3px solid #28a745;
+  overflow: hidden;
+}
+
+.race-track::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: repeating-linear-gradient(
+    to right,
+    #dc3545 0px,
+    #dc3545 20px,
+    transparent 20px,
+    transparent 40px
+  );
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.player {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.player:nth-child(1) { top: 20px; }
+.player:nth-child(2) { top: 60px; }
+.player:nth-child(3) { top: 100px; }
+.player:nth-child(4) { top: 140px; }
+.player:nth-child(5) { top: 180px; }
+.player:nth-child(6) { top: 220px; }
+.player:nth-child(7) { top: 20px; }
+.player:nth-child(8) { top: 60px; }
+.player:nth-child(9) { top: 100px; }
+.player:nth-child(10) { top: 140px; }
+
+.player.eliminated {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+.player-name {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.finish-line {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 48px;
+  z-index: 3;
+}
+
+.tagger {
+  position: absolute;
+  bottom: -60px;
+  right: 50px;
+  font-size: 48px;
+  transform-style: preserve-3d;
+  z-index: 3;
+}
+
+.game-finished {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.game-finished h3 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.game-finished p {
+  color: #666;
+  font-size: 16px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .game-header h2 {
+    font-size: 24px;
+  }
+  
+  .game-info {
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16px;
+  }
+  
+  .game-text {
+    font-size: 32px;
+    padding: 0 20px;
+  }
+  
+  .game-field {
+    padding: 20px;
+  }
+  
+  .race-track {
+    height: 250px;
+  }
+  
+  .player {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .player-name {
+    font-size: 10px;
+    top: -25px;
+  }
+  
+  .finish-line {
+    font-size: 36px;
+  }
+  
+  .tagger {
+    font-size: 36px;
+    right: 30px;
+  }
+}

@@ -1,13 +1,60 @@
-body {
+/* 기본 브라우저 스타일 리셋 */
+html, body, #root {
+  height: 100%;
   margin: 0;
+  padding: 0;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #f8f9fa;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* 모바일 기본 설정 */
+html {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* 모바일에서 확대/축소 방지 */
+@viewport {
+  width: device-width;
+  zoom: 1.0;
+}
+
+/* 터치 디바이스 최적화 */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* 텍스트 입력 요소는 선택 가능하게 */
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* 성능 최적화 */
+* {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
