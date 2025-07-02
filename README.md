@@ -1,6 +1,7 @@
 # 🏃‍♂️ 무궁화 꽃이 피었습니다 - 등수 추첨 웹서비스
 
 React + TypeScript로 개발된 무궁화 꽃이 피었습니다 게임을 모티브로 한 등수 추첨 웹서비스입니다.
+mugunghwarun.netlify.app
 
 ## 🎯 프로젝트 개요
 
