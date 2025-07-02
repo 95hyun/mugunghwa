@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Player, GameState } from '../types/game';
 import Button from '../components/common/Button';
@@ -9,7 +9,6 @@ const GamePage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // ESLint 경고 해결: playerNames를 useMemo로 메모이제이션
   const playerNames = useMemo(() => 
     location.state?.playerNames || [], 
     [location.state?.playerNames]
@@ -24,7 +23,19 @@ const GamePage: React.FC = () => {
     totalRounds: 0
   });
 
-  const [showText, setShowText] = useState(false);
+  // 무궁화 꽃이 피었습니다 음절 상태
+  const syllables = ['무', '궁', '화', '꽃', '이', '피', '었', '습', '니', '다'];
+  const [currentSyllableIndex, setCurrentSyllableIndex] = useState(-1);
+  const [isShowingSyllables, setIsShowingSyllables] = useState(false);
+  const [playersMoving, setPlayersMoving] = useState<Set<string>>(new Set());
+  const [syllableSpeed, setSyllableSpeed] = useState<'normal' | 'fast' | 'slow'>('normal');
+  const [finishedOrder, setFinishedOrder] = useState<string[]>([]); // 골인 순서만 저장
+  
+  // Interval 및 Timeout 관리를 위한 ref
+  const moveIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const taggerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const nextRoundTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const syllableTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
 
   useEffect(() => {
     if (playerNames.length === 0) {
@@ -51,38 +62,163 @@ const GamePage: React.FC = () => {
     }));
   }, [playerNames, navigate]);
 
+  // 컴포넌트 언마운트 시 모든 timer 정리
+  useEffect(() => {
+    return () => {
+      if (moveIntervalRef.current) {
+        clearInterval(moveIntervalRef.current);
+        moveIntervalRef.current = null;
+      }
+      if (taggerTimeoutRef.current) {
+        clearTimeout(taggerTimeoutRef.current);
+        taggerTimeoutRef.current = null;
+      }
+      if (nextRoundTimeoutRef.current) {
+        clearTimeout(nextRoundTimeoutRef.current);
+        nextRoundTimeoutRef.current = null;
+      }
+      syllableTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      syllableTimeoutsRef.current = [];
+    };
+  }, []);
+
+  const clearAllTimers = () => {
+    // 모든 timer와 interval 정리
+    if (moveIntervalRef.current) {
+      clearInterval(moveIntervalRef.current);
+      moveIntervalRef.current = null;
+    }
+    if (taggerTimeoutRef.current) {
+      clearTimeout(taggerTimeoutRef.current);
+      taggerTimeoutRef.current = null;
+    }
+    if (nextRoundTimeoutRef.current) {
+      clearTimeout(nextRoundTimeoutRef.current);
+      nextRoundTimeoutRef.current = null;
+    }
+    syllableTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    syllableTimeoutsRef.current = [];
+  };
+
   const startGame = () => {
+    // 모든 기존 timer 정리
+    clearAllTimers();
+    
+    setFinishedOrder([]); // 골인 순서 초기화
+    setPlayersMoving(new Set()); // 움직이는 플레이어 초기화
     setGameState(prev => ({
       ...prev,
-      gamePhase: 'playing',
-      currentRound: 1
+      gamePhase: 'playing'
     }));
     startRound();
   };
 
   const startRound = () => {
-    setShowText(true);
+    setGameState(prev => ({ ...prev, isItLooking: false }));
     
-    // "무궁화 꽃이 피었습니다" 텍스트를 2초간 보여줌
     setTimeout(() => {
-      setShowText(false);
+      startSyllableSequence();
+    }, 500);
+  };
+
+  const startSyllableSequence = () => {
+    // 기존 timers 정리
+    if (moveIntervalRef.current) {
+      clearInterval(moveIntervalRef.current);
+      moveIntervalRef.current = null;
+    }
+    syllableTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    syllableTimeoutsRef.current = [];
+    
+    setIsShowingSyllables(true);
+    setCurrentSyllableIndex(0);
+    
+    // 새로운 interval 시작
+    moveIntervalRef.current = setInterval(() => {
       movePlayersRandomly();
-    }, 2000);
+    }, 300);
+    
+    const showNextSyllable = (index: number) => {
+      if (index >= syllables.length) {
+        // 모든 음절 완료 - interval 정리
+        if (moveIntervalRef.current) {
+          clearInterval(moveIntervalRef.current);
+          moveIntervalRef.current = null;
+        }
+        
+        setIsShowingSyllables(false);
+        setCurrentSyllableIndex(-1);
+        
+        // 술래가 돌아보기
+        const timeout = setTimeout(() => {
+          taggerTurnsAround();
+        }, 300);
+        syllableTimeoutsRef.current.push(timeout);
+        return;
+      }
+
+      setCurrentSyllableIndex(index);
+      
+      let nextDelay;
+      let speedClass: 'normal' | 'fast' | 'slow' = 'normal';
+      const randomPattern = Math.random();
+      
+      if (randomPattern < 0.25) {
+        nextDelay = Math.random() * 130 + 50;
+        speedClass = 'fast';
+      } else if (randomPattern < 0.4) {
+        nextDelay = Math.random() * 170 + 180;
+        speedClass = 'fast';
+      } else if (randomPattern < 0.6) {
+        nextDelay = Math.random() * 250 + 350;
+        speedClass = 'normal';
+      } else if (randomPattern < 0.8) {
+        nextDelay = Math.random() * 400 + 800;
+        speedClass = 'slow';
+      } else {
+        nextDelay = Math.random() * 600 + 1200;
+        speedClass = 'slow';
+      }
+      
+      if (index > 0) {
+        if (randomPattern < 0.1) {
+          if (nextDelay > 600) {
+            nextDelay = Math.random() * 120 + 50;
+            speedClass = 'fast';
+          } else if (nextDelay < 400) {
+            nextDelay = Math.random() * 400 + 800;
+            speedClass = 'slow';
+          }
+        }
+      }
+      
+      setSyllableSpeed(speedClass);
+      
+      // 다음 음절로 진행
+      const timeout = setTimeout(() => showNextSyllable(index + 1), nextDelay);
+      syllableTimeoutsRef.current.push(timeout);
+    };
+
+    showNextSyllable(0);
   };
 
   const movePlayersRandomly = () => {
     setGameState(prev => {
       const newPlayers = prev.players.map(player => {
-        if (player.isEliminated) return player;
+        if (player.isEliminated || player.position >= 200) return player;
         
-        // 30% 확률로 10-30만큼 전진
-        const shouldMove = Math.random() < 0.3;
-        const moveDistance = shouldMove ? Math.random() * 20 + 10 : 0;
+        const shouldMove = Math.random() < 0.4;
+        if (shouldMove) {
+          const moveDistance = Math.random() * 3 + 2;
+          const newPosition = Math.min(200, player.position + moveDistance);
+          
+          return {
+            ...player,
+            position: newPosition
+          };
+        }
         
-        return {
-          ...player,
-          position: Math.min(100, player.position + moveDistance)
-        };
+        return player;
       });
       
       return {
@@ -90,134 +226,219 @@ const GamePage: React.FC = () => {
         players: newPlayers
       };
     });
-
-    // 1.5초 후 술래가 돌아봄
-    setTimeout(() => {
-      lookBack();
-    }, 1500);
-  };
-
-  const lookBack = () => {
-    setGameState(prev => ({ ...prev, isItLooking: true }));
     
-    // 0.5초 후 탈락자 선정
+    // 골인 체크를 별도로 처리 (상태 업데이트 중첩 방지)
     setTimeout(() => {
-      eliminateRandomPlayers();
-    }, 500);
+      setGameState(current => {
+        // 새로 골인한 플레이어들 체크
+        current.players.forEach(player => {
+          if (player.position >= 200) {
+            setFinishedOrder(currentOrder => {
+              if (!currentOrder.includes(player.id)) {
+                console.log(`${player.name}이 ${currentOrder.length + 1}등으로 골인!`);
+                return [...currentOrder, player.id];
+              }
+              return currentOrder;
+            });
+          }
+        });
+        return current;
+      });
+    }, 0);
   };
 
-  const eliminateRandomPlayers = () => {
+  const taggerTurnsAround = () => {
+    // 기존 tagger timeout 정리
+    if (taggerTimeoutRef.current) {
+      clearTimeout(taggerTimeoutRef.current);
+      taggerTimeoutRef.current = null;
+    }
+    
     setGameState(prev => {
-      const activePlayers = prev.players.filter(p => !p.isEliminated);
+      const stillMovingPlayers = new Set<string>();
       
-      if (activePlayers.length <= 1) {
-        return finishGame(prev);
-      }
-
-      // 1-2명 랜덤 탈락
-      const eliminateCount = Math.min(
-        Math.floor(Math.random() * 2) + 1,
-        activePlayers.length - 1
-      );
-      
-      // TypeScript 타입 에러 해결: Player[] 타입 명시
-      const playersToEliminate: Player[] = [];
-      for (let i = 0; i < eliminateCount; i++) {
-        const randomIndex = Math.floor(Math.random() * activePlayers.length);
-        if (!playersToEliminate.includes(activePlayers[randomIndex])) {
-          playersToEliminate.push(activePlayers[randomIndex]);
+      // 탈락하지 않고, 골인하지 않은 플레이어만 움직임 감지
+      prev.players.forEach(player => {
+        if (!player.isEliminated && player.position < 200 && Math.random() < 0.15) {
+          stillMovingPlayers.add(player.id);
         }
-      }
+      });
+      
+      setPlayersMoving(stillMovingPlayers);
+      
+      // 1.5초 후 탈락자 처리 - 현재 playersMoving 상태를 사용
+      taggerTimeoutRef.current = setTimeout(() => {
+        // 실시간으로 현재 움직이고 있는 플레이어들을 확인
+        setPlayersMoving(currentMovingPlayers => {
+          eliminateCaughtPlayers(currentMovingPlayers);
+          return new Set(); // 처리 후 초기화
+        });
+      }, 1500);
+      
+      return { ...prev, isItLooking: true };
+    });
+  };
 
+  const eliminateCaughtPlayers = (caughtPlayerIds: Set<string>) => {
+    // 기존 next round timeout 정리
+    if (nextRoundTimeoutRef.current) {
+      clearTimeout(nextRoundTimeoutRef.current);
+      nextRoundTimeoutRef.current = null;
+    }
+    
+    console.log('탈락 처리 - 걸린 플레이어:', Array.from(caughtPlayerIds)); // 디버깅용
+    
+    setGameState(prev => {
       const newPlayers = prev.players.map(player => {
-        if (playersToEliminate.some(p => p.id === player.id)) {
+        if (caughtPlayerIds.has(player.id)) {
+          console.log(`${player.name} 탈락 처리됨`); // 디버깅용
           return {
             ...player,
             isEliminated: true,
-            eliminatedRound: prev.currentRound
+            eliminatedRound: prev.currentRound + 1
           };
         }
         return player;
       });
 
-      const remainingPlayers = newPlayers.filter(p => !p.isEliminated);
-      
-      if (remainingPlayers.length <= 1) {
+      const activePlayers = newPlayers.filter(p => !p.isEliminated);
+      const nonFinishedActivePlayers = activePlayers.filter(p => p.position < 200);
+
+      // 게임 종료 조건 체크
+      if (nonFinishedActivePlayers.length === 0 || activePlayers.length <= 1) {
+        // 게임 종료 - 모든 timer 정리
+        clearAllTimers();
         return finishGame({ ...prev, players: newPlayers });
       }
 
       return {
         ...prev,
         players: newPlayers,
-        isItLooking: false
+        isItLooking: false,
+        currentRound: prev.currentRound + 1 // 라운드 증가
       };
     });
 
-    // 1초 후 다음 라운드
-    setTimeout(() => {
-      nextRound();
+    // 다음 라운드 시작 (게임이 종료되지 않은 경우에만)
+    nextRoundTimeoutRef.current = setTimeout(() => {
+      setGameState(currentState => {
+        // 게임이 이미 종료되었다면 다음 라운드를 시작하지 않음
+        if (currentState.gamePhase === 'finished') {
+          return currentState;
+        }
+        
+        const currentActivePlayers = currentState.players.filter(p => !p.isEliminated);
+        const currentNonFinished = currentActivePlayers.filter(p => p.position < 200);
+        
+        if (currentNonFinished.length > 0 && currentActivePlayers.length > 1) {
+          startRound();
+        }
+        
+        return currentState;
+      });
     }, 1000);
   };
 
-  const nextRound = () => {
-    setGameState(prev => {
-      const remainingPlayers = prev.players.filter(p => !p.isEliminated);
-      
-      if (remainingPlayers.length <= 1) {
-        return finishGame(prev);
-      }
-
-      return {
-        ...prev,
-        currentRound: prev.currentRound + 1,
-        isItLooking: false
-      };
-    });
-
-    startRound();
-  };
-
   const finishGame = (state: GameState) => {
-    const finalPlayers = state.players.map((player) => {
-      if (!player.isEliminated) {
-        return { ...player, rank: 1 };
-      }
-      return player;
+    // 모든 timer 정리
+    clearAllTimers();
+    
+    // 최신 골인 순서를 가져와서 등수 계산
+    setFinishedOrder(currentFinishedOrder => {
+      console.log('게임 종료 - 골인 순서:', currentFinishedOrder);
+      
+      const finalPlayers = [...state.players];
+      let currentRank = 1;
+      
+      // 1. 골인한 플레이어들에게 순서대로 등수 할당
+      currentFinishedOrder.forEach(playerId => {
+        const playerIndex = finalPlayers.findIndex(p => p.id === playerId);
+        if (playerIndex !== -1) {
+          finalPlayers[playerIndex] = { ...finalPlayers[playerIndex], rank: currentRank };
+          console.log(`${finalPlayers[playerIndex].name}에게 ${currentRank}등 할당`);
+          currentRank++;
+        }
+      });
+      
+      // 2. 골인하지 못한 활성 플레이어들을 거리순으로 등수 할당
+      const nonFinishedActive = state.players.filter(p => 
+        !p.isEliminated && 
+        p.position < 200 && 
+        !currentFinishedOrder.includes(p.id)
+      );
+      const sortedNonFinished = nonFinishedActive.sort((a, b) => b.position - a.position);
+      
+      sortedNonFinished.forEach(player => {
+        const playerIndex = finalPlayers.findIndex(p => p.id === player.id);
+        if (playerIndex !== -1) {
+          finalPlayers[playerIndex] = { ...finalPlayers[playerIndex], rank: currentRank };
+          console.log(`${player.name}에게 ${currentRank}등 할당`);
+          currentRank++;
+        }
+      });
+      
+      // 3. 탈락한 플레이어들을 거리순으로 등수 할당
+      const eliminatedPlayers = state.players.filter(p => p.isEliminated);
+      const sortedEliminated = eliminatedPlayers.sort((a, b) => b.position - a.position);
+      
+      sortedEliminated.forEach(player => {
+        const playerIndex = finalPlayers.findIndex(p => p.id === player.id);
+        if (playerIndex !== -1) {
+          finalPlayers[playerIndex] = { ...finalPlayers[playerIndex], rank: currentRank };
+          console.log(`${player.name}에게 ${currentRank}등 할당`);
+          currentRank++;
+        }
+      });
+
+      console.log('최종 플레이어들:', finalPlayers);
+
+      const finalState = {
+        ...state,
+        players: finalPlayers,
+        gamePhase: 'finished' as const
+      };
+
+      // 결과 페이지로 이동
+      setTimeout(() => {
+        navigate('/result', { 
+          state: { 
+            gameResult: finalState,
+            playerNames: playerNames 
+          } 
+        });
+      }, 2000);
+
+      return currentFinishedOrder; // 상태는 변경하지 않음
     });
 
-    // 탈락 순서대로 등수 매기기
-    const eliminatedPlayers = finalPlayers
-      .filter(p => p.isEliminated)
-      .sort((a, b) => (b.eliminatedRound || 0) - (a.eliminatedRound || 0));
-
-    eliminatedPlayers.forEach((player, index) => {
-      const playerIndex = finalPlayers.findIndex(p => p.id === player.id);
-      finalPlayers[playerIndex].rank = index + 2;
-    });
-
-    const finalState = {
+    return {
       ...state,
-      players: finalPlayers,
       gamePhase: 'finished' as const
     };
-
-    // 결과 페이지로 이동
-    setTimeout(() => {
-      navigate('/result', { state: { gameResult: finalState } });
-    }, 2000);
-
-    return finalState;
   };
 
   const activePlayers = gameState.players.filter(p => !p.isEliminated);
+  const winners = activePlayers.filter(p => p.position >= 200);
+
+  // 실시간 골인 순서 표시용 데이터
+  const finishedPlayersForDisplay = finishedOrder.map((playerId, index) => {
+    const player = gameState.players.find(p => p.id === playerId);
+    return player ? {
+      id: playerId,
+      name: player.name,
+      rank: index + 1
+    } : null;
+  }).filter(Boolean);
 
   return (
     <div className="game-page">
       <div className="game-header">
         <h2>무궁화 꽃이 피었습니다</h2>
         <div className="game-info">
-          <span>라운드: {gameState.currentRound}</span>
-          <span>남은 참가자: {activePlayers.length}명</span>
+          <span>참가자: {activePlayers.length}명</span>
+          {winners.length > 0 && (
+            <span className="winner-indicator">🏆 골인: {winners.length}명</span>
+          )}
         </div>
       </div>
 
@@ -229,6 +450,12 @@ const GamePage: React.FC = () => {
         >
           <h3>게임 준비</h3>
           <p>참가자 {gameState.players.length}명이 준비되었습니다.</p>
+          <p className="game-rules">
+            🎯 <strong>게임 규칙:</strong><br/>
+            • 술래가 뒤돌고 "무궁화 꽃이 피었습니다"를 외치는 동안 이동 가능<br/>
+            • 술래가 돌아볼 때 움직이면 탈락!<br/>
+            • 먼저 골인하거나 마지막까지 살아남으면 승리!
+          </p>
           <Button onClick={startGame} variant="primary" size="large">
             게임 시작!
           </Button>
@@ -237,35 +464,57 @@ const GamePage: React.FC = () => {
 
       {gameState.gamePhase === 'playing' && (
         <>
-          {showText && (
-            <motion.div 
-              className="game-text-overlay"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-            >
-              <h1 className="game-text">무궁화 꽃이 피었습니다</h1>
-            </motion.div>
-          )}
+          <AnimatePresence>
+            {isShowingSyllables && currentSyllableIndex >= 0 && (
+              <motion.div 
+                className="syllable-overlay"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h1 className={`syllable-text ${syllableSpeed}`}>
+                  {syllables.slice(0, currentSyllableIndex + 1).join('')}
+                </h1>
+                <div className="syllable-progress">
+                  {syllables.map((syllable, index) => (
+                    <span 
+                      key={index}
+                      className={`syllable-dot ${index <= currentSyllableIndex ? 'active' : ''}`}
+                    >
+                      {syllable}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="game-field">
             <div className="race-track">
               {gameState.players.map(player => (
                 <motion.div
                   key={player.id}
-                  className={`player ${player.isEliminated ? 'eliminated' : ''}`}
+                  className={`player ${player.isEliminated ? 'eliminated' : ''} ${player.position >= 200 ? 'winner' : ''} ${playersMoving.has(player.id) ? 'caught-moving' : ''}`}
                   style={{ 
                     backgroundColor: player.color,
-                    left: `${player.position}%`
+                    left: `${Math.min(player.position/2, 95)}%`
                   }}
                   animate={{
                     x: player.isEliminated ? [0, 10, -10, 0] : 0,
                     opacity: player.isEliminated ? 0.3 : 1,
-                    scale: player.isEliminated ? 0.8 : 1
+                    scale: player.position >= 200 ? 1.2 : (player.isEliminated ? 0.8 : 1),
+                    boxShadow: player.position >= 200 ? '0 0 20px gold' : playersMoving.has(player.id) ? '0 0 15px red' : 'none'
                   }}
                   transition={{ duration: 0.5 }}
                 >
                   <span className="player-name">{player.name}</span>
+                  {player.position >= 200 && (
+                    <span className="winner-crown">👑</span>
+                  )}
+                  {playersMoving.has(player.id) && (
+                    <span className="caught-indicator">💥</span>
+                  )}
                 </motion.div>
               ))}
             </div>
@@ -282,6 +531,51 @@ const GamePage: React.FC = () => {
               👮‍♂️
             </motion.div>
           </div>
+
+          {/* 실시간 등수 표시 */}
+          {finishedPlayersForDisplay.length > 0 && (
+            <motion.div 
+              className="live-rankings"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <h3>🏆 골인 순서</h3>
+              <div className="ranking-list">
+                {finishedPlayersForDisplay.map((player, index) => (
+                  <motion.div
+                    key={player!.id}
+                    className="ranking-item"
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.2 }}
+                  >
+                    <span className="rank-number">#{player!.rank}등</span>
+                    <span className="ranking-player-name">{player!.name}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {gameState.isItLooking && playersMoving.size > 0 && (
+            <motion.div 
+              className="caught-alert"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              <h3>🚨 걸렸다! {playersMoving.size}명이 움직이고 있습니다!</h3>
+            </motion.div>
+          )}
+
+          {gameState.isItLooking && playersMoving.size === 0 && (
+            <motion.div 
+              className="safe-alert"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <h3>✅ 모두 안전합니다!</h3>
+            </motion.div>
+          )}
         </>
       )}
 
@@ -291,7 +585,7 @@ const GamePage: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
-          <h3>게임 종료!</h3>
+          <h3>🎉 게임 종료!</h3>
           <p>결과 페이지로 이동합니다...</p>
         </motion.div>
       )}

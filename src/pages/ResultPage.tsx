@@ -9,15 +9,21 @@ const ResultPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const gameResult: GameState = location.state?.gameResult;
+  const playerNames: string[] = location.state?.playerNames || [];
 
   if (!gameResult) {
     navigate('/');
     return null;
   }
 
-  const sortedPlayers = [...gameResult.players].sort((a, b) => (a.rank || 0) - (b.rank || 0));
+  const sortedPlayers = [...gameResult.players].sort((a, b) => {
+    const rankA = a.rank || 999; // null이나 undefined인 경우 큰 값으로 처리
+    const rankB = b.rank || 999;
+    return rankA - rankB;
+  });
   
-  const getRankEmoji = (rank: number) => {
+  const getRankEmoji = (rank: number | null) => {
+    if (!rank || rank === 0) return '❓'; // 순위 없음 표시
     switch (rank) {
       case 1: return '🥇';
       case 2: return '🥈';
@@ -26,17 +32,22 @@ const ResultPage: React.FC = () => {
     }
   };
 
-  const getRankText = (rank: number) => {
+  const getRankText = (rank: number | null) => {
+    if (!rank || rank === 0) return '순위 없음'; // 0등 문제 해결
     switch (rank) {
-      case 1: return '1등 - 승리!';
-      case 2: return '2등 - 준우승!';
-      case 3: return '3등 - 3위!';
+      case 1: return '1등';
+      case 2: return '2등';
+      case 3: return '3등';
       default: return `${rank}등`;
     }
   };
 
-  const playAgain = () => {
+  const newGame = () => {
     navigate('/');
+  };
+
+  const restartGame = () => {
+    navigate('/game', { state: { playerNames: playerNames } });
   };
 
   return (
@@ -56,15 +67,6 @@ const ResultPage: React.FC = () => {
           🎉 게임 결과 🎉
         </motion.h1>
 
-        <motion.div 
-          className="result-subtitle"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          총 {gameResult.currentRound}라운드로 진행되었습니다
-        </motion.div>
-
         <div className="results-list">
           {sortedPlayers.map((player, index) => (
             <motion.div
@@ -72,11 +74,11 @@ const ResultPage: React.FC = () => {
               className={`result-item ${player.rank === 1 ? 'winner' : ''}`}
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 + 0.6 }}
+              transition={{ delay: index * 0.1 + 0.4 }}
             >
               <div className="rank-section">
-                <span className="rank-emoji">{getRankEmoji(player.rank || 0)}</span>
-                <span className="rank-text">{getRankText(player.rank || 0)}</span>
+                <span className="rank-emoji">{getRankEmoji(player.rank)}</span>
+                <span className="rank-text">{getRankText(player.rank)}</span>
               </div>
               
               <div 
@@ -84,15 +86,11 @@ const ResultPage: React.FC = () => {
                 style={{ backgroundColor: player.color }}
               >
                 <span className="player-name">{player.name}</span>
-                {player.eliminatedRound && (
-                  <span className="elimination-info">
-                    {player.eliminatedRound}라운드 탈락
-                  </span>
-                )}
               </div>
               
-              <div className="final-position">
-                최종 위치: {Math.round(player.position)}%
+              <div className="player-distance">
+                {player.position >= 200 ? '🏁 골인!' : `${Math.round(player.position/2)}%`}
+                {player.isEliminated && ' (탈락)'}
               </div>
             </motion.div>
           ))}
@@ -102,38 +100,23 @@ const ResultPage: React.FC = () => {
           className="result-actions"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
+          transition={{ delay: 0.8 }}
         >
           <Button
-            onClick={playAgain}
+            onClick={newGame}
+            variant="secondary"
+            size="large"
+          >
+            새로하기
+          </Button>
+          
+          <Button
+            onClick={restartGame}
             variant="primary"
             size="large"
           >
-            다시 게임하기
+            재시작
           </Button>
-        </motion.div>
-
-        <motion.div 
-          className="game-stats"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-        >
-          <h3>게임 통계</h3>
-          <div className="stats-grid">
-            <div className="stat-item">
-              <span className="stat-label">총 참가자</span>
-              <span className="stat-value">{gameResult.players.length}명</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-label">총 라운드</span>
-              <span className="stat-value">{gameResult.currentRound}라운드</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-label">승자</span>
-              <span className="stat-value">{sortedPlayers[0]?.name}</span>
-            </div>
-          </div>
         </motion.div>
       </motion.div>
     </div>
