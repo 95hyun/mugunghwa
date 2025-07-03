@@ -23,7 +23,8 @@
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    padding-bottom: env(safe-area-inset-bottom, 24px);
+    padding: 10px;
+    padding-bottom: env(safe-area-inset-bottom, 10px);
   }
 }
 
@@ -41,12 +42,14 @@
   }
 }
 
-/* iOS Safari 높이 보정 */
+/* iOS Safari 높이 보정 - 개선된 버전 */
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 768px) {
     .game-page {
-      height: -webkit-fill-available;
-      min-height: -webkit-fill-available;
+      height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      padding-top: env(safe-area-inset-top, 20px);
+      padding-bottom: env(safe-area-inset-bottom, 20px);
     }
   }
 }

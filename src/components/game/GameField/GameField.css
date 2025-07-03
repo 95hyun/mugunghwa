@@ -353,6 +353,7 @@
     max-height: calc(100vh - 100px);
     max-height: calc(100dvh - 100px);
     padding: 12px 6px;
+    margin-bottom: 8px;
   }
   
   .race-track {
@@ -410,6 +411,7 @@
     max-height: calc(100vh - 80px);
     max-height: calc(100dvh - 80px);
     padding: 10px 5px;
+    margin-bottom: 5px;
   }
   
   .race-track {
@@ -460,29 +462,26 @@
   }
 }
 
-/* iOS Safari 높이 보정 */
+/* iOS Safari 높이 보정 - 개선된 버전 */
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 768px) {
     .game-field {
-      max-height: -webkit-fill-available;
-      max-height: calc(100vh - 120px);
-      margin-bottom: 120px;
+      max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 60px);
+      margin-bottom: 10px; /* margin 대폭 감소 */
     }
   }
   
   @media (max-width: 480px) {
     .game-field {
-      max-height: -webkit-fill-available;
-      max-height: calc(100vh - 100px);
-      margin-bottom: 100px;
+      max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 50px);
+      margin-bottom: 8px; /* margin 대폭 감소 */
     }
   }
   
   @media (max-width: 360px) {
     .game-field {
-      max-height: -webkit-fill-available;
-      max-height: calc(100vh - 80px);
-      margin-bottom: 80px;
+      max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 40px);
+      margin-bottom: 5px; /* margin 대폭 감소 */
     }
   }
 }
