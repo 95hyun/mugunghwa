@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Player, GameState } from '../types/game';
-import Button from '../components/common/Button';
+import { GameHeader, CountdownOverlay, SyllableOverlay, PreparationScreen, ResultLoadingScreen, LiveRankings, CaughtAlert, SafeAlert, GameField, type FinishedPlayer } from '../components/game';
 import './GamePage.css';
 import './GameFloating.css';
 
@@ -532,250 +532,56 @@ const GamePage: React.FC = () => {
   const winners = activePlayers.filter(p => p.position >= 200);
 
   // 실시간 골인 순서 표시용 데이터
-  const finishedPlayersForDisplay = finishedOrder.map((playerId, index) => {
+  const finishedPlayersForDisplay: FinishedPlayer[] = finishedOrder.map((playerId, index) => {
     const player = gameState.players.find(p => p.id === playerId);
     return player ? {
       id: playerId,
       name: player.name,
       rank: index + 1
     } : null;
-  }).filter(Boolean);
-
-  // 결과 이동 중 로딩 화면 컴포넌트
-  const ResultLoadingScreen: React.FC = () => (
-    <div className="floating-game-finished">
-      <div className="game-finished-content">
-        <h3>🎉 게임 종료!</h3>
-        <p>결과 페이지로 이동합니다...</p>
-        <div className="rainbow"></div>
-      </div>
-    </div>
-  );
+  }).filter((player): player is FinishedPlayer => player !== null);
 
   return (
     <div className="game-page">
-      <div className="game-header">
-        <h2>무궁화 꽃이 피었습니다</h2>
-        <div className="game-info">
-          <span>생존자: {activePlayers.length}명</span>
-          {winners.length > 0 && (
-            <span className="winner-indicator">🏆 골인: {winners.length}명</span>
-          )}
-        </div>
-      </div>
+      <GameHeader 
+        activePlayers={activePlayers.length}
+        winners={winners.length}
+      />
 
       {gameState.gamePhase === 'preparation' && (
-        <motion.div 
-          className="preparation-screen"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <h3>게임 준비</h3>
-          <p>참가자 {gameState.players.length}명이 준비되었습니다.</p>
-          <div className="player-preview-list">
-            {gameState.players.map((player, idx) => (
-              <div className="player-preview-card" key={player.id}>
-                <div className="player-preview-number">{idx + 1}</div>
-                <img
-                  src={`/character/running_man_${runningAnimation}.png`}
-                  alt={`${player.name} 아바타`}
-                  className="player-preview-image"
-                />
-                <div className="player-preview-name" style={{ backgroundColor: player.color }}>{player.name}</div>
-              </div>
-            ))}
-          </div>
-          <p className="game-rules">
-            🎯 <strong>게임 규칙:</strong><br/>
-            • 술래가 뒤돌고 "무궁화 꽃이 피었습니다"를 외치는 동안 이동 가능<br/>
-            • 술래가 돌아볼 때 움직이면 탈락!<br/>
-            • 먼저 골인하거나 마지막까지 살아남으면 승리!
-          </p>
-          <Button onClick={startGame} variant="primary" size="large">
-            게임 시작
-          </Button>
-        </motion.div>
+        <PreparationScreen 
+          players={gameState.players}
+          onStartGame={startGame}
+          runningAnimation={runningAnimation}
+        />
       )}
 
       {gameState.gamePhase === 'playing' && (
         <>
-          <AnimatePresence>
-            {countdownValue !== null && (
-              <motion.div 
-                className="countdown-overlay"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                transition={{ duration: 0.3 }}
-              >
-                <motion.div 
-                  className={`countdown-display ${countdownValue === "시작!" ? "countdown-start" : "countdown-number"}`}
-                  key={countdownValue} // key를 추가하여 각 값마다 새로운 애니메이션
-                  initial={{ scale: 0.5, rotate: countdownValue === "시작!" ? -20 : -10 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  exit={{ scale: countdownValue === "시작!" ? 1.2 : 1.5, rotate: countdownValue === "시작!" ? 20 : 10, opacity: 0 }}
-                  transition={{ 
-                    type: "spring", 
-                    stiffness: countdownValue === "시작!" ? 400 : 300, 
-                    damping: countdownValue === "시작!" ? 20 : 15 
-                  }}
-                >
-                  {countdownValue}
-                </motion.div>
-                <motion.p 
-                  className="countdown-text"
-                  key={`text-${countdownValue}`} // 텍스트도 각 값마다 애니메이션
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                >
-                  {countdownValue === "시작!" ? "무궁화 꽃이 피었습니다!" : "게임 시작 준비"}
-                </motion.p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <CountdownOverlay countdownValue={countdownValue} />
 
-          <AnimatePresence>
-            {isShowingSyllables && currentSyllableIndex >= 0 && countdownValue === null && (
-              <motion.div 
-                className="syllable-overlay"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                transition={{ duration: 0.3 }}
-              >
-                <h1 className={`syllable-text ${syllableSpeed}`}>
-                  {syllables.slice(0, currentSyllableIndex + 1).join('')}
-                </h1>
-                <div className="syllable-progress">
-                  {syllables.map((syllable, index) => (
-                    <span 
-                      key={index}
-                      className={`syllable-dot ${index <= currentSyllableIndex ? 'active' : ''}`}
-                    >
-                      {syllable}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <SyllableOverlay 
+            isVisible={isShowingSyllables}
+            currentIndex={currentSyllableIndex}
+            syllables={syllables}
+            speed={syllableSpeed}
+            countdownValue={countdownValue}
+          />
 
-          <div className="game-field">
-            <div className="race-track">
-              {gameState.players.map(player => (
-                <motion.div
-                  key={player.id}
-                  className={`player ${player.isEliminated ? 'eliminated' : ''} ${player.position >= 200 ? 'winner' : ''} ${playersMoving.has(player.id) ? 'caught-moving' : ''}`}
-                  style={{ 
-                    bottom: `${5 + Math.min(player.position/2, 90)}%`,
-                    opacity: countdownValue !== null ? 0.3 : 1 // 카운트다운 중에는 흐리게 표시
-                  }}
-                  animate={{
-                    x: player.isEliminated ? [0, 10, -10, 0] : 0,
-                    opacity: countdownValue !== null ? 0.3 : (player.isEliminated ? 0.3 : 1),
-                    scale: player.position >= 200 ? 1.2 : (player.isEliminated ? 0.8 : 1),
-                    boxShadow: player.position >= 200
-                      ? '0 0 20px gold'
-                      : playersMoving.has(player.id)
-                        ? 'none'
-                        : 'none'
-                  }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <img 
-                    src={
-                      // 음절이 외쳐지는 동안 움직인 플레이어들 또는 술래가 돌아볼 때 걸린 플레이어들
-                      (isShowingSyllables && currentlyRunningPlayers.has(player.id)) || 
-                      playersMoving.has(player.id)
-                        ? `/character/running_man_${runningAnimation}.png`
-                        : '/character/running_man_1.png'
-                    }
-                    alt={`${player.name} 아바타`}
-                    className="player-image"
-                  />
-                  <span 
-                    className="player-name"
-                    style={{ backgroundColor: player.color, color: '#fff', boxShadow: `0 0 8px ${player.color}` }}
-                  >
-                    {player.name}
-                  </span>
-                  {player.position >= 200 && (
-                    <span className="winner-crown">👑</span>
-                  )}
-                  {playersMoving.has(player.id) && (
-                    <span className="caught-indicator">💥</span>
-                  )}
-                  {playersMoving.has(player.id) && (
-                    <span className="aim-indicator"></span>
-                  )}
-                </motion.div>
-              ))}
-            </div>
-            
-            <div className="finish-line"></div>
-            <div className="start-line"></div>
-            
-            <div className="tagger">
-              <AnimatePresence mode="wait">
-                <motion.img 
-                  key={gameState.isItLooking ? "front" : "back"}
-                  src={gameState.isItLooking ? "/character/gaksital_front.png" : "/character/gaksital_back.png"}
-                  alt={gameState.isItLooking ? "술래 정면" : "술래 뒤돌아보기"}
-                  className="tagger-image"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </AnimatePresence>
-            </div>
-          </div>
+          <GameField
+            players={gameState.players}
+            isItLooking={gameState.isItLooking}
+            playersMoving={playersMoving}
+            currentlyRunningPlayers={currentlyRunningPlayers}
+            runningAnimation={runningAnimation}
+            countdownValue={countdownValue}
+          />
 
           {/* 실시간 등수 표시 */}
-          {finishedPlayersForDisplay.length > 0 && (
-            <motion.div 
-              className="live-rankings floating-rankings"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <h3>🏆 골인 순서</h3>
-              <div className="ranking-list">
-                {finishedPlayersForDisplay.map((player, index) => (
-                  <motion.div
-                    key={player!.id}
-                    className="ranking-item"
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.2 }}
-                  >
-                    <span className="rank-number">#{player!.rank}등</span>
-                    <span className="ranking-player-name">{player!.name}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          )}
+          <LiveRankings finishedPlayers={finishedPlayersForDisplay} />
 
-          {gameState.isItLooking && playersMoving.size > 0 && (
-            <motion.div 
-              className="caught-alert floating-alert"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
-              <h3>🚨 걸렸다! {playersMoving.size}명이 움직이고 있습니다!</h3>
-            </motion.div>
-          )}
-
-          {gameState.isItLooking && playersMoving.size === 0 && (
-            <motion.div 
-              className="safe-alert floating-alert"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              <h3>✅ 모두 안전합니다!</h3>
-            </motion.div>
-          )}
+          <CaughtAlert playersMovingCount={playersMoving.size} />
+          <SafeAlert isItLooking={gameState.isItLooking} playersMovingCount={playersMoving.size} />
         </>
       )}
 

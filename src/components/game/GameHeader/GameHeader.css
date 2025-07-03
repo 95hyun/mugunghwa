@@ -1,0 +1,73 @@
+.game-header {
+  text-align: center;
+  color: #222222;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.game-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-info {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.winner-indicator {
+  background: linear-gradient(45deg, #999, #bbb);
+  color: #333;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 5px rgba(153, 153, 153, 0.5); }
+  to { box-shadow: 0 0 20px rgba(153, 153, 153, 0.8); }
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .game-header {
+    margin-bottom: 10px;
+  }
+  
+  .game-header h2 {
+    font-size: 24px;
+  }
+  
+  .game-info {
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-header {
+    margin-bottom: 8px;
+  }
+  
+  .game-header h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .game-header {
+    margin-bottom: 5px;
+  }
+
+  .game-header h2 {
+    font-size: 18px;
+  }
+}

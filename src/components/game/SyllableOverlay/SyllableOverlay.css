@@ -1,0 +1,318 @@
+/* 음절 표시 오버레이 */
+.syllable-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px; /* 여백 추가 */
+  box-sizing: border-box; /* 패딩 포함 계산 */
+}
+
+.syllable-text {
+  color: white;
+  font-size: 48px;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
+  margin-bottom: 30px;
+  animation: syllableSpeak 0.6s ease-out;
+  letter-spacing: 6px;
+  white-space: nowrap; /* 한 줄로 표시 강제 */
+  overflow: visible; /* 오버플로우 허용 */
+}
+
+@keyframes syllableSpeak {
+  0% { 
+    transform: scale(0.5) rotate(-5deg); 
+    opacity: 0; 
+    color: #ff6b6b;
+  }
+  30% { 
+    transform: scale(1.3) rotate(2deg); 
+    opacity: 0.8; 
+    color: #ffd700;
+  }
+  60% { 
+    transform: scale(1.1) rotate(-1deg); 
+    opacity: 1; 
+    color: #4ecdc4;
+  }
+  100% { 
+    transform: scale(1) rotate(0deg); 
+    opacity: 1; 
+    color: white;
+  }
+}
+
+@keyframes syllableFast {
+  0% { 
+    transform: scale(0.3) rotate(-15deg); 
+    opacity: 0; 
+    color: #ff4757;
+    filter: blur(3px);
+  }
+  50% { 
+    transform: scale(1.6) rotate(8deg); 
+    opacity: 1; 
+    color: #ffa502;
+    filter: blur(0px);
+  }
+  100% { 
+    transform: scale(1) rotate(0deg); 
+    opacity: 1; 
+    color: #ff6348;
+    filter: blur(0px);
+  }
+}
+
+@keyframes syllableSlow {
+  0% { 
+    transform: scale(0.8) rotate(-2deg); 
+    opacity: 0; 
+    color: #3742fa;
+  }
+  20% { 
+    transform: scale(1.05) rotate(1deg); 
+    opacity: 0.3; 
+    color: #5352ed;
+  }
+  40% { 
+    transform: scale(1.03) rotate(-0.5deg); 
+    opacity: 0.6; 
+    color: #70a1ff;
+  }
+  70% { 
+    transform: scale(1.01) rotate(0.2deg); 
+    opacity: 0.8; 
+    color: #747d8c;
+  }
+  100% { 
+    transform: scale(1) rotate(0deg); 
+    opacity: 1; 
+    color: #a4b0be;
+  }
+}
+
+.syllable-text.fast {
+  animation: syllableFast 0.4s ease-out;
+  font-size: 52px;
+  text-shadow: 6px 6px 12px rgba(255, 0, 0, 0.8);
+  letter-spacing: 8px;
+  white-space: nowrap; /* 한 줄로 표시 강제 */
+}
+
+.syllable-text.slow {
+  animation: syllableSlow 1.5s ease-out;
+  font-size: 44px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 255, 0.5);
+  letter-spacing: 4px;
+  white-space: nowrap; /* 한 줄로 표시 강제 */
+}
+
+.syllable-progress {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap; /* 줄바꿈 방지 */
+  justify-content: center;
+  align-items: center;
+  max-width: 95vw;
+  overflow-x: auto; /* 가로 스크롤 허용 */
+  overflow-y: hidden;
+  padding: 4px 8px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* 스크롤바 숨김 */
+.syllable-progress::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.syllable-dot {
+  flex-shrink: 0; /* 축소 방지 */
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transition: all 0.4s ease;
+  border: 2px solid transparent;
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  min-width: fit-content; /* 최소 너비 보장 */
+}
+
+.syllable-dot.active {
+  background: linear-gradient(45deg, #ffd700, #ffed4e);
+  color: #333;
+  transform: scale(1.2);
+  border: 2px solid #fff;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  animation: syllablePop 0.4s ease-out;
+}
+
+@keyframes syllablePop {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.4) rotate(10deg); }
+  100% { transform: scale(1.2) rotate(0deg); }
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .syllable-text {
+    font-size: 28px; /* 모바일에서 더 작게 */
+    padding: 0 15px;
+    letter-spacing: 3px; /* 글자 간격 줄임 */
+    margin-bottom: 20px;
+    white-space: nowrap; /* 한 줄로 표시 강제 */
+    max-width: 95vw; /* 최대 너비 제한 */
+    overflow: visible; /* 오버플로우 허용 */
+  }
+  
+  .syllable-text.fast {
+    font-size: 32px; /* 모바일에서 더 작게 */
+    letter-spacing: 4px; /* 글자 간격 줄임 */
+  }
+  
+  .syllable-text.slow {
+    font-size: 24px; /* 모바일에서 더 작게 */
+    letter-spacing: 2px; /* 글자 간격 줄임 */
+  }
+  
+  .syllable-progress {
+    gap: 4px;
+    max-width: 95vw;
+    padding: 4px 6px;
+  }
+  
+  .syllable-dot {
+    padding: 5px 8px;
+    font-size: 13px;
+    min-width: 32px; /* 모바일에서 최소 너비 */
+  }
+}
+
+@media (max-width: 480px) {
+  .syllable-text {
+    font-size: 24px; /* 480px 이하에서 더 작게 */
+    letter-spacing: 2px; /* 글자 간격 더 줄임 */
+    margin-bottom: 15px;
+    white-space: nowrap; /* 한 줄로 표시 강제 */
+    max-width: 95vw; /* 최대 너비 제한 */
+    overflow: visible; /* 오버플로우 허용 */
+  }
+  
+  .syllable-text.fast {
+    font-size: 28px; /* 480px 이하에서 더 작게 */
+    letter-spacing: 3px; /* 글자 간격 더 줄임 */
+  }
+  
+  .syllable-text.slow {
+    font-size: 20px; /* 480px 이하에서 더 작게 */
+    letter-spacing: 1px; /* 글자 간격 더 줄임 */
+  }
+  
+  .syllable-progress {
+    gap: 3px;
+    max-width: 95vw;
+    padding: 4px;
+  }
+  
+  .syllable-dot {
+    padding: 4px 6px;
+    font-size: 12px;
+    min-width: 28px; /* 더 작은 최소 너비 */
+  }
+}
+
+@media (max-width: 360px) {
+  .syllable-text {
+    font-size: 20px; /* 360px 이하에서 가장 작게 */
+    letter-spacing: 1px; /* 글자 간격 최소화 */
+    margin-bottom: 12px;
+    white-space: nowrap; /* 한 줄로 표시 강제 */
+    max-width: 95vw; /* 최대 너비 제한 */
+    overflow: visible; /* 오버플로우 허용 */
+  }
+
+  .syllable-text.fast {
+    font-size: 24px; /* 360px 이하에서 가장 작게 */
+    letter-spacing: 2px; /* 글자 간격 최소화 */
+  }
+
+  .syllable-text.slow {
+    font-size: 18px; /* 360px 이하에서 가장 작게 */
+    letter-spacing: 0px; /* 글자 간격 최소화 */
+  }
+
+  .syllable-progress {
+    gap: 2px;
+    max-width: 95vw;
+    padding: 2px;
+  }
+  
+  .syllable-dot {
+    padding: 3px 5px;
+    font-size: 11px;
+    min-width: 24px; /* 가장 작은 최소 너비 */
+  }
+}
+
+/* 가로 모드 최적화 */
+@media (max-width: 768px) and (orientation: landscape) and (max-height: 500px) {
+  .syllable-text {
+    font-size: 22px; /* 가로 모드에서 작게 */
+    margin-bottom: 15px;
+    letter-spacing: 1px; /* 글자 간격 줄임 */
+    white-space: nowrap; /* 한 줄로 표시 강제 */
+    max-width: 90vw; /* 최대 너비 제한 */
+    overflow: visible; /* 오버플로우 허용 */
+  }
+}
+
+/* 매우 작은 화면 (320px 이하)에서 추가 최적화 */
+@media (max-width: 320px) {
+  .syllable-text {
+    font-size: 18px !important; /* 강제 적용 */
+    letter-spacing: 0px !important; /* 글자 간격 제거 */
+    margin-bottom: 10px;
+    white-space: nowrap; /* 한 줄로 표시 강제 */
+    max-width: 95vw; /* 최대 너비 제한 */
+    overflow: visible; /* 오버플로우 허용 */
+    transform: scale(0.95); /* 살짝 축소 */
+  }
+
+  .syllable-text.fast {
+    font-size: 20px !important; /* 강제 적용 */
+    letter-spacing: 1px !important; /* 글자 간격 최소화 */
+  }
+
+  .syllable-text.slow {
+    font-size: 16px !important; /* 강제 적용 */
+    letter-spacing: 0px !important; /* 글자 간격 제거 */
+  }
+  
+  .syllable-overlay {
+    padding: 10px; /* 더 작은 패딩 */
+  }
+  
+  .syllable-progress {
+    gap: 1px;
+    max-width: 98vw;
+    padding: 2px;
+    transform: scale(0.9); /* progress도 살짝 축소 */
+  }
+  
+  .syllable-dot {
+    padding: 2px 4px;
+    font-size: 10px;
+    min-width: 20px; /* 최소한의 너비 */
+  }
+}

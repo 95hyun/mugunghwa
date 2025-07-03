@@ -1,0 +1,107 @@
+/* 기본 등수 표시 스타일 (플로팅으로 오버라이드됨) */
+.live-rankings {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.live-rankings h3 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background: linear-gradient(45deg, #888, #aaa);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(136, 136, 136, 0.3);
+}
+
+.rank-number {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  margin-right: 10px;
+  min-width: 25px;
+}
+
+.ranking-player-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+/* 기본 상태 알림 스타일 (플로팅으로 오버라이드됨) */
+.caught-alert {
+  background: rgba(85, 85, 85, 0.9);
+  color: white;
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(85, 85, 85, 0.3);
+  animation: alertPulse 0.5s ease-in-out infinite alternate;
+}
+
+.safe-alert {
+  background: rgba(102, 102, 102, 0.9);
+  color: white;
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(102, 102, 102, 0.3);
+}
+
+@keyframes alertPulse {
+  from { 
+    background: rgba(85, 85, 85, 0.9);
+    transform: scale(1);
+  }
+  to { 
+    background: rgba(102, 102, 102, 0.9);
+    transform: scale(1.02);
+  }
+}
+
+.caught-alert h3,
+.safe-alert h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .live-rankings h3 {
+    font-size: 14px;
+  }
+  
+  .ranking-item {
+    padding: 8px 12px;
+  }
+  
+  .rank-number {
+    font-size: 14px;
+    min-width: 22px;
+  }
+  
+  .ranking-player-name {
+    font-size: 13px;
+  }
+  
+  .caught-alert h3,
+  .safe-alert h3 {
+    font-size: 14px;
+  }
+}

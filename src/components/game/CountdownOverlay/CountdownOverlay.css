@@ -1,0 +1,146 @@
+/* 카운트다운 오버레이 */
+.countdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100; /* 음절 오버레이보다 높은 z-index */
+}
+
+.countdown-display {
+  text-align: center;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+  margin-bottom: 30px;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #ffd700);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.countdown-number {
+  color: #fff;
+  font-size: 120px;
+  font-weight: 900;
+  animation: gradientShift 1s ease-in-out infinite;
+}
+
+.countdown-start {
+  color: #fff;
+  font-size: 100px;
+  font-weight: 900;
+  text-shadow: 0 0 40px rgba(255, 255, 255, 1) !important;
+  background: linear-gradient(45deg, #ff4757, #ffa502, #2ed573, #1e90ff, #ff6348) !important;
+  background-size: 400% 400% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: startPulse 1s ease-in-out;
+}
+
+@keyframes startPulse {
+  0% { 
+    transform: scale(0.8);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  }
+  50% { 
+    transform: scale(1.1);
+    text-shadow: 0 0 60px rgba(255, 255, 255, 1);
+  }
+  100% { 
+    transform: scale(1);
+    text-shadow: 0 0 40px rgba(255, 255, 255, 1);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.countdown-text {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .countdown-display.countdown-number {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 70px;
+    margin-bottom: 20px;
+  }
+  
+  .countdown-text {
+    font-size: 18px;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .countdown-display.countdown-number {
+    font-size: 70px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 60px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-text {
+    font-size: 16px;
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .countdown-display.countdown-number {
+    font-size: 60px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 50px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-text {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+}
+
+/* 가로 모드 최적화 */
+@media (max-width: 768px) and (orientation: landscape) and (max-height: 500px) {
+  .countdown-display.countdown-number {
+    font-size: 60px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 50px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-text {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+}

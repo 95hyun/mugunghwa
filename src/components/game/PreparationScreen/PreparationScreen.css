@@ -1,0 +1,270 @@
+.preparation-screen {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.preparation-screen h3 {
+  color: #333;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+.preparation-screen button {
+  display: block;
+  margin: 24px auto 0 auto;
+  width: fit-content;
+  min-width: 160px;
+  max-width: 90vw;
+}
+
+/* 플레이어 미리보기 섹션 */
+.players-preview-section {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 15px;
+  border: 2px solid #dee2e6;
+}
+
+.preview-title {
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.players-preview-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.player-preview-list {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 12px 0;
+  scrollbar-width: none;
+}
+
+.player-preview-list::-webkit-scrollbar {
+  display: none;
+}
+
+.player-preview-card {
+  min-width: 80px;
+  max-width: 120px;
+  background: #f8f8f8;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.player-preview-number {
+  font-size: 13px;
+  font-weight: bold;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.player-preview-image {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 4px;
+}
+
+.player-preview-name {
+  font-size: 12px;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin-top: 2px;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-rules {
+  background: #f8f9fa;
+  padding: 18px;
+  border-radius: 12px;
+  border-left: 4px solid #4ecdc4;
+  text-align: left !important;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.game-rules strong {
+  color: #333;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .preparation-screen {
+    min-height: unset;
+    height: auto;
+    padding: 10px 4px 12px 4px;
+    margin: 0;
+    padding-bottom: env(safe-area-inset-bottom, 24px);
+  }
+  
+  .preparation-screen h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .players-preview-section {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .preview-title {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .player-preview-card {
+    min-width: 64px;
+    max-width: 90px;
+    padding: 6px 2px;
+  }
+  
+  .player-preview-image {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .player-preview-name {
+    font-size: 11px;
+    padding: 1px 4px;
+  }
+
+  .preparation-screen {
+    padding: 20px;
+    margin: 10px;
+    max-width: 90%;
+  }
+  
+  .game-rules {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  .preparation-screen button {
+    margin: 18px auto 0 auto;
+    width: 90%;
+    min-width: 0;
+    max-width: 320px;
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .preparation-screen {
+    padding: 15px;
+    margin: 5px;
+  }
+  
+  .preparation-screen h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .players-preview-section {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+  
+  .preview-title {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  
+  .player-preview-card {
+    min-width: 65px;
+    max-width: 65px;
+    padding: 8px 5px;
+  }
+  
+  .player-preview-number {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-image {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-name {
+    font-size: 9px;
+  }
+
+  .game-rules {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .player-preview-list {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .preparation-screen button {
+    margin: 18px auto 0 auto;
+    width: 90%;
+    min-width: 0;
+    max-width: 320px;
+    display: block;
+  }
+}
+
+/* 가로 모드 최적화 */
+@media (max-width: 768px) and (orientation: landscape) and (max-height: 500px) {
+  .preparation-screen {
+    padding: 15px;
+    max-width: 400px;
+  }
+  
+  .player-preview-card {
+    min-width: 70px;
+    max-width: 70px;
+    padding: 10px 6px;
+  }
+  
+  .player-preview-number {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .player-preview-image {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 5px;
+  }
+  
+  .player-preview-name {
+    font-size: 10px;
+  }
+}
