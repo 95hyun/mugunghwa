@@ -8,8 +8,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden; /* 스크롤 완전 차단 */
   box-sizing: border-box;
 }
 
@@ -18,27 +17,29 @@
   .game-page {
     display: flex;
     flex-direction: column;
-    min-height: 100dvh;
+    height: 100vh;
     height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    padding: 10px;
-    padding-bottom: env(safe-area-inset-bottom, 10px);
+    padding: 5px;
+    overflow: hidden;
   }
 }
 
 @media (max-width: 480px) {
   .game-page {
-    padding: 8px;
-    gap: 8px;
+    padding: 3px;
   }
 }
 
 @media (max-width: 360px) {
   .game-page {
-    padding: 5px;
-    gap: 5px;
+    padding: 2px;
   }
 }
 
@@ -48,8 +49,10 @@
     .game-page {
       height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
       min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-      padding-top: env(safe-area-inset-top, 20px);
-      padding-bottom: env(safe-area-inset-bottom, 20px);
+      max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      padding-top: env(safe-area-inset-top, 5px);
+      padding-bottom: env(safe-area-inset-bottom, 5px);
+      overflow: hidden;
     }
   }
 }
