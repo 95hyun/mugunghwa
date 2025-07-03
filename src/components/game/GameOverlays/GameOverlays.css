@@ -1,4 +1,4 @@
-/* 기본 등수 표시 스타일 (플로팅으로 오버라이드됨) */
+/* ===== Live Rankings ===== */
 .live-rankings {
   background: rgba(255, 255, 255, 0.95);
   padding: 15px;
@@ -43,45 +43,109 @@
   color: white;
 }
 
-/* 기본 상태 알림 스타일 (플로팅으로 오버라이드됨) */
-.caught-alert {
-  background: rgba(85, 85, 85, 0.9);
+/* ===== Safe Alert Overlay ===== */
+.safe-alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 20px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.safe-alert-content {
+  pointer-events: auto;
+  max-width: 90vw;
+  background: rgba(76, 175, 80, 0.95);
   color: white;
-  padding: 15px;
+  padding: 20px 30px;
   border-radius: 15px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(85, 85, 85, 0.3);
-  animation: alertPulse 0.5s ease-in-out infinite alternate;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  animation: safeGlow 2s ease-in-out infinite alternate;
 }
 
-.safe-alert {
-  background: rgba(102, 102, 102, 0.9);
-  color: white;
-  padding: 15px;
-  border-radius: 15px;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(102, 102, 102, 0.3);
-}
-
-@keyframes alertPulse {
-  from { 
-    background: rgba(85, 85, 85, 0.9);
-    transform: scale(1);
-  }
-  to { 
-    background: rgba(102, 102, 102, 0.9);
-    transform: scale(1.02);
-  }
-}
-
-.caught-alert h3,
-.safe-alert h3 {
+.safe-alert-content h3 {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* 모바일 반응형 */
+@keyframes safeGlow {
+  from {
+    background: rgba(76, 175, 80, 0.95);
+    transform: scale(1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  to {
+    background: rgba(102, 187, 106, 0.95);
+    transform: scale(1.02);
+    box-shadow: 0 15px 40px rgba(76, 175, 80, 0.4);
+  }
+}
+
+/* ===== Caught Alert Overlay ===== */
+.caught-alert-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 20px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.caught-alert-content {
+  pointer-events: auto;
+  max-width: 90vw;
+  background: rgba(244, 67, 54, 0.95);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  animation: dangerPulse 1s ease-in-out infinite alternate;
+}
+
+.caught-alert-content h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes dangerPulse {
+  from {
+    background: rgba(244, 67, 54, 0.95);
+    transform: scale(1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  to {
+    background: rgba(255, 87, 34, 0.95);
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(244, 67, 54, 0.5);
+  }
+}
+
+/* ===== 모바일 반응형 ===== */
 @media (max-width: 768px) {
   .live-rankings h3 {
     font-size: 14px;
@@ -100,8 +164,53 @@
     font-size: 13px;
   }
   
-  .caught-alert h3,
-  .safe-alert h3 {
+  .safe-alert-content,
+  .caught-alert-content {
+    max-width: calc(100% - 40px);
+    padding: 16px 24px;
+  }
+  
+  .safe-alert-content h3,
+  .caught-alert-content h3 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .safe-alert-content,
+  .caught-alert-content {
+    max-width: calc(100% - 20px);
+    padding: 14px 20px;
+  }
+  
+  .safe-alert-content h3,
+  .caught-alert-content h3 {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .safe-alert-content,
+  .caught-alert-content {
+    max-width: calc(100% - 10px);
+    padding: 12px 18px;
+  }
+  
+  .safe-alert-content h3,
+  .caught-alert-content h3 {
+    font-size: 14px;
+  }
+}
+
+/* ===== 가로 모드 최적화 ===== */
+@media (max-width: 768px) and (orientation: landscape) and (max-height: 500px) {
+  .safe-alert-content,
+  .caught-alert-content {
+    padding: 12px 20px;
+  }
+  
+  .safe-alert-content h3,
+  .caught-alert-content h3 {
     font-size: 14px;
   }
 }

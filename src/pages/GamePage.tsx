@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Player, GameState } from '../types/game';
 import { GameHeader, CountdownOverlay, SyllableOverlay, PreparationScreen, ResultLoadingScreen, LiveRankings, CaughtAlert, SafeAlert, GameField, type FinishedPlayer } from '../components/game';
@@ -580,6 +579,7 @@ const GamePage: React.FC = () => {
           {/* 실시간 등수 표시 */}
           <LiveRankings finishedPlayers={finishedPlayersForDisplay} />
 
+          {/* Alert 컴포넌트들 */}
           <CaughtAlert playersMovingCount={playersMoving.size} />
           <SafeAlert isItLooking={gameState.isItLooking} playersMovingCount={playersMoving.size} />
         </>

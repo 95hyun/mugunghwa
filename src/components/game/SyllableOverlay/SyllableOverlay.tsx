@@ -21,21 +21,28 @@ const SyllableOverlay: React.FC<SyllableOverlayProps> = ({
   return (
     <AnimatePresence>
       {isVisible && currentIndex >= 0 && countdownValue === null && (
-        <motion.div 
-          className="syllable-overlay"
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.5 }}
-          transition={{ duration: 0.3 }}
-        >
-          <h1 className={`syllable-text ${speed}`}>
+        <div className="syllable-overlay">
+          <motion.h1 
+            className={`syllable-text ${speed}`}
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.5, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             {syllables.slice(0, currentIndex + 1).join('')}
-          </h1>
-          <SyllableProgress 
-            syllables={syllables}
-            currentIndex={currentIndex}
-          />
-        </motion.div>
+          </motion.h1>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+          >
+            <SyllableProgress 
+              syllables={syllables}
+              currentIndex={currentIndex}
+            />
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
