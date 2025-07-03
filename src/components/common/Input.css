@@ -1,61 +1,84 @@
 .input-container {
-  margin-bottom: 16px;
+  margin-bottom: 15px;
+  width: 100%;
 }
 
 .input-label {
   display: block;
-  margin-bottom: 6px;
+  font-size: 14px;
   font-weight: 600;
   color: #333;
-  font-size: 14px;
+  margin-bottom: 6px;
 }
 
 .input {
   width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #e1e8ed;
-  border-radius: 12px;
-  font-size: 16px;
-  font-family: inherit;
-  background: white;
-  transition: all 0.2s ease;
-  outline: none;
-  min-height: 44px; /* 모바일 터치 타겟 최소 크기 */
+  padding: 12px 15px;
+  border: 2px solid #e1e5e9;
+  border-radius: 10px;
+  font-size: 16px; /* iOS 줌 방지를 위한 최소 16px */
+  color: #333;
+  background-color: #fff;
+  transition: all 0.3s ease;
   box-sizing: border-box;
+  outline: none;
+  
+  /* iOS 관련 스타일 */
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  
+  /* 줌 방지 추가 */
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 .input:focus {
   border-color: #4ecdc4;
   box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+  background-color: #fff;
 }
 
 .input:disabled {
   background-color: #f8f9fa;
+  color: #6c757d;
   cursor: not-allowed;
-  opacity: 0.7;
+  border-color: #dee2e6;
+}
+
+.input::placeholder {
+  color: #adb5bd;
+  opacity: 1;
 }
 
 .input--error {
-  border-color: #ff4757;
+  border-color: #dc3545;
+  background-color: #fff5f5;
 }
 
 .input--error:focus {
-  border-color: #ff4757;
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
 }
 
 .input-error {
   display: block;
-  margin-top: 4px;
-  color: #ff4757;
+  color: #dc3545;
   font-size: 12px;
   font-weight: 500;
+  margin-top: 5px;
+  line-height: 1.4;
 }
 
-/* 모바일 반응형 */
+/* 모바일 반응형 디자인 */
 @media (max-width: 768px) {
-  .input-container {
-    margin-bottom: 14px;
+  .input {
+    padding: 12px 14px;
+    font-size: 16px; /* iOS 줌 방지 유지 */
+    border-radius: 8px;
   }
   
   .input-label {
@@ -63,33 +86,100 @@
     margin-bottom: 5px;
   }
   
-  .input {
-    padding: 10px 14px;
-    font-size: 15px;
-    min-height: 42px;
-  }
-  
   .input-error {
     font-size: 11px;
+    margin-top: 4px;
+  }
+  
+  .input-container {
+    margin-bottom: 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .input-container {
-    margin-bottom: 12px;
+  .input {
+    padding: 11px 13px;
+    font-size: 16px; /* iOS 줌 방지 유지 */
+    border-radius: 7px;
   }
   
   .input-label {
     font-size: 12px;
-  }
-  
-  .input {
-    padding: 10px 12px;
-    font-size: 14px;
-    min-height: 40px;
+    margin-bottom: 4px;
   }
   
   .input-error {
     font-size: 10px;
+    margin-top: 3px;
   }
+  
+  .input-container {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .input {
+    padding: 10px 12px;
+    font-size: 16px; /* iOS 줌 방지 유지 */
+    border-radius: 6px;
+  }
+  
+  .input-label {
+    font-size: 11px;
+  }
+  
+  .input-error {
+    font-size: 9px;
+  }
+}
+
+/* 터치 디바이스 최적화 */
+@media (hover: none) and (pointer: coarse) {
+  .input {
+    font-size: 16px !important; /* iOS 자동 줌 방지 강화 */
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+  
+  /* iOS Safari 특별 처리 */
+  .input:focus {
+    /* iOS에서 포커스 시 줌 방지 */
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* 포커스 가시성 개선 */
+.input:focus-visible {
+  outline: 2px solid #4ecdc4;
+  outline-offset: 1px;
+}
+
+/* 자동완성 스타일 */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #333 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* 입력 중 애니메이션 */
+.input:not(:placeholder-shown) {
+  background-color: #f8f9fa;
+}
+
+.input:not(:placeholder-shown):focus {
+  background-color: #fff;
+}
+
+/* 드래그 방지 */
+.input {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
 }

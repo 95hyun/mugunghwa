@@ -32,13 +32,13 @@ const GamePage: React.FC = () => {
   const [syllableSpeed, setSyllableSpeed] = useState<'normal' | 'fast' | 'slow'>('normal');
   const [finishedOrder, setFinishedOrder] = useState<string[]>([]); // 골인 순서만 저장
   const [runningAnimation, setRunningAnimation] = useState<1 | 2>(1); // 달리기 애니메이션 상태
-  const [activelyMovingPlayers, setActivelyMovingPlayers] = useState<Set<string>>(new Set());
+  const [currentlyRunningPlayers, setCurrentlyRunningPlayers] = useState<Set<string>>(new Set()); // 현재 달리고 있는 플레이어들
   
-  // 달리기 애니메이션을 위한 주기적 리렌더링
+  // 달리기 애니메이션을 위한 주기적 리렌더링 - 음절이 외쳐지는 동안에만
   useEffect(() => {
     let animationInterval: NodeJS.Timeout;
     
-    if (playersMoving.size > 0) {
+    if (isShowingSyllables || currentlyRunningPlayers.size > 0) {
       animationInterval = setInterval(() => {
         // 강제 리렌더링을 위한 더미 상태 업데이트
         setRunningAnimation(prev => prev === 1 ? 2 : 1);
@@ -50,7 +50,7 @@ const GamePage: React.FC = () => {
         clearInterval(animationInterval);
       }
     };
-  }, [playersMoving.size]);
+  }, [isShowingSyllables, currentlyRunningPlayers.size]);
   
   // Interval 및 Timeout 관리를 위한 ref
   const moveIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -133,8 +133,10 @@ const GamePage: React.FC = () => {
   // 달리기 애니메이션 디버깅
   useEffect(() => {
     console.log('Running animation state:', runningAnimation);
-    console.log('Players moving:', Array.from(playersMoving));
-  }, [runningAnimation, playersMoving]);
+    console.log('Players moving (caught):', Array.from(playersMoving));
+    console.log('Currently running players:', Array.from(currentlyRunningPlayers));
+    console.log('Is showing syllables:', isShowingSyllables);
+  }, [runningAnimation, playersMoving, currentlyRunningPlayers, isShowingSyllables]);
 
   const startGame = () => {
     // 모든 기존 timer 정리
@@ -142,6 +144,7 @@ const GamePage: React.FC = () => {
     
     setFinishedOrder([]); // 골인 순서 초기화
     setPlayersMoving(new Set()); // 움직이는 플레이어 초기화
+    setCurrentlyRunningPlayers(new Set()); // 달리기 플레이어 초기화
     setGameState(prev => ({
       ...prev,
       gamePhase: 'playing'
@@ -168,6 +171,7 @@ const GamePage: React.FC = () => {
     
     setIsShowingSyllables(true);
     setCurrentSyllableIndex(0);
+    setCurrentlyRunningPlayers(new Set()); // 달리기 상태 초기화
     
     // 새로운 interval 시작
     moveIntervalRef.current = setInterval(() => {
@@ -184,6 +188,10 @@ const GamePage: React.FC = () => {
         
         setIsShowingSyllables(false);
         setCurrentSyllableIndex(-1);
+        // 달리기 애니메이션을 잠시 더 유지하다가 정리
+        setTimeout(() => {
+          setCurrentlyRunningPlayers(new Set());
+        }, 200);
         
         // 술래가 돌아보기
         const timeout = setTimeout(() => {
@@ -277,7 +285,16 @@ const GamePage: React.FC = () => {
         players: newPlayers
       };
     });
-    setActivelyMovingPlayers(movedPlayers);
+    
+    // 움직인 플레이어들을 달리기 애니메이션에 추가 (Set spread를 Array.from으로 대체)
+    setCurrentlyRunningPlayers(prev => {
+      const updated = new Set(prev);
+      movedPlayers.forEach(playerId => updated.add(playerId));
+      return updated;
+    });
+    
+    console.log('이번에 움직인 플레이어:', Array.from(movedPlayers));
+    console.log('현재 달리고 있는 플레이어:', Array.from(movedPlayers));
   };
 
   const taggerTurnsAround = () => {
@@ -308,7 +325,8 @@ const GamePage: React.FC = () => {
         });
       }, 1500);
       
-      setActivelyMovingPlayers(new Set());
+      // 음절이 끝났으므로 달리기 애니메이션도 정리
+      setCurrentlyRunningPlayers(new Set());
       
       return { ...prev, isItLooking: true };
     });
@@ -470,7 +488,7 @@ const GamePage: React.FC = () => {
       <div className="game-header">
         <h2>무궁화 꽃이 피었습니다</h2>
         <div className="game-info">
-          <span>참가자: {activePlayers.length}명</span>
+          <span>생존자: {activePlayers.length}명</span>
           {winners.length > 0 && (
             <span className="winner-indicator">🏆 골인: {winners.length}명</span>
           )}
@@ -548,7 +566,9 @@ const GamePage: React.FC = () => {
                 >
                   <img 
                     src={
-                      (activelyMovingPlayers.has(player.id) || playersMoving.has(player.id))
+                      // 음절이 외쳐지는 동안 움직인 플레이어들 또는 술래가 돌아볼 때 걸린 플레이어들
+                      (isShowingSyllables && currentlyRunningPlayers.has(player.id)) || 
+                      playersMoving.has(player.id)
                         ? `/character/running_man_${runningAnimation}.png`
                         : '/character/running_man_1.png'
                     }

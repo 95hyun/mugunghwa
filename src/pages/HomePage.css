@@ -1,10 +1,15 @@
 .home-page {
   min-height: 100vh;
+  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   background: linear-gradient(135deg, #ffffff 90%, #ff0000 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .home-container {
@@ -15,6 +20,7 @@
   max-width: 500px;
   width: 100%;
   backdrop-filter: blur(10px);
+  margin: auto;
 }
 
 .home-title {
@@ -64,6 +70,7 @@
   justify-content: center;
   transition: all 0.2s ease;
   box-shadow: 0 4px 15px rgba(85, 85, 85, 0.3);
+  touch-action: manipulation;
 }
 
 .add-player-btn:hover:not(:disabled) {
@@ -131,6 +138,7 @@
   transition: all 0.2s ease;
   box-shadow: 0 4px 15px rgba(136, 136, 136, 0.3);
   flex-shrink: 0;
+  touch-action: manipulation;
 }
 
 .remove-player-btn:hover:not(:disabled) {
@@ -180,9 +188,20 @@
 
 /* 모바일 반응형 디자인 */
 @media (max-width: 768px) {
+  .home-page {
+    padding: 15px;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+  }
+  
   .home-container {
     padding: 25px;
-    margin: 15px;
+    margin: 0;
+    max-height: 90vh;
+    max-height: 90dvh;
+    overflow-y: auto;
   }
   
   .home-title {
@@ -220,12 +239,19 @@
 
 @media (max-width: 480px) {
   .home-page {
-    padding: 15px;
+    padding: 10px;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
   }
   
   .home-container {
     padding: 20px;
-    margin: 10px;
+    margin: 0;
+    max-height: 95vh;
+    max-height: 95dvh;
+    overflow-y: auto;
   }
   
   .home-title {
@@ -284,8 +310,14 @@
 }
 
 @media (max-width: 360px) {
+  .home-page {
+    padding: 8px;
+  }
+  
   .home-container {
     padding: 15px;
+    max-height: 98vh;
+    max-height: 98dvh;
   }
   
   .home-title {

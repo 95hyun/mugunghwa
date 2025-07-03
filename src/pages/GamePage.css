@@ -1,15 +1,23 @@
 .game-page {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
   min-height: 100vh;
+  min-height: 100dvh;
   background: linear-gradient(135deg, #ffffff 90%, #ff0000 100%);
   padding: 20px;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .game-header {
   text-align: center;
   color: #222222;
-  margin-bottom: 80px; /* 20px에서 40px로 증가 */
+  margin-bottom: 20px;
+  flex-shrink: 0;
 }
 
 .game-header h2 {
@@ -50,6 +58,7 @@
   max-width: 500px;
   margin: 0 auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
 .preparation-screen h3 {
@@ -105,73 +114,73 @@
 }
 
 @keyframes syllableSpeak {
-  0% { 
-    transform: scale(0.5) rotate(-5deg); 
-    opacity: 0; 
+  0% {
+    transform: scale(0.5) rotate(-5deg);
+    opacity: 0;
     color: #ff6b6b;
   }
-  30% { 
-    transform: scale(1.3) rotate(2deg); 
-    opacity: 0.8; 
+  30% {
+    transform: scale(1.3) rotate(2deg);
+    opacity: 0.8;
     color: #ffd700;
   }
-  60% { 
-    transform: scale(1.1) rotate(-1deg); 
-    opacity: 1; 
+  60% {
+    transform: scale(1.1) rotate(-1deg);
+    opacity: 1;
     color: #4ecdc4;
   }
-  100% { 
-    transform: scale(1) rotate(0deg); 
-    opacity: 1; 
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
     color: white;
   }
 }
 
 @keyframes syllableFast {
-  0% { 
-    transform: scale(0.3) rotate(-15deg); 
-    opacity: 0; 
+  0% {
+    transform: scale(0.3) rotate(-15deg);
+    opacity: 0;
     color: #ff4757;
     filter: blur(3px);
   }
-  50% { 
-    transform: scale(1.6) rotate(8deg); 
-    opacity: 1; 
+  50% {
+    transform: scale(1.6) rotate(8deg);
+    opacity: 1;
     color: #ffa502;
     filter: blur(0px);
   }
-  100% { 
-    transform: scale(1) rotate(0deg); 
-    opacity: 1; 
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
     color: #ff6348;
     filter: blur(0px);
   }
 }
 
 @keyframes syllableSlow {
-  0% { 
-    transform: scale(0.8) rotate(-2deg); 
-    opacity: 0; 
+  0% {
+    transform: scale(0.8) rotate(-2deg);
+    opacity: 0;
     color: #3742fa;
   }
-  20% { 
-    transform: scale(1.05) rotate(1deg); 
-    opacity: 0.3; 
+  20% {
+    transform: scale(1.05) rotate(1deg);
+    opacity: 0.3;
     color: #5352ed;
   }
-  40% { 
-    transform: scale(1.03) rotate(-0.5deg); 
-    opacity: 0.6; 
+  40% {
+    transform: scale(1.03) rotate(-0.5deg);
+    opacity: 0.6;
     color: #70a1ff;
   }
-  70% { 
-    transform: scale(1.01) rotate(0.2deg); 
-    opacity: 0.8; 
+  70% {
+    transform: scale(1.01) rotate(0.2deg);
+    opacity: 0.8;
     color: #747d8c;
   }
-  100% { 
-    transform: scale(1) rotate(0deg); 
-    opacity: 1; 
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
     color: #a4b0be;
   }
 }
@@ -195,6 +204,7 @@
   gap: 8px;
   flex-wrap: wrap;
   justify-content: center;
+  max-width: 90vw;
 }
 
 .syllable-dot {
@@ -226,14 +236,15 @@
 .game-field {
   position: relative;
   width: 100%;
-  height: 600px;
+  flex: 1;
+  min-height: 400px;
   background: linear-gradient(180deg, #e0e7ef 60%, #fff 100%);
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-  margin: 0 auto 30px auto;
-  overflow: visible;
-  padding-top: 40px;
-  padding-bottom: 80px;
+  margin: 0 auto 20px auto;
+  overflow: hidden;
+  padding: 20px 10px;
+  box-sizing: border-box;
 }
 
 /* 세로 방향 레이스 트랙 */
@@ -319,15 +330,14 @@
 
 .player.caught-moving {
   animation: caughtShake 0.5s ease-in-out infinite;
-  /* border: 3px solid #666; */
 }
 
 @keyframes winnerPulse {
-  from { 
+  from {
     box-shadow: 0 0 15px #999;
     transform: scale(1.1);
   }
-  to { 
+  to {
     box-shadow: 0 0 25px #999;
     transform: scale(1.2);
   }
@@ -393,7 +403,6 @@
 }
 
 .finish-line::before {
-  /* content: '🏁 GOAL 🏁'; */
   position: absolute;
   top: -25px;
   left: 50%;
@@ -426,7 +435,6 @@
 }
 
 .start-line::before {
-  /* content: '🚀 START 🚀'; */
   position: absolute;
   bottom: -25px;
   left: 50%;
@@ -441,11 +449,11 @@
 }
 
 @keyframes finishLineGlow {
-  from { 
+  from {
     filter: drop-shadow(0 0 5px rgba(153, 153, 153, 0.5));
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   }
-  to { 
+  to {
     filter: drop-shadow(0 0 15px rgba(153, 153, 153, 0.8));
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   }
@@ -540,11 +548,11 @@
 }
 
 @keyframes alertPulse {
-  from { 
+  from {
     background: rgba(85, 85, 85, 0.9);
     transform: scale(1);
   }
-  to { 
+  to {
     background: rgba(102, 102, 102, 0.9);
     transform: scale(1.02);
   }
@@ -555,252 +563,6 @@
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-}
-
-/* 모바일 반응형 디자인 */
-@media (max-width: 768px) {
-  .game-page {
-    padding: 15px;
-  }
-  
-  .game-header {
-    margin-bottom: 80px; /* 20px에서 30px로 증가 */
-  }
-  
-  .game-header h2 {
-    font-size: 24px;
-  }
-  
-  .game-info {
-    flex-direction: column;
-    gap: 8px;
-    font-size: 14px;
-  }
-  
-  .syllable-text {
-    font-size: 42px;
-    padding: 0 15px;
-    letter-spacing: 4px;
-  }
-  
-  .syllable-text.fast {
-    font-size: 46px;
-    letter-spacing: 6px;
-  }
-  
-  .syllable-text.slow {
-    font-size: 38px;
-    letter-spacing: 3px;
-  }
-  
-  .syllable-progress {
-    gap: 6px;
-  }
-  
-  .syllable-dot {
-    padding: 6px 10px;
-    font-size: 14px;
-  }
-  
-  .game-field {
-    padding-top: 32px;
-    padding-bottom: 100px;
-  }
-  
-  .race-track {
-    min-height: 200px;
-  }
-  
-  .player {
-    width: 45px;
-    height: 45px;
-  }
-  
-  .player-name {
-    font-size: 9px;
-    top: -28px;
-  }
-  
-  .winner-crown,
-  .caught-indicator {
-    font-size: 14px;
-    top: -32px;
-  }
-  
-  .finish-line::before {
-    font-size: 12px;
-    top: -23px;
-  }
-  
-  .start-line::before {
-    font-size: 12px;
-    bottom: -23px;
-  }
-  
-  .tagger {
-    width: 100px;
-    height: 100px;
-    top: -45px;
-  }
-  
-  .live-rankings h3 {
-    font-size: 14px;
-  }
-  
-  .ranking-item {
-    padding: 8px 12px;
-  }
-  
-  .rank-number {
-    font-size: 14px;
-    min-width: 22px;
-  }
-  
-  .ranking-player-name {
-    font-size: 13px;
-  }
-  
-  .caught-alert h3,
-  .safe-alert h3 {
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .game-page {
-    padding: 10px;
-  }
-  
-  .game-header {
-    margin-bottom: 80px; /* 간격 추가 */
-  }
-  
-  .game-header h2 {
-    font-size: 20px;
-  }
-  
-  .syllable-text {
-    font-size: 36px;
-    letter-spacing: 3px;
-  }
-  
-  .syllable-text.fast {
-    font-size: 40px;
-    letter-spacing: 4px;
-  }
-  
-  .syllable-text.slow {
-    font-size: 32px;
-    letter-spacing: 2px;
-  }
-  
-  .syllable-dot {
-    padding: 5px 8px;
-    font-size: 13px;
-  }
-  
-  .game-field {
-    padding: 12px;
-  }
-  
-  .race-track {
-    min-height: 450px;
-  }
-  
-  .player {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .player:nth-child(1) { left: 10%; }
-  .player:nth-child(2) { left: 25%; }
-  .player:nth-child(3) { left: 40%; }
-  .player:nth-child(4) { left: 55%; }
-  .player:nth-child(5) { left: 70%; }
-  .player:nth-child(6) { left: 85%; }
-  .player:nth-child(7) { left: 10%; --bottom-offset: 50px; }
-  .player:nth-child(8) { left: 25%; --bottom-offset: 50px; }
-  .player:nth-child(9) { left: 40%; --bottom-offset: 50px; }
-  .player:nth-child(10) { left: 85%; --bottom-offset: 50px; }
-  
-  .player-name {
-    font-size: 8px;
-    top: -26px;
-    padding: 1px 4px;
-  }
-  
-  .winner-crown,
-  .caught-indicator {
-    font-size: 12px;
-    top: -30px;
-  }
-  
-  .finish-line::before {
-    font-size: 11px;
-    top: -22px;
-  }
-  
-  .start-line::before {
-    font-size: 11px;
-    bottom: -22px;
-  }
-  
-  .tagger {
-    width: 100px;
-    height: 100px;
-    top: -40px;
-  }
-  
-  .preparation-screen {
-    padding: 20px;
-    margin: 10px;
-  }
-  
-  .game-rules {
-    padding: 12px;
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 360px) {
-  .game-header {
-    margin-bottom: 20px; /* 간격 추가 */
-  }
-  
-  .race-track {
-    min-height: 400px;
-  }
-  
-  .player {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .player:nth-child(1) { left: 8%; }
-  .player:nth-child(2) { left: 23%; }
-  .player:nth-child(3) { left: 38%; }
-  .player:nth-child(4) { left: 53%; }
-  .player:nth-child(5) { left: 68%; }
-  .player:nth-child(6) { left: 83%; }
-  .player:nth-child(7) { left: 8%; --bottom-offset: 45px; }
-  .player:nth-child(8) { left: 23%; --bottom-offset: 45px; }
-  .player:nth-child(9) { left: 38%; --bottom-offset: 45px; }
-  .player:nth-child(10) { left: 83%; --bottom-offset: 45px; }
-  
-  .player-name {
-    font-size: 7px;
-    top: -24px;
-  }
-  
-  .finish-line::before {
-    font-size: 10px;
-    top: -21px;
-  }
-  
-  .start-line::before {
-    font-size: 10px;
-    bottom: -21px;
-  }
 }
 
 .aim-indicator {
@@ -817,11 +579,13 @@
   z-index: 10;
   background: rgba(255,0,0,0.05);
 }
+
 .aim-indicator::before, .aim-indicator::after {
   content: '';
   position: absolute;
   background: #ff2222;
 }
+
 .aim-indicator::before {
   left: 50%;
   top: 4px;
@@ -830,6 +594,7 @@
   transform: translateX(-50%);
   border-radius: 1px;
 }
+
 .aim-indicator::after {
   top: 50%;
   left: 4px;
@@ -837,4 +602,380 @@
   height: 2px;
   transform: translateY(-50%);
   border-radius: 1px;
+}
+
+/* 모바일 반응형 디자인 */
+@media (max-width: 768px) {
+  .game-page {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .game-header {
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+
+  .game-header h2 {
+    font-size: 24px;
+  }
+
+  .game-info {
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .syllable-text {
+    font-size: 36px;
+    padding: 0 15px;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+  }
+
+  .syllable-text.fast {
+    font-size: 40px;
+    letter-spacing: 6px;
+  }
+
+  .syllable-text.slow {
+    font-size: 32px;
+    letter-spacing: 3px;
+  }
+
+  .syllable-progress {
+    gap: 6px;
+    max-width: 95vw;
+  }
+
+  .syllable-dot {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .game-field {
+    flex: 1;
+    min-height: 300px;
+    max-height: calc(100vh - 120px);
+    max-height: calc(100dvh - 120px);
+    padding: 15px 8px;
+    margin-bottom: 10px;
+  }
+
+  .race-track {
+    min-height: 250px;
+  }
+
+  .player {
+    width: 40px;
+    height: 40px;
+  }
+
+  .player-name {
+    font-size: 9px;
+    top: -26px;
+  }
+
+  .winner-crown,
+  .caught-indicator {
+    font-size: 14px;
+    top: -30px;
+  }
+
+  .finish-line::before {
+    font-size: 12px;
+    top: -22px;
+  }
+
+  .start-line::before {
+    font-size: 12px;
+    bottom: -22px;
+  }
+
+  .tagger {
+    width: 80px;
+    height: 80px;
+    top: 0px;
+  }
+
+  .preparation-screen {
+    padding: 20px;
+    margin: 10px;
+    max-width: 90%;
+  }
+
+  .game-rules {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  .live-rankings h3 {
+    font-size: 14px;
+  }
+
+  .ranking-item {
+    padding: 8px 12px;
+  }
+
+  .rank-number {
+    font-size: 14px;
+    min-width: 22px;
+  }
+
+  .ranking-player-name {
+    font-size: 13px;
+  }
+
+  .caught-alert h3,
+  .safe-alert h3 {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-page {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .game-header {
+    margin-bottom: 8px;
+  }
+
+  .game-header h2 {
+    font-size: 20px;
+  }
+
+  .syllable-text {
+    font-size: 30px;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+  }
+
+  .syllable-text.fast {
+    font-size: 34px;
+    letter-spacing: 4px;
+  }
+
+  .syllable-text.slow {
+    font-size: 26px;
+    letter-spacing: 2px;
+  }
+
+  .syllable-dot {
+    padding: 5px 8px;
+    font-size: 13px;
+  }
+
+  .game-field {
+    min-height: 280px;
+    max-height: calc(100vh - 100px);
+    max-height: calc(100dvh - 100px);
+    padding: 12px 6px;
+  }
+
+  .race-track {
+    min-height: 220px;
+  }
+
+  .player {
+    width: 35px;
+    height: 35px;
+  }
+
+  .player:nth-child(1) { left: 10%; }
+  .player:nth-child(2) { left: 25%; }
+  .player:nth-child(3) { left: 40%; }
+  .player:nth-child(4) { left: 55%; }
+  .player:nth-child(5) { left: 70%; }
+  .player:nth-child(6) { left: 85%; }
+  .player:nth-child(7) { left: 10%; --bottom-offset: 45px; }
+  .player:nth-child(8) { left: 25%; --bottom-offset: 45px; }
+  .player:nth-child(9) { left: 40%; --bottom-offset: 45px; }
+  .player:nth-child(10) { left: 85%; --bottom-offset: 45px; }
+
+  .player-name {
+    font-size: 8px;
+    top: -24px;
+    padding: 1px 4px;
+  }
+
+  .winner-crown,
+  .caught-indicator {
+    font-size: 12px;
+    top: -28px;
+  }
+
+  .finish-line::before {
+    font-size: 11px;
+    top: -21px;
+  }
+
+  .start-line::before {
+    font-size: 11px;
+    bottom: -21px;
+  }
+
+  .tagger {
+    width: 70px;
+    height: 70px;
+    top: 0px;
+  }
+
+  .preparation-screen {
+    padding: 15px;
+    margin: 5px;
+  }
+
+  .game-rules {
+    padding: 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .game-page {
+    padding: 5px;
+    gap: 5px;
+  }
+
+  .game-header {
+    margin-bottom: 5px;
+  }
+
+  .game-header h2 {
+    font-size: 18px;
+  }
+
+  .syllable-text {
+    font-size: 26px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .syllable-text.fast {
+    font-size: 30px;
+    letter-spacing: 3px;
+  }
+
+  .syllable-text.slow {
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+
+  .game-field {
+    min-height: 250px;
+    max-height: calc(100vh - 80px);
+    max-height: calc(100dvh - 80px);
+    padding: 10px 5px;
+  }
+
+  .race-track {
+    min-height: 200px;
+  }
+
+  .player {
+    width: 30px;
+    height: 30px;
+  }
+
+  .player:nth-child(1) { left: 8%; }
+  .player:nth-child(2) { left: 23%; }
+  .player:nth-child(3) { left: 38%; }
+  .player:nth-child(4) { left: 53%; }
+  .player:nth-child(5) { left: 68%; }
+  .player:nth-child(6) { left: 83%; }
+  .player:nth-child(7) { left: 8%; --bottom-offset: 40px; }
+  .player:nth-child(8) { left: 23%; --bottom-offset: 40px; }
+  .player:nth-child(9) { left: 38%; --bottom-offset: 40px; }
+  .player:nth-child(10) { left: 83%; --bottom-offset: 40px; }
+
+  .player-name {
+    font-size: 7px;
+    top: -22px;
+  }
+
+  .winner-crown,
+  .caught-indicator {
+    font-size: 10px;
+    top: -26px;
+  }
+
+  .finish-line::before {
+    font-size: 10px;
+    top: -20px;
+  }
+
+  .start-line::before {
+    font-size: 10px;
+    bottom: -20px;
+  }
+
+  .tagger {
+    width: 60px;
+    height: 60px;
+    top: 0px;
+  }
+}
+
+/* iOS Safari 높이 보정 */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 768px) {
+    .game-page {
+      height: -webkit-fill-available;
+      min-height: -webkit-fill-available;
+    }
+    
+    .game-field {
+      max-height: calc(-webkit-fill-available - 120px);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .game-field {
+      max-height: calc(-webkit-fill-available - 100px);
+    }
+  }
+  
+  @media (max-width: 360px) {
+    .game-field {
+      max-height: calc(-webkit-fill-available - 80px);
+    }
+  }
+}
+
+/* 가로 모드 최적화 */
+@media (max-width: 768px) and (orientation: landscape) and (max-height: 500px) {
+  .game-page {
+    padding: 5px;
+    gap: 5px;
+  }
+  
+  .game-header {
+    margin-bottom: 5px;
+  }
+  
+  .game-header h2 {
+    font-size: 18px;
+  }
+  
+  .game-field {
+    min-height: 200px;
+    max-height: calc(100vh - 60px);
+    max-height: calc(100dvh - 60px);
+  }
+  
+  .preparation-screen {
+    padding: 15px;
+    max-width: 400px;
+  }
+  
+  .syllable-text {
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
 }
