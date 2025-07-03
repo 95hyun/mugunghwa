@@ -86,7 +86,7 @@ const HomePage: React.FC = () => {
 
         <div className="players-section">
           <div className="section-header">
-            <h3>참가자 명단 ({playerNames.length}명)</h3>
+            <h3>참가자 설정</h3>
             <button
               className="add-player-btn"
               onClick={addPlayer}

@@ -319,9 +319,11 @@
   }
   
   .result-actions {
-    flex-direction: column;
+    flex-direction: row;
     gap: 8px;
     flex-shrink: 0;
+    justify-content: center;
+    align-items: stretch;
   }
 }
 

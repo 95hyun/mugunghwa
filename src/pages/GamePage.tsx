@@ -33,6 +33,7 @@ const GamePage: React.FC = () => {
   const [finishedOrder, setFinishedOrder] = useState<string[]>([]); // 골인 순서만 저장
   const [runningAnimation, setRunningAnimation] = useState<1 | 2>(1); // 달리기 애니메이션 상태
   const [currentlyRunningPlayers, setCurrentlyRunningPlayers] = useState<Set<string>>(new Set()); // 현재 달리고 있는 플레이어들
+  const [countdownValue, setCountdownValue] = useState<number | string | null>(null); // 카운트다운 상태 (3, 2, 1, "시작!", null)
   
   // 달리기 애니메이션을 위한 주기적 리렌더링 - 음절이 외쳐지는 동안에만
   useEffect(() => {
@@ -52,12 +53,30 @@ const GamePage: React.FC = () => {
     };
   }, [isShowingSyllables, currentlyRunningPlayers.size]);
   
+  // 준비화면 달리기 애니메이션 (게임 준비 상태일 때만)
+  useEffect(() => {
+    let preparationAnimationInterval: NodeJS.Timeout;
+    
+    if (gameState.gamePhase === 'preparation') {
+      preparationAnimationInterval = setInterval(() => {
+        setRunningAnimation(prev => prev === 1 ? 2 : 1);
+      }, 500); // 0.5초마다 애니메이션 프레임 변경
+    }
+    
+    return () => {
+      if (preparationAnimationInterval) {
+        clearInterval(preparationAnimationInterval);
+      }
+    };
+  }, [gameState.gamePhase]);
+  
   // Interval 및 Timeout 관리를 위한 ref
   const moveIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const taggerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const nextRoundTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const syllableTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
   const runningAnimationIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const countdownTimeoutRef = useRef<NodeJS.Timeout | null>(null); // 카운트다운 타이머
 
   // 모든 타이머와 인터벌을 정리하는 함수
   const clearAllTimers = () => {
@@ -76,6 +95,10 @@ const GamePage: React.FC = () => {
     if (runningAnimationIntervalRef.current) {
       clearInterval(runningAnimationIntervalRef.current);
       runningAnimationIntervalRef.current = null;
+    }
+    if (countdownTimeoutRef.current) {
+      clearTimeout(countdownTimeoutRef.current);
+      countdownTimeoutRef.current = null;
     }
     syllableTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     syllableTimeoutsRef.current = [];
@@ -125,6 +148,10 @@ const GamePage: React.FC = () => {
         clearInterval(runningAnimationIntervalRef.current);
         runningAnimationIntervalRef.current = null;
       }
+      if (countdownTimeoutRef.current) {
+        clearTimeout(countdownTimeoutRef.current);
+        countdownTimeoutRef.current = null;
+      }
       syllableTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
       syllableTimeoutsRef.current = [];
     };
@@ -145,14 +172,44 @@ const GamePage: React.FC = () => {
     setFinishedOrder([]); // 골인 순서 초기화
     setPlayersMoving(new Set()); // 움직이는 플레이어 초기화
     setCurrentlyRunningPlayers(new Set()); // 달리기 플레이어 초기화
+    setCountdownValue(null); // 카운트다운 초기화
     setGameState(prev => ({
       ...prev,
       gamePhase: 'playing'
     }));
-    startRound();
+    
+    // 카운트다운 시작
+    startCountdown();
+  };
+
+  const startCountdown = () => {
+    setCountdownValue(3); // 3부터 시작
+    
+    const countdownSequence = (value: number | string) => {
+      if (typeof value === 'number' && value > 0) {
+        setCountdownValue(value);
+        countdownTimeoutRef.current = setTimeout(() => {
+          countdownSequence(value - 1);
+        }, 1000); // 1초 간격
+      } else if (value === 0) {
+        setCountdownValue("시작!"); // "시작!" 표시
+        countdownTimeoutRef.current = setTimeout(() => {
+          setCountdownValue(null); // 카운트다운 완전 종료
+          // 카운트다운 완료 후 실제 게임 시작
+          setTimeout(() => {
+            startRound();
+          }, 300); // 0.3초 대기 후 게임 시작
+        }, 1000); // "시작!"을 1초간 표시
+      }
+    };
+    
+    countdownSequence(3);
   };
 
   const startRound = () => {
+    // 카운트다운 중이면 실행하지 않음
+    if (countdownValue !== null) return;
+    
     setGameState(prev => ({ ...prev, isItLooking: false }));
     
     setTimeout(() => {
@@ -384,6 +441,7 @@ const GamePage: React.FC = () => {
         const currentNonFinished = currentActivePlayers.filter(p => p.position < 200);
         
         if (currentNonFinished.length > 0 && currentActivePlayers.length > 1) {
+          // 다음 라운드에서는 카운트다운 없이 바로 시작
           startRound();
         }
         
@@ -483,6 +541,17 @@ const GamePage: React.FC = () => {
     } : null;
   }).filter(Boolean);
 
+  // 결과 이동 중 로딩 화면 컴포넌트
+  const ResultLoadingScreen: React.FC = () => (
+    <div className="floating-game-finished">
+      <div className="game-finished-content">
+        <h3>🎉 게임 종료!</h3>
+        <p>결과 페이지로 이동합니다...</p>
+        <div className="rainbow"></div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="game-page">
       <div className="game-header">
@@ -503,6 +572,19 @@ const GamePage: React.FC = () => {
         >
           <h3>게임 준비</h3>
           <p>참가자 {gameState.players.length}명이 준비되었습니다.</p>
+          <div className="player-preview-list">
+            {gameState.players.map((player, idx) => (
+              <div className="player-preview-card" key={player.id}>
+                <div className="player-preview-number">{idx + 1}</div>
+                <img
+                  src={`/character/running_man_${runningAnimation}.png`}
+                  alt={`${player.name} 아바타`}
+                  className="player-preview-image"
+                />
+                <div className="player-preview-name" style={{ backgroundColor: player.color }}>{player.name}</div>
+              </div>
+            ))}
+          </div>
           <p className="game-rules">
             🎯 <strong>게임 규칙:</strong><br/>
             • 술래가 뒤돌고 "무궁화 꽃이 피었습니다"를 외치는 동안 이동 가능<br/>
@@ -518,7 +600,43 @@ const GamePage: React.FC = () => {
       {gameState.gamePhase === 'playing' && (
         <>
           <AnimatePresence>
-            {isShowingSyllables && currentSyllableIndex >= 0 && (
+            {countdownValue !== null && (
+              <motion.div 
+                className="countdown-overlay"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div 
+                  className={`countdown-display ${countdownValue === "시작!" ? "countdown-start" : "countdown-number"}`}
+                  key={countdownValue} // key를 추가하여 각 값마다 새로운 애니메이션
+                  initial={{ scale: 0.5, rotate: countdownValue === "시작!" ? -20 : -10 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  exit={{ scale: countdownValue === "시작!" ? 1.2 : 1.5, rotate: countdownValue === "시작!" ? 20 : 10, opacity: 0 }}
+                  transition={{ 
+                    type: "spring", 
+                    stiffness: countdownValue === "시작!" ? 400 : 300, 
+                    damping: countdownValue === "시작!" ? 20 : 15 
+                  }}
+                >
+                  {countdownValue}
+                </motion.div>
+                <motion.p 
+                  className="countdown-text"
+                  key={`text-${countdownValue}`} // 텍스트도 각 값마다 애니메이션
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  {countdownValue === "시작!" ? "무궁화 꽃이 피었습니다!" : "게임 시작 준비"}
+                </motion.p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isShowingSyllables && currentSyllableIndex >= 0 && countdownValue === null && (
               <motion.div 
                 className="syllable-overlay"
                 initial={{ opacity: 0, scale: 0.5 }}
@@ -550,11 +668,12 @@ const GamePage: React.FC = () => {
                   key={player.id}
                   className={`player ${player.isEliminated ? 'eliminated' : ''} ${player.position >= 200 ? 'winner' : ''} ${playersMoving.has(player.id) ? 'caught-moving' : ''}`}
                   style={{ 
-                    bottom: `${5 + Math.min(player.position/2, 90)}%`
+                    bottom: `${5 + Math.min(player.position/2, 90)}%`,
+                    opacity: countdownValue !== null ? 0.3 : 1 // 카운트다운 중에는 흐리게 표시
                   }}
                   animate={{
                     x: player.isEliminated ? [0, 10, -10, 0] : 0,
-                    opacity: player.isEliminated ? 0.3 : 1,
+                    opacity: countdownValue !== null ? 0.3 : (player.isEliminated ? 0.3 : 1),
                     scale: player.position >= 200 ? 1.2 : (player.isEliminated ? 0.8 : 1),
                     boxShadow: player.position >= 200
                       ? '0 0 20px gold'
@@ -661,23 +780,7 @@ const GamePage: React.FC = () => {
       )}
 
       {gameState.gamePhase === 'finished' && (
-        <motion.div 
-          className="floating-game-finished"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <motion.div 
-            className="game-finished-content"
-            initial={{ scale: 0.8, y: 30 }}
-            animate={{ scale: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
-          >
-            <h3>🎉 게임 종료!</h3>
-            <div className="rainbow"></div>
-            <p>결과 페이지로 이동합니다...</p>
-          </motion.div>
-        </motion.div>
+        <ResultLoadingScreen />
       )}
     </div>
   );

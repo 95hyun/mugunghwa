@@ -55,7 +55,7 @@
   padding: 30px;
   border-radius: 20px;
   text-align: center;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
@@ -64,13 +64,89 @@
 .preparation-screen h3 {
   color: #333;
   font-size: 22px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
-.preparation-screen p {
-  color: #666;
-  font-size: 15px;
-  margin-bottom: 20px;
+.preparation-screen button {
+  display: block;
+  margin: 24px auto 0 auto;
+  width: fit-content;
+  min-width: 160px;
+  max-width: 90vw;
+}
+
+/* 플레이어 미리보기 섹션 */
+.players-preview-section {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 15px;
+  border: 2px solid #dee2e6;
+}
+
+.preview-title {
+  color: #333;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.players-preview-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.player-preview-list {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 12px 0;
+  scrollbar-width: none;
+}
+
+.player-preview-list::-webkit-scrollbar {
+  display: none;
+}
+
+.player-preview-card {
+  min-width: 80px;
+  max-width: 120px;
+  background: #f8f8f8;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.player-preview-number {
+  font-size: 13px;
+  font-weight: bold;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.player-preview-image {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 4px;
+}
+
+.player-preview-name {
+  font-size: 12px;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin-top: 2px;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .game-rules {
@@ -87,6 +163,83 @@
   color: #333;
 }
 
+/* 카운트다운 오버레이 */
+.countdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100; /* 음절 오버레이보다 높은 z-index */
+}
+
+.countdown-display {
+  text-align: center;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+  margin-bottom: 30px;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #ffd700);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.countdown-number {
+  color: #fff;
+  font-size: 120px;
+  font-weight: 900;
+  animation: gradientShift 1s ease-in-out infinite;
+}
+
+.countdown-start {
+  color: #fff;
+  font-size: 100px;
+  font-weight: 900;
+  text-shadow: 0 0 40px rgba(255, 255, 255, 1) !important;
+  background: linear-gradient(45deg, #ff4757, #ffa502, #2ed573, #1e90ff, #ff6348) !important;
+  background-size: 400% 400% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: startPulse 1s ease-in-out;
+}
+
+@keyframes startPulse {
+  0% { 
+    transform: scale(0.8);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+  }
+  50% { 
+    transform: scale(1.1);
+    text-shadow: 0 0 60px rgba(255, 255, 255, 1);
+  }
+  100% { 
+    transform: scale(1);
+    text-shadow: 0 0 40px rgba(255, 255, 255, 1);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.countdown-text {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  margin: 0;
+  opacity: 0.9;
+}
+
 /* 음절 표시 오버레이 */
 .syllable-overlay {
   position: fixed;
@@ -94,7 +247,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -114,73 +267,73 @@
 }
 
 @keyframes syllableSpeak {
-  0% {
-    transform: scale(0.5) rotate(-5deg);
-    opacity: 0;
+  0% { 
+    transform: scale(0.5) rotate(-5deg); 
+    opacity: 0; 
     color: #ff6b6b;
   }
-  30% {
-    transform: scale(1.3) rotate(2deg);
-    opacity: 0.8;
+  30% { 
+    transform: scale(1.3) rotate(2deg); 
+    opacity: 0.8; 
     color: #ffd700;
   }
-  60% {
-    transform: scale(1.1) rotate(-1deg);
-    opacity: 1;
+  60% { 
+    transform: scale(1.1) rotate(-1deg); 
+    opacity: 1; 
     color: #4ecdc4;
   }
-  100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
+  100% { 
+    transform: scale(1) rotate(0deg); 
+    opacity: 1; 
     color: white;
   }
 }
 
 @keyframes syllableFast {
-  0% {
-    transform: scale(0.3) rotate(-15deg);
-    opacity: 0;
+  0% { 
+    transform: scale(0.3) rotate(-15deg); 
+    opacity: 0; 
     color: #ff4757;
     filter: blur(3px);
   }
-  50% {
-    transform: scale(1.6) rotate(8deg);
-    opacity: 1;
+  50% { 
+    transform: scale(1.6) rotate(8deg); 
+    opacity: 1; 
     color: #ffa502;
     filter: blur(0px);
   }
-  100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
+  100% { 
+    transform: scale(1) rotate(0deg); 
+    opacity: 1; 
     color: #ff6348;
     filter: blur(0px);
   }
 }
 
 @keyframes syllableSlow {
-  0% {
-    transform: scale(0.8) rotate(-2deg);
-    opacity: 0;
+  0% { 
+    transform: scale(0.8) rotate(-2deg); 
+    opacity: 0; 
     color: #3742fa;
   }
-  20% {
-    transform: scale(1.05) rotate(1deg);
-    opacity: 0.3;
+  20% { 
+    transform: scale(1.05) rotate(1deg); 
+    opacity: 0.3; 
     color: #5352ed;
   }
-  40% {
-    transform: scale(1.03) rotate(-0.5deg);
-    opacity: 0.6;
+  40% { 
+    transform: scale(1.03) rotate(-0.5deg); 
+    opacity: 0.6; 
     color: #70a1ff;
   }
-  70% {
-    transform: scale(1.01) rotate(0.2deg);
-    opacity: 0.8;
+  70% { 
+    transform: scale(1.01) rotate(0.2deg); 
+    opacity: 0.8; 
     color: #747d8c;
   }
-  100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
+  100% { 
+    transform: scale(1) rotate(0deg); 
+    opacity: 1; 
     color: #a4b0be;
   }
 }
@@ -245,6 +398,8 @@
   overflow: hidden;
   padding: 20px 10px;
   box-sizing: border-box;
+  /* padding-top: 56px;
+  /* overflow: visible;
 }
 
 /* 세로 방향 레이스 트랙 */
@@ -333,11 +488,11 @@
 }
 
 @keyframes winnerPulse {
-  from {
+  from { 
     box-shadow: 0 0 15px #999;
     transform: scale(1.1);
   }
-  to {
+  to { 
     box-shadow: 0 0 25px #999;
     transform: scale(1.2);
   }
@@ -449,11 +604,11 @@
 }
 
 @keyframes finishLineGlow {
-  from {
+  from { 
     filter: drop-shadow(0 0 5px rgba(153, 153, 153, 0.5));
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   }
-  to {
+  to { 
     filter: drop-shadow(0 0 15px rgba(153, 153, 153, 0.8));
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   }
@@ -462,7 +617,7 @@
 /* 술래 - 상단에 배치 */
 .tagger {
   position: absolute;
-  top: -50px;
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
   transform-style: preserve-3d;
@@ -548,11 +703,11 @@
 }
 
 @keyframes alertPulse {
-  from {
+  from { 
     background: rgba(85, 85, 85, 0.9);
     transform: scale(1);
   }
-  to {
+  to { 
     background: rgba(102, 102, 102, 0.9);
     transform: scale(1.02);
   }
@@ -607,56 +762,198 @@
 /* 모바일 반응형 디자인 */
 @media (max-width: 768px) {
   .game-page {
-    height: 100vh;
-    height: 100dvh;
-    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     min-height: 100dvh;
-    padding: 10px;
-    gap: 10px;
+    height: 100dvh;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding-bottom: env(safe-area-inset-bottom, 24px);
   }
-
+  .preparation-screen {
+    min-height: unset;
+    height: auto;
+    padding: 10px 4px 12px 4px;
+    margin: 0;
+    padding-bottom: env(safe-area-inset-bottom, 24px);
+  }
+  
   .game-header {
     margin-bottom: 10px;
     flex-shrink: 0;
   }
-
+  
   .game-header h2 {
     font-size: 24px;
   }
-
+  
   .game-info {
     flex-direction: column;
     gap: 8px;
     font-size: 14px;
   }
 
+  .countdown-overlay {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .countdown-display.countdown-number {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 70px;
+    margin-bottom: 20px;
+  }
+  
+  .countdown-text {
+    font-size: 18px;
+    padding: 0 20px;
+  }
+
+  .countdown-display.countdown-number {
+    font-size: 70px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 60px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-text {
+    font-size: 16px;
+    padding: 0 15px;
+  }
+
+  .countdown-display.countdown-number {
+    font-size: 60px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 50px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-text {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+
+  .preparation-screen {
+    max-width: 100vw;
+    width: 100%;
+    margin: 0 auto !important;
+    box-sizing: border-box;
+    left: 0;
+    right: 0;
+  }
+  
+  .preparation-screen h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .players-preview-section {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .preview-title {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .player-preview-card {
+    min-width: 64px;
+    max-width: 90px;
+    padding: 6px 2px;
+  }
+  
+  .player-preview-image {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .player-preview-name {
+    font-size: 11px;
+    padding: 1px 4px;
+  }
+
+  .preparation-screen {
+    padding: 20px;
+    margin: 10px;
+    max-width: 90%;
+  }
+  
+  .preparation-screen h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .players-preview-section {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+  
+  .preview-title {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  
+  .player-preview-card {
+    min-width: 65px;
+    max-width: 65px;
+    padding: 8px 5px;
+  }
+  
+  .player-preview-number {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-character {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-name {
+    font-size: 9px;
+  }
+  
   .syllable-text {
     font-size: 36px;
     padding: 0 15px;
     letter-spacing: 4px;
     margin-bottom: 20px;
   }
-
+  
   .syllable-text.fast {
     font-size: 40px;
     letter-spacing: 6px;
   }
-
+  
   .syllable-text.slow {
     font-size: 32px;
     letter-spacing: 3px;
   }
-
+  
   .syllable-progress {
     gap: 6px;
     max-width: 95vw;
   }
-
+  
   .syllable-dot {
     padding: 6px 10px;
     font-size: 14px;
   }
-
+  
   .game-field {
     flex: 1;
     min-height: 300px;
@@ -665,37 +962,37 @@
     padding: 15px 8px;
     margin-bottom: 10px;
   }
-
+  
   .race-track {
     min-height: 250px;
   }
-
+  
   .player {
     width: 40px;
     height: 40px;
   }
-
+  
   .player-name {
     font-size: 9px;
     top: -26px;
   }
-
+  
   .winner-crown,
   .caught-indicator {
     font-size: 14px;
     top: -30px;
   }
-
+  
   .finish-line::before {
     font-size: 12px;
     top: -22px;
   }
-
+  
   .start-line::before {
     font-size: 12px;
     bottom: -22px;
   }
-
+  
   .tagger {
     width: 80px;
     height: 80px;
@@ -712,27 +1009,43 @@
     padding: 12px;
     font-size: 13px;
   }
-
+  
   .live-rankings h3 {
     font-size: 14px;
   }
-
+  
   .ranking-item {
     padding: 8px 12px;
   }
-
+  
   .rank-number {
     font-size: 14px;
     min-width: 22px;
   }
-
+  
   .ranking-player-name {
     font-size: 13px;
   }
-
+  
   .caught-alert h3,
   .safe-alert h3 {
     font-size: 14px;
+  }
+
+  .player-preview-list {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .preparation-screen button {
+    margin: 18px auto 0 auto;
+    width: 90%;
+    min-width: 0;
+    max-width: 320px;
+    display: block;
   }
 }
 
@@ -741,52 +1054,181 @@
     padding: 8px;
     gap: 8px;
   }
-
+  
   .game-header {
     margin-bottom: 8px;
   }
-
+  
   .game-header h2 {
     font-size: 20px;
   }
 
+  .countdown-overlay {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .countdown-display.countdown-number {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 70px;
+    margin-bottom: 20px;
+  }
+  
+  .countdown-text {
+    font-size: 18px;
+    padding: 0 20px;
+  }
+
+  .countdown-display.countdown-number {
+    font-size: 70px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 60px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-text {
+    font-size: 16px;
+    padding: 0 15px;
+  }
+
+  .countdown-display.countdown-number {
+    font-size: 60px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 50px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-text {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+
+  .preparation-screen {
+    padding: 20px;
+    margin: 10px;
+    max-width: 90%;
+  }
+  
+  .preparation-screen h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .players-preview-section {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .preview-title {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .player-preview-card {
+    min-width: 64px;
+    max-width: 90px;
+    padding: 6px 2px;
+  }
+  
+  .player-preview-image {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .player-preview-name {
+    font-size: 11px;
+    padding: 1px 4px;
+  }
+
+  .preparation-screen {
+    padding: 15px;
+    margin: 5px;
+  }
+  
+  .preparation-screen h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .players-preview-section {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+  
+  .preview-title {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  
+  .player-preview-card {
+    min-width: 65px;
+    max-width: 65px;
+    padding: 8px 5px;
+  }
+  
+  .player-preview-number {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-character {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-name {
+    font-size: 9px;
+  }
+  
   .syllable-text {
     font-size: 30px;
     letter-spacing: 3px;
     margin-bottom: 15px;
   }
-
+  
   .syllable-text.fast {
     font-size: 34px;
     letter-spacing: 4px;
   }
-
+  
   .syllable-text.slow {
     font-size: 26px;
     letter-spacing: 2px;
   }
-
+  
   .syllable-dot {
     padding: 5px 8px;
     font-size: 13px;
   }
-
+  
   .game-field {
     min-height: 280px;
     max-height: calc(100vh - 100px);
     max-height: calc(100dvh - 100px);
     padding: 12px 6px;
   }
-
+  
   .race-track {
     min-height: 220px;
   }
-
+  
   .player {
     width: 35px;
     height: 35px;
   }
-
+  
   .player:nth-child(1) { left: 10%; }
   .player:nth-child(2) { left: 25%; }
   .player:nth-child(3) { left: 40%; }
@@ -797,29 +1239,29 @@
   .player:nth-child(8) { left: 25%; --bottom-offset: 45px; }
   .player:nth-child(9) { left: 40%; --bottom-offset: 45px; }
   .player:nth-child(10) { left: 85%; --bottom-offset: 45px; }
-
+  
   .player-name {
     font-size: 8px;
     top: -24px;
     padding: 1px 4px;
   }
-
+  
   .winner-crown,
   .caught-indicator {
     font-size: 12px;
     top: -28px;
   }
-
+  
   .finish-line::before {
     font-size: 11px;
     top: -21px;
   }
-
+  
   .start-line::before {
     font-size: 11px;
     bottom: -21px;
   }
-
+  
   .tagger {
     width: 70px;
     height: 70px;
@@ -835,6 +1277,14 @@
     padding: 10px;
     font-size: 12px;
   }
+
+  .preparation-screen button {
+    margin: 18px auto 0 auto;
+    width: 90%;
+    min-width: 0;
+    max-width: 320px;
+    display: block;
+  }
 }
 
 @media (max-width: 360px) {
@@ -849,6 +1299,135 @@
 
   .game-header h2 {
     font-size: 18px;
+  }
+
+  .countdown-overlay {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .countdown-display.countdown-number {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 70px;
+    margin-bottom: 20px;
+  }
+  
+  .countdown-text {
+    font-size: 18px;
+    padding: 0 20px;
+  }
+
+  .countdown-display.countdown-number {
+    font-size: 70px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 60px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-text {
+    font-size: 16px;
+    padding: 0 15px;
+  }
+
+  .countdown-display.countdown-number {
+    font-size: 60px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 50px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-text {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+  
+  .preparation-screen {
+    padding: 20px;
+    margin: 10px;
+    max-width: 90%;
+  }
+  
+  .preparation-screen h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .players-preview-section {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .preview-title {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .player-preview-card {
+    min-width: 64px;
+    max-width: 90px;
+    padding: 6px 2px;
+  }
+  
+  .player-preview-image {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .player-preview-name {
+    font-size: 11px;
+    padding: 1px 4px;
+  }
+
+  .preparation-screen {
+    padding: 15px;
+    margin: 5px;
+  }
+  
+  .preparation-screen h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .players-preview-section {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+  
+  .preview-title {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  
+  .player-preview-card {
+    min-width: 65px;
+    max-width: 65px;
+    padding: 8px 5px;
+  }
+  
+  .player-preview-number {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-character {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-name {
+    font-size: 9px;
   }
 
   .syllable-text {
@@ -873,16 +1452,16 @@
     max-height: calc(100dvh - 80px);
     padding: 10px 5px;
   }
-
+  
   .race-track {
     min-height: 200px;
   }
-
+  
   .player {
     width: 30px;
     height: 30px;
   }
-
+  
   .player:nth-child(1) { left: 8%; }
   .player:nth-child(2) { left: 23%; }
   .player:nth-child(3) { left: 38%; }
@@ -893,7 +1472,7 @@
   .player:nth-child(8) { left: 23%; --bottom-offset: 40px; }
   .player:nth-child(9) { left: 38%; --bottom-offset: 40px; }
   .player:nth-child(10) { left: 83%; --bottom-offset: 40px; }
-
+  
   .player-name {
     font-size: 7px;
     top: -22px;
@@ -904,12 +1483,12 @@
     font-size: 10px;
     top: -26px;
   }
-
+  
   .finish-line::before {
     font-size: 10px;
     top: -20px;
   }
-
+  
   .start-line::before {
     font-size: 10px;
     bottom: -20px;
@@ -919,6 +1498,14 @@
     width: 60px;
     height: 60px;
     top: 0px;
+  }
+
+  .preparation-screen button {
+    margin: 18px auto 0 auto;
+    width: 90%;
+    min-width: 0;
+    max-width: 320px;
+    display: block;
   }
 }
 
@@ -974,8 +1561,237 @@
     max-width: 400px;
   }
   
+  .countdown-overlay {
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .countdown-display.countdown-number {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 70px;
+    margin-bottom: 20px;
+  }
+  
+  .countdown-text {
+    font-size: 18px;
+    padding: 0 20px;
+  }
+
+  .countdown-display.countdown-number {
+    font-size: 70px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 60px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown-text {
+    font-size: 16px;
+    padding: 0 15px;
+  }
+
+  .countdown-display.countdown-number {
+    font-size: 60px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-display.countdown-start {
+    font-size: 50px;
+    margin-bottom: 12px;
+  }
+  
+  .countdown-text {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+
+  .preparation-screen {
+    padding: 20px;
+    margin: 10px;
+    max-width: 90%;
+  }
+  
+  .preparation-screen h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .players-preview-section {
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .preview-title {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .player-preview-card {
+    min-width: 70px;
+    max-width: 70px;
+    padding: 10px 6px;
+  }
+  
+  .player-preview-number {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .player-preview-character {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 5px;
+  }
+  
+  .player-preview-name {
+    font-size: 10px;
+  }
+
+  .preparation-screen {
+    padding: 15px;
+    margin: 5px;
+  }
+  
+  .preparation-screen h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .players-preview-section {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+  
+  .preview-title {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  
+  .player-preview-card {
+    min-width: 65px;
+    max-width: 65px;
+    padding: 8px 5px;
+  }
+  
+  .player-preview-number {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-character {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-name {
+    font-size: 9px;
+  }
+
   .syllable-text {
     font-size: 28px;
     margin-bottom: 15px;
   }
+}
+
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+/**
+  * Rainbow
+  *
+  * @author jh3y
+*/
+.rainbow {
+  border-radius: 100%;
+  -webkit-clip-path: inset(0 0 50% 0);
+  clip-path: inset(0 0 50% 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  width: 100px;
+  position: relative;
+  margin: 24px auto 0 auto;
+}
+.rainbow:before {
+  content: '';
+  height: 80px;
+  width: 80px;
+  animation: spin 1.5s linear infinite;
+  border-radius: 100%;
+  box-shadow: 0 0 0 4px #f22613 inset, 0 0 0 8px #f89406 inset, 0 0 0 12px #f9bf3b inset, 0 0 0 16px #2ecc71 inset, 0 0 0 20px #19b5fe inset, 0 0 0 24px #663399 inset;
+  clip-path: inset(0 0 50% 0);
+  overflow: hidden;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+.rainbow:after {
+  content: '';
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  border-radius: 100%;
+  box-shadow: -40px -2px 0 1px #ffffff, -35px -6px 0 1px #ffffff, -30px -2px 0 1px #ffffff, -30px -8px 0 1px #ffffff, -25px -2px 0 1px #ffffff, -25px -8px 0 1px #ffffff, -20px -6px 0 1px #ffffff, -15px -2px 0 1px #ffffff, 40px -2px 0 1px #ffffff, 35px -6px 0 1px #ffffff, 30px -2px 0 1px #ffffff, 30px -8px 0 1px #ffffff, 25px -2px 0 1px #ffffff, 25px -8px 0 1px #ffffff, 20px -6px 0 1px #ffffff, 15px -2px 0 1px #ffffff;
+  left: 45px;
+  top: 60px;
+}
+@media (max-width: 768px) {
+  .rainbow {
+    width: 60px;
+    height: 60px;
+  }
+  .rainbow:before {
+    width: 48px;
+    height: 48px;
+    left: 6px;
+    top: 6px;
+  }
+}
+
+.floating-game-finished {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  background: rgba(40,40,40,0.7);
+}
+
+.game-finished-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  min-height: 180px;
+  background: rgba(255,255,255,0.95);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  padding: 32px 16px 28px 16px;
+  overflow: visible;
+}
 }

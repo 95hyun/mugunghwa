@@ -17,10 +17,12 @@
   padding: 30px;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
+  max-width: 700px;
   width: 100%;
   backdrop-filter: blur(10px);
   margin: auto;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .home-title {
@@ -39,6 +41,110 @@
   font-size: 15px;
 }
 
+/* 플레이어 미리보기 섹션 */
+.players-preview-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 15px;
+  border: 2px solid #dee2e6;
+}
+
+.preview-title {
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.players-preview-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.players-preview-list {
+  display: flex;
+  gap: 15px;
+  padding: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  
+  /* 스크롤바 숨기기 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.players-preview-list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.player-preview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+  max-width: 100px;
+  padding: 15px 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.player-preview-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-color: #4ecdc4;
+}
+
+.player-preview-number {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(45deg, #444, #666);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.player-preview-character {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
+}
+
+.player-preview-name {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.2;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 플레이어 설정 섹션 */
 .players-section {
   margin-bottom: 25px;
 }
@@ -183,7 +289,7 @@
 }
 
 .game-info p {
-  margin: 0;
+  margin: 5px 0;
 }
 
 /* 모바일 반응형 디자인 */
@@ -199,9 +305,10 @@
   .home-container {
     padding: 25px;
     margin: 0;
-    max-height: 90vh;
-    max-height: 90dvh;
+    max-height: 95vh;
+    max-height: 95dvh;
     overflow-y: auto;
+    max-width: 100%;
   }
   
   .home-title {
@@ -210,6 +317,44 @@
   
   .home-subtitle {
     font-size: 14px;
+  }
+  
+  .players-preview-section {
+    padding: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .preview-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .players-preview-list {
+    gap: 12px;
+    padding: 8px;
+  }
+  
+  .player-preview-card {
+    min-width: 85px;
+    max-width: 85px;
+    padding: 12px 8px;
+  }
+  
+  .player-preview-number {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+  
+  .player-preview-character {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 6px;
+  }
+  
+  .player-preview-name {
+    font-size: 11px;
   }
   
   .section-header h3 {
@@ -248,9 +393,8 @@
   
   .home-container {
     padding: 20px;
-    margin: 0;
-    max-height: 95vh;
-    max-height: 95dvh;
+    max-height: 98vh;
+    max-height: 98dvh;
     overflow-y: auto;
   }
   
@@ -261,6 +405,44 @@
   .home-subtitle {
     font-size: 13px;
     margin-bottom: 20px;
+  }
+  
+  .players-preview-section {
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .preview-title {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .players-preview-list {
+    gap: 10px;
+    padding: 6px;
+  }
+  
+  .player-preview-card {
+    min-width: 75px;
+    max-width: 75px;
+    padding: 10px 6px;
+  }
+  
+  .player-preview-number {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .player-preview-character {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 5px;
+  }
+  
+  .player-preview-name {
+    font-size: 10px;
   }
   
   .section-header h3 {
@@ -316,8 +498,8 @@
   
   .home-container {
     padding: 15px;
-    max-height: 98vh;
-    max-height: 98dvh;
+    max-height: 99vh;
+    max-height: 99dvh;
   }
   
   .home-title {
@@ -326,6 +508,43 @@
   
   .home-subtitle {
     font-size: 12px;
+  }
+  
+  .players-preview-section {
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .preview-title {
+    font-size: 14px;
+  }
+  
+  .players-preview-list {
+    gap: 8px;
+    padding: 4px;
+  }
+  
+  .player-preview-card {
+    min-width: 70px;
+    max-width: 70px;
+    padding: 8px 4px;
+  }
+  
+  .player-preview-number {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-character {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 4px;
+  }
+  
+  .player-preview-name {
+    font-size: 9px;
   }
   
   .section-header h3 {
@@ -371,7 +590,41 @@
 /* 터치 디바이스 최적화 */
 @media (hover: none) and (pointer: coarse) {
   .add-player-btn:hover,
-  .remove-player-btn:hover {
+  .remove-player-btn:hover,
+  .player-preview-card:hover {
     transform: none;
   }
+}
+
+/* 스크롤 힌트 (선택사항) */
+@media (max-width: 768px) {
+  .players-preview-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to left, rgba(248, 249, 250, 0.8), transparent);
+    pointer-events: none;
+    opacity: 0.7;
+  }
+}
+
+/* 가로 스크롤 터치 최적화 */
+.players-preview-list {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+
+/* 접근성 개선 */
+.player-preview-card:focus {
+  outline: 2px solid #4ecdc4;
+  outline-offset: 2px;
+}
+
+/* 애니메이션 최적화 */
+.player-preview-image {
+  will-change: transform;
+  transform: translateZ(0);
 }
