@@ -1,6 +1,6 @@
 .result-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #a8e6cf 0%, #88d8a3 100%);
+  background: linear-gradient(135deg, #ffffff 90%, #ff0000 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,7 +71,7 @@
   /* 전체 results-list 영역의 중앙이 아닌, 전체 컨테이너의 중앙에 맞춤 */
   left: calc(43%); /* 컨테이너 패딩 25px의 절반만큼 오른쪽으로 이동 */
   transform: translateX(-50%);
-  background: linear-gradient(45deg, #4ecdc4, #72e6df);
+  background: linear-gradient(45deg, #555, #777);
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
@@ -80,7 +80,7 @@
   justify-content: center;
   gap: 6px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+  box-shadow: 0 4px 15px rgba(85, 85, 85, 0.4);
   z-index: 10;
   font-size: 12px;
   font-weight: 600;
@@ -91,7 +91,7 @@
 
 .scroll-hint:hover {
   transform: translateX(-50%) scale(1.05);
-  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.6);
+  box-shadow: 0 6px 20px rgba(85, 85, 85, 0.6);
 }
 
 .scroll-hint-text {
@@ -135,9 +135,9 @@
 }
 
 .result-item.winner {
-  background: linear-gradient(45deg, #ffd700, #ffed4e);
-  border-color: #ffd700;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  background: linear-gradient(45deg, #999, #bbb);
+  border-color: #999;
+  box-shadow: 0 4px 15px rgba(153, 153, 153, 0.3);
 }
 
 .rank-section {
@@ -541,7 +541,7 @@
 
 /* 포커스 개선 */
 .result-item:focus-within {
-  outline: 2px solid #4ecdc4;
+  outline: 2px solid #666;
   outline-offset: 2px;
 }
 

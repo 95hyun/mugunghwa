@@ -72,7 +72,7 @@ const HomePage: React.FC = () => {
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
         >
-          🏃‍♂️ 무궁화 꽃이 피었습니다 🏃‍♀️
+          🌺 무궁화 꽃이 피었습니다 🌺
         </motion.h1>
         
         <motion.p 
@@ -81,7 +81,7 @@ const HomePage: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          참가자들의 이름을 입력하고 게임을 시작해보세요!
+          등수 추첨 게임
         </motion.p>
 
         <div className="players-section">
@@ -144,12 +144,12 @@ const HomePage: React.FC = () => {
             variant="primary"
             size="large"
           >
-            🎮 게임 시작!
+            게임 시작
           </Button>
         </div>
         
         <div className="game-info">
-          <p>👥 최소 2명, 최대 10명까지 참가 가능</p>
+          <p>ℹ️ 최소 2명, 최대 10명까지 참가 가능</p>
         </div>
       </motion.div>
     </div>

@@ -31,12 +31,55 @@ const GamePage: React.FC = () => {
   const [playersMoving, setPlayersMoving] = useState<Set<string>>(new Set());
   const [syllableSpeed, setSyllableSpeed] = useState<'normal' | 'fast' | 'slow'>('normal');
   const [finishedOrder, setFinishedOrder] = useState<string[]>([]); // 골인 순서만 저장
+  const [runningAnimation, setRunningAnimation] = useState<1 | 2>(1); // 달리기 애니메이션 상태
+  const [activelyMovingPlayers, setActivelyMovingPlayers] = useState<Set<string>>(new Set());
+  
+  // 달리기 애니메이션을 위한 주기적 리렌더링
+  useEffect(() => {
+    let animationInterval: NodeJS.Timeout;
+    
+    if (playersMoving.size > 0) {
+      animationInterval = setInterval(() => {
+        // 강제 리렌더링을 위한 더미 상태 업데이트
+        setRunningAnimation(prev => prev === 1 ? 2 : 1);
+      }, 200);
+    }
+    
+    return () => {
+      if (animationInterval) {
+        clearInterval(animationInterval);
+      }
+    };
+  }, [playersMoving.size]);
   
   // Interval 및 Timeout 관리를 위한 ref
   const moveIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const taggerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const nextRoundTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const syllableTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
+  const runningAnimationIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 모든 타이머와 인터벌을 정리하는 함수
+  const clearAllTimers = () => {
+    if (moveIntervalRef.current) {
+      clearInterval(moveIntervalRef.current);
+      moveIntervalRef.current = null;
+    }
+    if (taggerTimeoutRef.current) {
+      clearTimeout(taggerTimeoutRef.current);
+      taggerTimeoutRef.current = null;
+    }
+    if (nextRoundTimeoutRef.current) {
+      clearTimeout(nextRoundTimeoutRef.current);
+      nextRoundTimeoutRef.current = null;
+    }
+    if (runningAnimationIntervalRef.current) {
+      clearInterval(runningAnimationIntervalRef.current);
+      runningAnimationIntervalRef.current = null;
+    }
+    syllableTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    syllableTimeoutsRef.current = [];
+  };
 
   useEffect(() => {
     if (playerNames.length === 0) {
@@ -45,7 +88,7 @@ const GamePage: React.FC = () => {
     }
 
     // 플레이어 초기화
-    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8', '#ff7675', '#74b9ff', '#fd79a8'];
+    const colors = ['#444', '#666', '#888', '#555', '#777', '#999', '#333', '#aaa', '#bbb', '#ccc'];
     const initialPlayers: Player[] = playerNames.map((name: string, index: number) => ({
       id: `player-${index}`,
       name,
@@ -78,28 +121,20 @@ const GamePage: React.FC = () => {
         clearTimeout(nextRoundTimeoutRef.current);
         nextRoundTimeoutRef.current = null;
       }
+      if (runningAnimationIntervalRef.current) {
+        clearInterval(runningAnimationIntervalRef.current);
+        runningAnimationIntervalRef.current = null;
+      }
       syllableTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
       syllableTimeoutsRef.current = [];
     };
   }, []);
 
-  const clearAllTimers = () => {
-    // 모든 timer와 interval 정리
-    if (moveIntervalRef.current) {
-      clearInterval(moveIntervalRef.current);
-      moveIntervalRef.current = null;
-    }
-    if (taggerTimeoutRef.current) {
-      clearTimeout(taggerTimeoutRef.current);
-      taggerTimeoutRef.current = null;
-    }
-    if (nextRoundTimeoutRef.current) {
-      clearTimeout(nextRoundTimeoutRef.current);
-      nextRoundTimeoutRef.current = null;
-    }
-    syllableTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    syllableTimeoutsRef.current = [];
-  };
+  // 달리기 애니메이션 디버깅
+  useEffect(() => {
+    console.log('Running animation state:', runningAnimation);
+    console.log('Players moving:', Array.from(playersMoving));
+  }, [runningAnimation, playersMoving]);
 
   const startGame = () => {
     // 모든 기존 timer 정리
@@ -204,15 +239,15 @@ const GamePage: React.FC = () => {
   };
 
   const movePlayersRandomly = () => {
+    const movedPlayers = new Set<string>();
     setGameState(prev => {
       const newPlayers = prev.players.map(player => {
         if (player.isEliminated || player.position >= 200) return player;
-        
         const shouldMove = Math.random() < 0.4;
         if (shouldMove) {
           const moveDistance = Math.random() * 3 + 2;
           const newPosition = Math.min(200, player.position + moveDistance);
-          
+          movedPlayers.add(player.id);
           return {
             ...player,
             position: newPosition
@@ -242,6 +277,7 @@ const GamePage: React.FC = () => {
         players: newPlayers
       };
     });
+    setActivelyMovingPlayers(movedPlayers);
   };
 
   const taggerTurnsAround = () => {
@@ -271,6 +307,8 @@ const GamePage: React.FC = () => {
           return new Set(); // 처리 후 초기화
         });
       }, 1500);
+      
+      setActivelyMovingPlayers(new Set());
       
       return { ...prev, isItLooking: true };
     });
@@ -454,7 +492,7 @@ const GamePage: React.FC = () => {
             • 먼저 골인하거나 마지막까지 살아남으면 승리!
           </p>
           <Button onClick={startGame} variant="primary" size="large">
-            게임 시작!
+            게임 시작
           </Button>
         </motion.div>
       )}
@@ -494,39 +532,65 @@ const GamePage: React.FC = () => {
                   key={player.id}
                   className={`player ${player.isEliminated ? 'eliminated' : ''} ${player.position >= 200 ? 'winner' : ''} ${playersMoving.has(player.id) ? 'caught-moving' : ''}`}
                   style={{ 
-                    backgroundColor: player.color,
                     bottom: `${5 + Math.min(player.position/2, 90)}%`
                   }}
                   animate={{
                     x: player.isEliminated ? [0, 10, -10, 0] : 0,
                     opacity: player.isEliminated ? 0.3 : 1,
                     scale: player.position >= 200 ? 1.2 : (player.isEliminated ? 0.8 : 1),
-                    boxShadow: player.position >= 200 ? '0 0 20px gold' : playersMoving.has(player.id) ? '0 0 15px red' : 'none'
+                    boxShadow: player.position >= 200
+                      ? '0 0 20px gold'
+                      : playersMoving.has(player.id)
+                        ? 'none'
+                        : 'none'
                   }}
                   transition={{ duration: 0.5 }}
                 >
-                  <span className="player-name">{player.name}</span>
+                  <img 
+                    src={
+                      (activelyMovingPlayers.has(player.id) || playersMoving.has(player.id))
+                        ? `/character/running_man_${runningAnimation}.png`
+                        : '/character/running_man_1.png'
+                    }
+                    alt={`${player.name} 아바타`}
+                    className="player-image"
+                  />
+                  <span 
+                    className="player-name"
+                    style={{ backgroundColor: player.color, color: '#fff', boxShadow: `0 0 8px ${player.color}` }}
+                  >
+                    {player.name}
+                  </span>
                   {player.position >= 200 && (
                     <span className="winner-crown">👑</span>
                   )}
                   {playersMoving.has(player.id) && (
                     <span className="caught-indicator">💥</span>
                   )}
+                  {playersMoving.has(player.id) && (
+                    <span className="aim-indicator"></span>
+                  )}
                 </motion.div>
               ))}
             </div>
             
-            <div className="finish-line">🏁</div>
+            <div className="finish-line"></div>
+            <div className="start-line"></div>
             
-            <motion.div 
-              className="tagger"
-              animate={{
-                rotateY: gameState.isItLooking ? 0 : 180
-              }}
-              transition={{ duration: 0.5 }}
-            >
-              👮‍♂️
-            </motion.div>
+            <div className="tagger">
+              <AnimatePresence mode="wait">
+                <motion.img 
+                  key={gameState.isItLooking ? "front" : "back"}
+                  src={gameState.isItLooking ? "/character/gaksital_front.png" : "/character/gaksital_back.png"}
+                  alt={gameState.isItLooking ? "술래 정면" : "술래 뒤돌아보기"}
+                  className="tagger-image"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </AnimatePresence>
+            </div>
           </div>
 
           {/* 실시간 등수 표시 */}

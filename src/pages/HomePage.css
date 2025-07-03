@@ -1,6 +1,6 @@
 .home-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ffffff 90%, #ff0000 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,19 +56,19 @@
   height: 44px;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(45deg, #4ecdc4, #72e6df);
+  background: linear-gradient(45deg, #555, #777);
   color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+  box-shadow: 0 4px 15px rgba(85, 85, 85, 0.3);
 }
 
 .add-player-btn:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+  box-shadow: 0 6px 20px rgba(85, 85, 85, 0.4);
 }
 
 .add-player-btn:disabled {
@@ -101,7 +101,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(45deg, #444, #666);
   color: white;
   border-radius: 8px;
   font-weight: 600;
@@ -122,20 +122,20 @@
   height: 44px;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(45deg, #ff4757, #ff6b7a);
+  background: linear-gradient(45deg, #888, #aaa);
   color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  box-shadow: 0 4px 15px rgba(136, 136, 136, 0.3);
   flex-shrink: 0;
 }
 
 .remove-player-btn:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+  box-shadow: 0 6px 20px rgba(136, 136, 136, 0.4);
 }
 
 .remove-player-btn:disabled {
@@ -151,14 +151,14 @@
 }
 
 .error-message {
-  background: #ffe6e6;
-  color: #cc0000;
+  background: #f5f5f5;
+  color: #333;
   padding: 10px;
   border-radius: 8px;
   font-size: 13px;
   font-weight: 500;
   margin-top: 12px;
-  border-left: 4px solid #cc0000;
+  border-left: 4px solid #666;
 }
 
 .actions {
@@ -332,7 +332,7 @@
 /* 버튼 포커스 스타일 */
 .add-player-btn:focus-visible,
 .remove-player-btn:focus-visible {
-  outline: 2px solid #4ecdc4;
+  outline: 2px solid #666;
   outline-offset: 2px;
 }
 

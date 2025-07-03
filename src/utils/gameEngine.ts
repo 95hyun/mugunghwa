@@ -19,8 +19,8 @@ export class GameEngine {
    */
   initializePlayers(names: string[]): Player[] {
     const colors = [
-      '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', 
-      '#dda0dd', '#98d8c8', '#ff7675', '#74b9ff', '#fd79a8'
+      '#444', '#666', '#888', '#555', '#777', 
+      '#999', '#333', '#aaa', '#bbb', '#ccc'
     ];
 
     return names.map((name, index) => ({

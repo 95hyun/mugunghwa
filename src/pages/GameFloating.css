@@ -13,11 +13,11 @@
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
-  background: rgba(255, 0, 0, 0.95) !important;
+  background: rgba(85, 85, 85, 0.95) !important;
   max-width: 350px !important;
   width: 90% !important;
   padding: 20px 25px !important;
-  box-shadow: 0 15px 40px rgba(255, 0, 0, 0.4) !important;
+  box-shadow: 0 15px 40px rgba(85, 85, 85, 0.4) !important;
 }
 
 .floating-alert.safe-alert {
@@ -25,11 +25,11 @@
   left: 50% !important;
   right: auto !important;
   transform: translateX(-50%) !important;
-  background: rgba(0, 200, 0, 0.95) !important;
+  background: rgba(102, 102, 102, 0.95) !important;
   max-width: 300px !important;
   width: 80% !important;
   padding: 15px 20px !important;
-  box-shadow: 0 10px 30px rgba(0, 200, 0, 0.4) !important;
+  box-shadow: 0 10px 30px rgba(102, 102, 102, 0.4) !important;
 }
 
 /* 플로팅 등수 표시 */

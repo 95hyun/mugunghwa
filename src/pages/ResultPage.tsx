@@ -124,7 +124,7 @@ const ResultPage: React.FC = () => {
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
         >
-          🎉 게임 결과 🎉
+          게임 결과
         </motion.h1>
 
         <div className="results-wrapper">
