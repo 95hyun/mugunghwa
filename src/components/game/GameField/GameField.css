@@ -464,19 +464,25 @@
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 768px) {
     .game-field {
-      max-height: calc(-webkit-fill-available - 120px);
+      max-height: -webkit-fill-available;
+      max-height: calc(100vh - 120px);
+      margin-bottom: 120px;
     }
   }
   
   @media (max-width: 480px) {
     .game-field {
-      max-height: calc(-webkit-fill-available - 100px);
+      max-height: -webkit-fill-available;
+      max-height: calc(100vh - 100px);
+      margin-bottom: 100px;
     }
   }
   
   @media (max-width: 360px) {
     .game-field {
-      max-height: calc(-webkit-fill-available - 80px);
+      max-height: -webkit-fill-available;
+      max-height: calc(100vh - 80px);
+      margin-bottom: 80px;
     }
   }
 }
