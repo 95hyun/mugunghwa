@@ -13,6 +13,7 @@ const ResultPage: React.FC = () => {
   
   const [showScrollHint, setShowScrollHint] = useState(false);
   const resultsListRef = useRef<HTMLDivElement>(null);
+  const [showCopied, setShowCopied] = useState(false);
 
   // 정렬된 플레이어 목록 (gameResult가 없을 때 빈 배열)
   const sortedPlayers = gameResult ? [...gameResult.players].sort((a, b) => {
@@ -110,6 +111,26 @@ const ResultPage: React.FC = () => {
     }
   };
 
+  // 결과 텍스트 생성 함수
+  const getResultShareText = () => {
+    if (!gameResult) return '';
+    const sorted = [...gameResult.players].sort((a, b) => (a.rank || 999) - (b.rank || 999));
+    const rankText = sorted.map((p, i) => `#${p.rank} ${p.name}`).join(', ');
+    return `[무궁화 꽃이 피었습니다 결과]\n${rankText}`;
+  };
+
+  // 클립보드 복사 및 플로팅 문구 표시
+  const handleShareResult = async () => {
+    const text = getResultShareText();
+    try {
+      await navigator.clipboard.writeText(text);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 1800);
+    } catch (e) {
+      alert('클립보드 복사에 실패했습니다.');
+    }
+  };
+
   return (
     <div className="result-page">
       <motion.div 
@@ -203,7 +224,17 @@ const ResultPage: React.FC = () => {
           >
             재시작
           </Button>
+          <Button
+            onClick={handleShareResult}
+            variant="primary"
+            size="large"
+          >
+            결과 공유
+          </Button>
         </motion.div>
+        {showCopied && (
+          <div className="floating-copy-toast">게임 결과가 클립보드에 복사되었습니다!</div>
+        )}
       </motion.div>
     </div>
   );
