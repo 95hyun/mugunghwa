@@ -7,9 +7,9 @@ export class GameEngine {
   constructor(settings?: Partial<GameSettings>) {
     this.settings = {
       maxPlayers: 10,
-      moveChance: 0.3,        // 30% 확률로 움직임
-      eliminationRate: 0.4,   // 40% 탈락률 (더 많은 플레이어가 탈락 가능)
-      roundDuration: 6000,    // 6초 라운드 (3초 텍스트 + 2초 이동 + 1초 돌아보기)
+      moveChance: 0.3,        // X% 확률로 움직임
+      eliminationRate: 0.1,   // x% 탈락률 (더 많은 플레이어가 탈락 가능)
+      roundDuration: 4000,    // x초 라운드 (3초 텍스트 + 2초 이동 + 1초 돌아보기)
       ...settings
     };
   }

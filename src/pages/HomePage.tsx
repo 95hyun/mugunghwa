@@ -6,7 +6,7 @@ import Input from '../components/common/Input';
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
-  const [playerNames, setPlayerNames] = useState<string[]>(['']);
+  const [playerNames, setPlayerNames] = useState<string[]>(['', '']);
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
   };
 
   const removePlayer = (index: number) => {
-    if (playerNames.length > 1) {
+    if (playerNames.length > 2) {
       const newNames = playerNames.filter((_, i) => i !== index);
       setPlayerNames(newNames);
       setError('');
@@ -81,37 +81,51 @@ const HomePage: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          참가자들의 이름을 입력하고 등수 추첨을 시작해보세요!
+          참가자들의 이름을 입력하고 게임을 시작해보세요!
         </motion.p>
 
         <div className="players-section">
-          <h3>참가자 명단</h3>
-          
-          {playerNames.map((name, index) => (
-            <motion.div 
-              key={index}
-              className="player-input-row"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
+          <div className="section-header">
+            <h3>참가자 명단 ({playerNames.length}명)</h3>
+            <button
+              className="add-player-btn"
+              onClick={addPlayer}
+              disabled={playerNames.length >= 10}
+              title="참가자 추가"
             >
-              <Input
-                value={name}
-                onChange={(value) => updatePlayerName(index, value)}
-                placeholder={`참가자 ${index + 1} 이름`}
-                maxLength={10}
-              />
-              {playerNames.length > 1 && (
-                <Button
+              <span className="plus-icon">+</span>
+            </button>
+          </div>
+          
+          <div className="players-list">
+            {playerNames.map((name, index) => (
+              <motion.div 
+                key={index}
+                className="player-input-row"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <div className="player-number">{index + 1}</div>
+                <div className="input-wrapper">
+                  <Input
+                    value={name}
+                    onChange={(value) => updatePlayerName(index, value)}
+                    placeholder={`참가자 ${index + 1} 이름`}
+                    maxLength={10}
+                  />
+                </div>
+                <button
+                  className="remove-player-btn"
                   onClick={() => removePlayer(index)}
-                  variant="danger"
-                  size="small"
+                  disabled={playerNames.length <= 2}
+                  title="참가자 삭제"
                 >
-                  삭제
-                </Button>
-              )}
-            </motion.div>
-          ))}
+                  <span className="minus-icon">−</span>
+                </button>
+              </motion.div>
+            ))}
+          </div>
           
           {error && (
             <motion.div 
@@ -126,20 +140,16 @@ const HomePage: React.FC = () => {
 
         <div className="actions">
           <Button
-            onClick={addPlayer}
-            variant="secondary"
-            disabled={playerNames.length >= 10}
-          >
-            참가자 추가
-          </Button>
-          
-          <Button
             onClick={startGame}
             variant="primary"
             size="large"
           >
-            게임 시작!
+            🎮 게임 시작!
           </Button>
+        </div>
+        
+        <div className="game-info">
+          <p>👥 최소 2명, 최대 10명까지 참가 가능</p>
         </div>
       </motion.div>
     </div>

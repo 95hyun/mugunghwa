@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GameState } from '../types/game';
@@ -10,20 +10,67 @@ const ResultPage: React.FC = () => {
   const navigate = useNavigate();
   const gameResult: GameState = location.state?.gameResult;
   const playerNames: string[] = location.state?.playerNames || [];
+  
+  const [showScrollHint, setShowScrollHint] = useState(false);
+  const resultsListRef = useRef<HTMLDivElement>(null);
 
-  if (!gameResult) {
-    navigate('/');
-    return null;
-  }
-
-  const sortedPlayers = [...gameResult.players].sort((a, b) => {
-    const rankA = a.rank || 999; // null이나 undefined인 경우 큰 값으로 처리
+  // 정렬된 플레이어 목록 (gameResult가 없을 때 빈 배열)
+  const sortedPlayers = gameResult ? [...gameResult.players].sort((a, b) => {
+    const rankA = a.rank || 999;
     const rankB = b.rank || 999;
     return rankA - rankB;
-  });
+  }) : [];
+
+  // 스크롤 가능 여부 체크 - Hook을 조건부 없이 항상 호출
+  useEffect(() => {
+    // gameResult가 없으면 early return
+    if (!gameResult || sortedPlayers.length === 0) {
+      return;
+    }
+
+    const checkScrollable = () => {
+      if (resultsListRef.current) {
+        const { scrollHeight, clientHeight, scrollTop } = resultsListRef.current;
+        const isScrollable = scrollHeight > clientHeight;
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10;
+        setShowScrollHint(isScrollable && !isAtBottom);
+      }
+    };
+
+    const handleScroll = () => {
+      checkScrollable();
+    };
+
+    const resultsElement = resultsListRef.current;
+    if (resultsElement) {
+      resultsElement.addEventListener('scroll', handleScroll);
+      // 초기 체크
+      const timeoutId = setTimeout(checkScrollable, 100);
+      // 윈도우 리사이즈 시에도 체크
+      window.addEventListener('resize', checkScrollable);
+
+      return () => {
+        resultsElement.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('resize', checkScrollable);
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [gameResult, sortedPlayers.length]);
+
+  // gameResult가 없으면 홈으로 리다이렉트
+  useEffect(() => {
+    if (!gameResult) {
+      navigate('/');
+    }
+  }, [gameResult, navigate]);
+
+  // gameResult가 없으면 null 반환 (리다이렉트 중)
+  if (!gameResult) {
+    return null;
+  }
   
   const getRankEmoji = (rank: number | null) => {
-    if (!rank || rank === 0) return '❓'; // 순위 없음 표시
+    if (!rank || rank === 0) return '❓';
     switch (rank) {
       case 1: return '🥇';
       case 2: return '🥈';
@@ -33,7 +80,7 @@ const ResultPage: React.FC = () => {
   };
 
   const getRankText = (rank: number | null) => {
-    if (!rank || rank === 0) return '순위 없음'; // 0등 문제 해결
+    if (!rank || rank === 0) return '순위 없음';
     switch (rank) {
       case 1: return '1등';
       case 2: return '2등';
@@ -42,12 +89,25 @@ const ResultPage: React.FC = () => {
     }
   };
 
+  const getProgressPercentage = (position: number) => {
+    return Math.min(Math.round(position / 2), 100);
+  };
+
   const newGame = () => {
     navigate('/');
   };
 
   const restartGame = () => {
     navigate('/game', { state: { playerNames: playerNames } });
+  };
+
+  const scrollToBottom = () => {
+    if (resultsListRef.current) {
+      resultsListRef.current.scrollTo({
+        top: resultsListRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
@@ -67,33 +127,59 @@ const ResultPage: React.FC = () => {
           🎉 게임 결과 🎉
         </motion.h1>
 
-        <div className="results-list">
-          {sortedPlayers.map((player, index) => (
-            <motion.div
-              key={player.id}
-              className={`result-item ${player.rank === 1 ? 'winner' : ''}`}
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 + 0.4 }}
-            >
-              <div className="rank-section">
-                <span className="rank-emoji">{getRankEmoji(player.rank)}</span>
-                <span className="rank-text">{getRankText(player.rank)}</span>
-              </div>
-              
-              <div 
-                className="player-info"
-                style={{ backgroundColor: player.color }}
+        <div className="results-wrapper">
+          <div className={`results-list ${showScrollHint ? 'hide-scrollbar' : ''}`} ref={resultsListRef}>
+            {sortedPlayers.map((player, index) => (
+              <motion.div
+                key={player.id}
+                className={`result-item ${player.rank === 1 ? 'winner' : ''}`}
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 + 0.4 }}
               >
-                <span className="player-name">{player.name}</span>
-              </div>
-              
-              <div className="player-distance">
-                {player.position >= 200 ? '🏁 골인!' : `${Math.round(player.position/2)}%`}
-                {player.isEliminated && ' (탈락)'}
+                <div className="rank-section">
+                  <span className="rank-emoji">{getRankEmoji(player.rank)}</span>
+                  <span className="rank-text">{getRankText(player.rank)}</span>
+                </div>
+                
+                <div className="progress-section">
+                  <div className="progress-bar-container">
+                    <motion.div 
+                      className="progress-bar"
+                      style={{ backgroundColor: player.color }}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${getProgressPercentage(player.position)}%` }}
+                      transition={{ duration: 1, delay: index * 0.1 + 0.6 }}
+                    >
+                      <span className="progress-bar-text">{player.name}</span>
+                    </motion.div>
+                  </div>
+                  <div className="progress-info">
+                    <span className="progress-percentage">
+                      {player.position >= 200 ? '🏁 골인!' : `${getProgressPercentage(player.position)}m`}
+                      {player.isEliminated && ' (탈락)'}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+          {/* 스크롤 힌트 화살표 - results-wrapper 내부, results-list 외부로 이동하여 고정 위치 */}
+          {showScrollHint && (
+            <motion.div 
+              className="scroll-hint"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              onClick={scrollToBottom}
+            >
+              <div className="scroll-hint-text">더 보기</div>
+              <div className="scroll-arrow">
+                <span>▼</span>
               </div>
             </motion.div>
-          ))}
+          )}
         </div>
 
         <motion.div 

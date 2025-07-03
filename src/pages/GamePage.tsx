@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Player, GameState } from '../types/game';
 import Button from '../components/common/Button';
 import './GamePage.css';
+import './GameFloating.css';
 
 const GamePage: React.FC = () => {
   const location = useLocation();
@@ -221,30 +222,26 @@ const GamePage: React.FC = () => {
         return player;
       });
       
+      // 새로 골인한 플레이어들을 즉시 체크 (이전 위치와 비교)
+      newPlayers.forEach(player => {
+        const oldPlayer = prev.players.find(p => p.id === player.id);
+        if (oldPlayer && oldPlayer.position < 200 && player.position >= 200) {
+          // 새로 골인한 플레이어 - 즉시 finishedOrder 업데이트
+          setFinishedOrder(currentOrder => {
+            if (!currentOrder.includes(player.id)) {
+              console.log(`${player.name}이 ${currentOrder.length + 1}등으로 골인!`);
+              return [...currentOrder, player.id];
+            }
+            return currentOrder;
+          });
+        }
+      });
+      
       return {
         ...prev,
         players: newPlayers
       };
     });
-    
-    // 골인 체크를 별도로 처리 (상태 업데이트 중첩 방지)
-    setTimeout(() => {
-      setGameState(current => {
-        // 새로 골인한 플레이어들 체크
-        current.players.forEach(player => {
-          if (player.position >= 200) {
-            setFinishedOrder(currentOrder => {
-              if (!currentOrder.includes(player.id)) {
-                console.log(`${player.name}이 ${currentOrder.length + 1}등으로 골인!`);
-                return [...currentOrder, player.id];
-              }
-              return currentOrder;
-            });
-          }
-        });
-        return current;
-      });
-    }, 0);
   };
 
   const taggerTurnsAround = () => {
@@ -498,7 +495,7 @@ const GamePage: React.FC = () => {
                   className={`player ${player.isEliminated ? 'eliminated' : ''} ${player.position >= 200 ? 'winner' : ''} ${playersMoving.has(player.id) ? 'caught-moving' : ''}`}
                   style={{ 
                     backgroundColor: player.color,
-                    left: `${Math.min(player.position/2, 95)}%`
+                    bottom: `${5 + Math.min(player.position/2, 90)}%`
                   }}
                   animate={{
                     x: player.isEliminated ? [0, 10, -10, 0] : 0,
@@ -535,7 +532,7 @@ const GamePage: React.FC = () => {
           {/* 실시간 등수 표시 */}
           {finishedPlayersForDisplay.length > 0 && (
             <motion.div 
-              className="live-rankings"
+              className="live-rankings floating-rankings"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
@@ -559,7 +556,7 @@ const GamePage: React.FC = () => {
 
           {gameState.isItLooking && playersMoving.size > 0 && (
             <motion.div 
-              className="caught-alert"
+              className="caught-alert floating-alert"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
             >
@@ -569,7 +566,7 @@ const GamePage: React.FC = () => {
 
           {gameState.isItLooking && playersMoving.size === 0 && (
             <motion.div 
-              className="safe-alert"
+              className="safe-alert floating-alert"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
@@ -581,12 +578,21 @@ const GamePage: React.FC = () => {
 
       {gameState.gamePhase === 'finished' && (
         <motion.div 
-          className="game-finished"
+          className="floating-game-finished"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
         >
-          <h3>🎉 게임 종료!</h3>
-          <p>결과 페이지로 이동합니다...</p>
+          <motion.div 
+            className="game-finished-content"
+            initial={{ scale: 0.8, y: 30 }}
+            animate={{ scale: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
+          >
+            <h3>🎉 게임 종료!</h3>
+            <div className="rainbow"></div>
+            <p>결과 페이지로 이동합니다...</p>
+          </motion.div>
         </motion.div>
       )}
     </div>

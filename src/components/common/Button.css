@@ -7,6 +7,10 @@
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  min-height: 44px; /* 모바일 터치 타겟 최소 크기 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn:disabled {
@@ -16,18 +20,21 @@
 
 /* Sizes */
 .btn--small {
-  padding: 8px 16px;
+  padding: 10px 16px;
   font-size: 14px;
+  min-height: 40px;
 }
 
 .btn--medium {
   padding: 12px 24px;
   font-size: 16px;
+  min-height: 44px;
 }
 
 .btn--large {
   padding: 16px 32px;
   font-size: 18px;
+  min-height: 48px;
 }
 
 /* Variants */
@@ -59,4 +66,46 @@
 
 .btn--danger:hover:not(:disabled) {
   box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .btn--small {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+
+  .btn--medium {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+
+  .btn--large {
+    padding: 14px 28px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    width: 100%; /* 모바일에서 전체 너비 */
+  }
+  
+  .btn--small {
+    padding: 8px 12px;
+    font-size: 12px;
+    min-height: 38px;
+  }
+
+  .btn--medium {
+    padding: 10px 18px;
+    font-size: 14px;
+    min-height: 42px;
+  }
+
+  .btn--large {
+    padding: 12px 24px;
+    font-size: 15px;
+    min-height: 46px;
+  }
 }

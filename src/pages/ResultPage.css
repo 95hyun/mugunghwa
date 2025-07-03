@@ -9,174 +9,517 @@
 
 .result-container {
   background: rgba(255, 255, 255, 0.95);
-  padding: 40px;
+  padding: 25px;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   width: 100%;
   backdrop-filter: blur(10px);
+  position: relative; /* 스크롤 힌트 위치 기준점 */
 }
 
 .result-title {
   text-align: center;
-  font-size: 36px;
+  font-size: 26px;
   font-weight: 700;
   color: #333;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   line-height: 1.2;
 }
 
+.results-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
 .results-list {
-  margin-bottom: 30px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 5px;
+  position: relative; /* 스크롤 힌트 위치 기준점 */
+}
+
+/* 데스크톱에서는 기본 스크롤바 표시 */
+.results-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.results-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+}
+
+.results-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+}
+
+/* 스크롤 힌트가 표시될 때는 스크롤바 숨김 */
+.results-list.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.results-list.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* 스크롤 힌트 */
+.scroll-hint {
+  position: absolute;
+  bottom: 0px; /* results-wrapper 하단에 고정 */
+  /* 전체 results-list 영역의 중앙이 아닌, 전체 컨테이너의 중앙에 맞춤 */
+  left: calc(43%); /* 컨테이너 패딩 25px의 절반만큼 오른쪽으로 이동 */
+  transform: translateX(-50%);
+  background: linear-gradient(45deg, #4ecdc4, #72e6df);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+  z-index: 10;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.scroll-hint:hover {
+  transform: translateX(-50%) scale(1.05);
+  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.6);
+}
+
+.scroll-hint-text {
+  white-space: nowrap;
+}
+
+.scroll-arrow {
+  animation: bounce 1.5s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
 }
 
 .result-item {
   display: flex;
   align-items: center;
-  padding: 20px;
-  margin-bottom: 15px;
-  border-radius: 15px;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  border-radius: 12px;
   background: #f8f9fa;
   border: 2px solid #e9ecef;
   transition: all 0.3s ease;
+  min-height: 60px;
 }
 
 .result-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 .result-item.winner {
   background: linear-gradient(45deg, #ffd700, #ffed4e);
   border-color: #ffd700;
   box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-  transform: scale(1.02);
 }
 
 .rank-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 80px;
+  min-width: 55px;
+  flex-shrink: 0;
+  margin-right: 15px;
 }
 
 .rank-emoji {
-  font-size: 36px;
-  margin-bottom: 5px;
+  font-size: 24px;
+  margin-bottom: 2px;
+  line-height: 1;
 }
 
 .rank-text {
   font-weight: 700;
-  font-size: 16px;
+  font-size: 11px;
   color: #333;
   text-align: center;
+  line-height: 1.2;
 }
 
-.player-info {
+.progress-section {
   flex: 1;
-  margin: 0 20px;
-  padding: 15px 20px;
-  border-radius: 12px;
-  color: white;
-  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 16px;
+  position: relative;
+  min-width: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  transition: width 0.3s ease;
 }
 
-.player-name {
-  font-size: 20px;
+.progress-bar-text {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  padding: 0 8px;
 }
 
-.player-distance {
-  min-width: 80px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 18px;
-  color: #333;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  border-radius: 10px;
+.progress-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.progress-percentage {
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  text-align: right;
 }
 
 .result-actions {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-/* 반응형 디자인 */
+/* 모바일 반응형 디자인 */
 @media (max-width: 768px) {
+  .result-page {
+    padding: 15px;
+    align-items: center;
+    justify-content: center;
+  }
+  
   .result-container {
     padding: 20px;
-    margin: 10px;
+    margin: 0;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 100%;
   }
   
   .result-title {
-    font-size: 28px;
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  
+  .results-wrapper {
+    flex: 1;
+    margin-bottom: 15px;
+  }
+  
+  .results-list {
+    max-height: 50vh;
+    /* 모바일에서 스크롤바 숨김 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    position: relative;
+  }
+  
+  .results-list::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scroll-hint {
+    font-size: 11px;
+    padding: 6px 12px;
+    gap: 4px;
+    min-width: 70px;
+    /* 모바일에서 패딩 20px 고려 */
+    left: calc(45%);
   }
   
   .result-item {
-    padding: 15px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    min-height: 55px;
+  }
+  
+  .rank-section {
+    min-width: 50px;
+    margin-right: 12px;
   }
   
   .rank-emoji {
-    font-size: 28px;
+    font-size: 20px;
   }
   
   .rank-text {
-    font-size: 14px;
+    font-size: 10px;
   }
   
-  .player-name {
-    font-size: 18px;
+  .progress-section {
+    gap: 3px;
   }
   
-  .player-distance {
-    font-size: 16px;
-    min-width: 70px;
-    padding: 8px;
+  .progress-percentage {
+    font-size: 10px;
+  }
+  
+  .progress-bar-container {
+    height: 28px;
+  }
+  
+  .progress-bar-text {
+    font-size: 13px;
   }
   
   .result-actions {
     flex-direction: column;
+    gap: 8px;
   }
 }
 
 @media (max-width: 480px) {
+  .result-page {
+    padding: 15px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .result-container {
+    padding: 18px;
+    max-height: 85vh;
+    justify-content: center;
+  }
+  
   .result-title {
-    font-size: 24px;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  
+  .results-wrapper {
+    margin-bottom: 12px;
+  }
+  
+  .results-list {
+    max-height: 50vh;
+    /* 모바일에서 스크롤바 숨김 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    position: relative;
+  }
+  
+  .results-list::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scroll-hint {
+    font-size: 10px;
+    padding: 5px 10px;
+    gap: 3px;
+    min-width: 60px;
+    /* 480px 이하에서 패딩 18px 고려 */
+    left: calc(43%);
   }
   
   .result-item {
-    flex-direction: column;
-    text-align: center;
-    padding: 15px;
-    gap: 10px;
+    padding: 8px 10px;
+    margin-bottom: 5px;
+    min-height: 50px;
   }
   
   .rank-section {
-    min-width: auto;
-  }
-  
-  .player-info {
-    margin: 0;
-    width: 100%;
-  }
-  
-  .player-distance {
-    min-width: auto;
-    width: 100%;
+    min-width: 45px;
+    margin-right: 10px;
   }
   
   .rank-emoji {
-    font-size: 24px;
+    font-size: 18px;
+    margin-bottom: 1px;
   }
   
-  .player-name {
+  .rank-text {
+    font-size: 9px;
+  }
+  
+  .progress-section {
+    gap: 2px;
+  }
+  
+  .progress-percentage {
+    font-size: 9px;
+  }
+  
+  .progress-bar-container {
+    height: 26px;
+  }
+  
+  .progress-bar-text {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .result-container {
+    padding: 15px;
+  }
+  
+  .result-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .results-list {
+    max-height: 55vh;
+    /* 모바일에서 스크롤바 숨김 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    position: relative;
+  }
+  
+  .results-list::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scroll-hint {
+    font-size: 9px;
+    padding: 4px 8px;
+    gap: 2px;
+    min-width: 50px;
+    /* 360px 이하에서 패딩 15px 고려 */
+    left: calc(43%);
+  }
+  
+  .result-item {
+    padding: 6px 8px;
+    margin-bottom: 4px;
+    min-height: 45px;
+  }
+  
+  .rank-section {
+    min-width: 40px;
+    margin-right: 8px;
+  }
+  
+  .rank-emoji {
     font-size: 16px;
+    margin-bottom: 1px;
+  }
+  
+  .rank-text {
+    font-size: 8px;
+  }
+  
+  .progress-section {
+    gap: 2px;
+  }
+  
+  .progress-percentage {
+    font-size: 8px;
+  }
+  
+  .progress-bar-container {
+    height: 24px;
+  }
+  
+  .progress-bar-text {
+    font-size: 11px;
+  }
+}
+
+/* 매우 작은 화면에서의 추가 최적화 */
+@media (max-width: 320px) {
+  .result-item {
+    min-height: 55px;
+  }
+  
+  .progress-bar-container {
+    height: 22px;
+  }
+  
+  .progress-bar-text {
+    font-size: 10px;
+  }
+}
+
+/* 세로 모드 최적화 (높이가 작은 경우) */
+@media (max-height: 700px) and (max-width: 768px) {
+  .result-page {
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .result-container {
+    max-height: 90vh;
+    justify-content: center;
+  }
+  
+  .result-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .results-list {
+    max-height: 55vh;
+  }
+  
+  .result-item {
+    min-height: 60px;
+    margin-bottom: 6px;
+  }
+}
+
+/* 매우 낮은 화면에서의 최적화 */
+@media (max-height: 600px) and (max-width: 768px) {
+  .result-page {
+    padding: 5px;
+  }
+  
+  .result-container {
+    max-height: 95vh;
+    padding: 15px;
+  }
+  
+  .result-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .results-list {
+    max-height: 60vh;
   }
 }
 
@@ -184,7 +527,7 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -193,5 +536,30 @@
 }
 
 .result-item {
-  animation: fadeInUp 0.5s ease-out;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* 포커스 개선 */
+.result-item:focus-within {
+  outline: 2px solid #4ecdc4;
+  outline-offset: 2px;
+}
+
+/* 진행도 바 애니메이션 효과 */
+.progress-bar {
+  background: linear-gradient(90deg, 
+    rgba(255,255,255,0.2) 0%, 
+    transparent 50%, 
+    rgba(255,255,255,0.2) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }

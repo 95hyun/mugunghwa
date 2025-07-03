@@ -1,0 +1,312 @@
+/* 게임 중 플로팅 요소들 (게임 화면 위에 표시) */
+
+/* 플로팅 상태 알림 */
+.floating-alert {
+  position: fixed !important;
+  z-index: 200 !important;
+  backdrop-filter: blur(10px) !important;
+  margin: 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+.floating-alert.caught-alert {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background: rgba(255, 0, 0, 0.95) !important;
+  max-width: 350px !important;
+  width: 90% !important;
+  padding: 20px 25px !important;
+  box-shadow: 0 15px 40px rgba(255, 0, 0, 0.4) !important;
+}
+
+.floating-alert.safe-alert {
+  bottom: 100px !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  background: rgba(0, 200, 0, 0.95) !important;
+  max-width: 300px !important;
+  width: 80% !important;
+  padding: 15px 20px !important;
+  box-shadow: 0 10px 30px rgba(0, 200, 0, 0.4) !important;
+}
+
+/* 플로팅 등수 표시 */
+.floating-rankings {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  z-index: 100 !important;
+  margin: 0 !important;
+  backdrop-filter: blur(10px) !important;
+  max-width: 280px !important;
+}
+
+/* 게임 종료 플로팅 */
+.floating-game-finished {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 300 !important;
+  backdrop-filter: blur(15px) !important;
+}
+
+.game-finished-content {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+.game-finished-content h3 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.game-finished-content p {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+/* 로딩 애니메이션 - Rainbow Spinner */
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.rainbow {
+  border-radius: 100%;
+  -webkit-clip-path: inset(0 0 50% 0);
+  clip-path: inset(0 0 50% 0);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  height: 100px;
+  position: relative;
+  width: 100px;
+  margin: 0 auto;
+}
+
+.rainbow:after {
+  content: '';
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  border-radius: 100%;
+  -webkit-box-shadow: -40px -2px 0 1px #ffffff, -35px -6px 0 1px #ffffff, 
+                      -30px -2px 0 1px #ffffff, -30px -8px 0 1px #ffffff, 
+                      -25px -2px 0 1px #ffffff, -25px -8px 0 1px #ffffff, 
+                      -20px -6px 0 1px #ffffff, -15px -2px 0 1px #ffffff, 
+                      40px -2px 0 1px #ffffff, 35px -6px 0 1px #ffffff, 
+                      30px -2px 0 1px #ffffff, 30px -8px 0 1px #ffffff, 
+                      25px -2px 0 1px #ffffff, 25px -8px 0 1px #ffffff, 
+                      20px -6px 0 1px #ffffff, 15px -2px 0 1px #ffffff;
+  box-shadow: -40px -2px 0 1px #ffffff, -35px -6px 0 1px #ffffff, 
+              -30px -2px 0 1px #ffffff, -30px -8px 0 1px #ffffff, 
+              -25px -2px 0 1px #ffffff, -25px -8px 0 1px #ffffff, 
+              -20px -6px 0 1px #ffffff, -15px -2px 0 1px #ffffff, 
+              40px -2px 0 1px #ffffff, 35px -6px 0 1px #ffffff, 
+              30px -2px 0 1px #ffffff, 30px -8px 0 1px #ffffff, 
+              25px -2px 0 1px #ffffff, 25px -8px 0 1px #ffffff, 
+              20px -6px 0 1px #ffffff, 15px -2px 0 1px #ffffff;
+}
+
+.rainbow:before {
+  content: '';
+  height: 80px;
+  width: 80px;
+  -webkit-animation: spin 1.5s infinite linear;
+  animation: spin 1.5s infinite linear;
+  border-radius: 100%;
+  -webkit-box-shadow: 0 0 0 4px #f22613 inset, 0 0 0 8px #f89406 inset, 
+                      0 0 0 12px #f9bf3b inset, 0 0 0 16px #2ecc71 inset, 
+                      0 0 0 20px #19b5fe inset, 0 0 0 24px #663399 inset, 
+                      0 0 0 28px #bf55ec inset;
+  box-shadow: 0 0 0 4px #f22613 inset, 0 0 0 8px #f89406 inset, 
+              0 0 0 12px #f9bf3b inset, 0 0 0 16px #2ecc71 inset, 
+              0 0 0 20px #19b5fe inset, 0 0 0 24px #663399 inset, 
+              0 0 0 28px #bf55ec inset;
+  -webkit-clip-path: inset(0 0 50% 0);
+  clip-path: inset(0 0 50% 0);
+  overflow: hidden;
+  position: absolute;
+}
+
+/* 모바일 반응형 플로팅 요소 */
+@media (max-width: 768px) {
+  .floating-rankings {
+    top: 15px !important;
+    right: 15px !important;
+    max-width: 240px !important;
+  }
+  
+  .floating-alert.caught-alert {
+    max-width: 300px !important;
+    width: 85% !important;
+    padding: 15px 20px !important;
+  }
+  
+  .floating-alert.safe-alert {
+    bottom: 80px !important;
+    max-width: 260px !important;
+    width: 75% !important;
+    padding: 12px 16px !important;
+  }
+
+  .game-finished-content {
+    padding: 30px;
+    width: 85%;
+  }
+
+  .game-finished-content h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .game-finished-content p {
+    font-size: 15px;
+    margin-bottom: 25px;
+  }
+
+  .rainbow {
+    height: 80px;
+    width: 80px;
+  }
+
+  .rainbow:before {
+    height: 64px;
+    width: 64px;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-rankings {
+    top: 10px !important;
+    right: 10px !important;
+    left: 10px !important;
+    max-width: none !important;
+  }
+  
+  .floating-alert.caught-alert {
+    max-width: 280px !important;
+    width: 90% !important;
+    padding: 12px 18px !important;
+  }
+  
+  .floating-alert.safe-alert {
+    bottom: 70px !important;
+    max-width: 240px !important;
+    width: 80% !important;
+    padding: 10px 14px !important;
+  }
+
+  .game-finished-content {
+    padding: 25px;
+    width: 90%;
+  }
+
+  .game-finished-content h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .game-finished-content p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .rainbow {
+    height: 70px;
+    width: 70px;
+  }
+
+  .rainbow:before {
+    height: 56px;
+    width: 56px;
+  }
+
+  .rainbow:after {
+    -webkit-box-shadow: -32px -2px 0 1px #ffffff, -28px -5px 0 1px #ffffff, 
+                        -24px -2px 0 1px #ffffff, -24px -6px 0 1px #ffffff, 
+                        -20px -2px 0 1px #ffffff, -20px -6px 0 1px #ffffff, 
+                        -16px -5px 0 1px #ffffff, -12px -2px 0 1px #ffffff, 
+                        32px -2px 0 1px #ffffff, 28px -5px 0 1px #ffffff, 
+                        24px -2px 0 1px #ffffff, 24px -6px 0 1px #ffffff, 
+                        20px -2px 0 1px #ffffff, 20px -6px 0 1px #ffffff, 
+                        16px -5px 0 1px #ffffff, 12px -2px 0 1px #ffffff;
+    box-shadow: -32px -2px 0 1px #ffffff, -28px -5px 0 1px #ffffff, 
+                -24px -2px 0 1px #ffffff, -24px -6px 0 1px #ffffff, 
+                -20px -2px 0 1px #ffffff, -20px -6px 0 1px #ffffff, 
+                -16px -5px 0 1px #ffffff, -12px -2px 0 1px #ffffff, 
+                32px -2px 0 1px #ffffff, 28px -5px 0 1px #ffffff, 
+                24px -2px 0 1px #ffffff, 24px -6px 0 1px #ffffff, 
+                20px -2px 0 1px #ffffff, 20px -6px 0 1px #ffffff, 
+                16px -5px 0 1px #ffffff, 12px -2px 0 1px #ffffff;
+  }
+}
+
+@media (max-width: 360px) {
+  .floating-rankings {
+    padding: 8px !important;
+  }
+  
+  .floating-alert.caught-alert {
+    padding: 10px 15px !important;
+  }
+  
+  .floating-alert.safe-alert {
+    padding: 8px 12px !important;
+  }
+
+  .game-finished-content {
+    padding: 20px;
+  }
+
+  .game-finished-content h3 {
+    font-size: 18px;
+  }
+
+  .game-finished-content p {
+    font-size: 13px;
+  }
+
+  .rainbow {
+    height: 60px;
+    width: 60px;
+  }
+
+  .rainbow:before {
+    height: 48px;
+    width: 48px;
+  }
+}

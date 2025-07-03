@@ -1,10 +1,10 @@
 .input-container {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .input-label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-weight: 600;
   color: #333;
   font-size: 14px;
@@ -20,6 +20,8 @@
   background: white;
   transition: all 0.2s ease;
   outline: none;
+  min-height: 44px; /* 모바일 터치 타겟 최소 크기 */
+  box-sizing: border-box;
 }
 
 .input:focus {
@@ -44,8 +46,50 @@
 
 .input-error {
   display: block;
-  margin-top: 6px;
+  margin-top: 4px;
   color: #ff4757;
   font-size: 12px;
   font-weight: 500;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .input-container {
+    margin-bottom: 14px;
+  }
+  
+  .input-label {
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+  
+  .input {
+    padding: 10px 14px;
+    font-size: 15px;
+    min-height: 42px;
+  }
+  
+  .input-error {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-container {
+    margin-bottom: 12px;
+  }
+  
+  .input-label {
+    font-size: 12px;
+  }
+  
+  .input {
+    padding: 10px 12px;
+    font-size: 14px;
+    min-height: 40px;
+  }
+  
+  .input-error {
+    font-size: 10px;
+  }
 }

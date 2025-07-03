@@ -9,7 +9,7 @@
 
 .home-container {
   background: rgba(255, 255, 255, 0.95);
-  padding: 40px;
+  padding: 30px;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   max-width: 500px;
@@ -19,7 +19,7 @@
 
 .home-title {
   text-align: center;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   color: #333;
   margin-bottom: 10px;
@@ -29,65 +29,317 @@
 .home-subtitle {
   text-align: center;
   color: #666;
-  margin-bottom: 30px;
-  font-size: 16px;
+  margin-bottom: 25px;
+  font-size: 15px;
 }
 
-.players-section h3 {
+.players-section {
+  margin-bottom: 25px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.section-header h3 {
   color: #333;
-  margin-bottom: 20px;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
+  margin: 0;
+}
+
+.add-player-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #4ecdc4, #72e6df);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+}
+
+.add-player-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.add-player-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.plus-icon {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.players-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .player-input-row {
   display: flex;
+  align-items: center;
   gap: 10px;
-  align-items: flex-start;
-  margin-bottom: 15px;
 }
 
-.player-input-row .input-container {
+.player-number {
+  width: 30px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.input-wrapper {
   flex: 1;
+}
+
+.input-wrapper .input-container {
   margin-bottom: 0;
+}
+
+.remove-player-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #ff4757, #ff6b7a);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+  flex-shrink: 0;
+}
+
+.remove-player-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.4);
+}
+
+.remove-player-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.minus-icon {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .error-message {
   background: #ffe6e6;
   color: #cc0000;
-  padding: 12px;
+  padding: 10px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
-  margin: 10px 0;
+  margin-top: 12px;
   border-left: 4px solid #cc0000;
 }
 
 .actions {
   display: flex;
-  gap: 15px;
   justify-content: center;
-  margin-top: 30px;
-  flex-wrap: wrap;
+  margin-bottom: 15px;
 }
 
-/* 반응형 디자인 */
-@media (max-width: 600px) {
+.game-info {
+  text-align: center;
+  color: #666;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.game-info p {
+  margin: 0;
+}
+
+/* 모바일 반응형 디자인 */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 25px;
+    margin: 15px;
+  }
+  
+  .home-title {
+    font-size: 22px;
+  }
+  
+  .home-subtitle {
+    font-size: 14px;
+  }
+  
+  .section-header h3 {
+    font-size: 16px;
+  }
+  
+  .add-player-btn,
+  .remove-player-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .plus-icon {
+    font-size: 18px;
+  }
+  
+  .minus-icon {
+    font-size: 16px;
+  }
+  
+  .player-number {
+    width: 28px;
+    height: 40px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-page {
+    padding: 15px;
+  }
+  
   .home-container {
     padding: 20px;
     margin: 10px;
   }
   
   .home-title {
-    font-size: 24px;
+    font-size: 20px;
   }
   
-  .actions {
-    flex-direction: column;
+  .home-subtitle {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  
+  .section-header h3 {
+    font-size: 15px;
+  }
+  
+  .players-list {
+    gap: 10px;
   }
   
   .player-input-row {
-    flex-direction: column;
-    gap: 5px;
+    gap: 8px;
+  }
+  
+  .add-player-btn,
+  .remove-player-btn {
+    width: 38px;
+    height: 38px;
+  }
+  
+  .plus-icon {
+    font-size: 16px;
+  }
+  
+  .minus-icon {
+    font-size: 14px;
+  }
+  
+  .player-number {
+    width: 26px;
+    height: 38px;
+    font-size: 12px;
+  }
+  
+  .error-message {
+    font-size: 12px;
+    padding: 8px;
+  }
+  
+  .actions {
+    margin-bottom: 12px;
+  }
+  
+  .game-info {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .home-container {
+    padding: 15px;
+  }
+  
+  .home-title {
+    font-size: 18px;
+  }
+  
+  .home-subtitle {
+    font-size: 12px;
+  }
+  
+  .section-header h3 {
+    font-size: 14px;
+  }
+  
+  .players-list {
+    gap: 8px;
+  }
+  
+  .player-input-row {
+    gap: 6px;
+  }
+  
+  .add-player-btn,
+  .remove-player-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .plus-icon {
+    font-size: 15px;
+  }
+  
+  .minus-icon {
+    font-size: 13px;
+  }
+  
+  .player-number {
+    width: 24px;
+    height: 36px;
+    font-size: 11px;
+  }
+}
+
+/* 버튼 포커스 스타일 */
+.add-player-btn:focus-visible,
+.remove-player-btn:focus-visible {
+  outline: 2px solid #4ecdc4;
+  outline-offset: 2px;
+}
+
+/* 터치 디바이스 최적화 */
+@media (hover: none) and (pointer: coarse) {
+  .add-player-btn:hover,
+  .remove-player-btn:hover {
+    transform: none;
   }
 }

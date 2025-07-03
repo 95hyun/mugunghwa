@@ -10,15 +10,18 @@ body {
   line-height: 1.6;
   color: #333;
   background-color: #f5f5f5;
+  -webkit-text-size-adjust: 100%; /* iOS 텍스트 크기 조정 방지 */
+  -webkit-tap-highlight-color: transparent; /* iOS 탭 하이라이트 제거 */
 }
 
 .App {
   min-height: 100vh;
+  overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 /* 스크롤바 스타일링 */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -27,7 +30,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #c1c1c1;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -62,10 +65,10 @@ body {
     transform: translate3d(0, 0, 0);
   }
   40%, 43% {
-    transform: translate3d(0, -10px, 0);
+    transform: translate3d(0, -8px, 0);
   }
   70% {
-    transform: translate3d(0, -5px, 0);
+    transform: translate3d(0, -4px, 0);
   }
   90% {
     transform: translate3d(0, -2px, 0);
@@ -97,11 +100,12 @@ body {
   }
 }
 
-/* 포커스 스타일 */
-button:focus,
-input:focus {
+/* 포커스 스타일 개선 */
+button:focus-visible,
+input:focus-visible {
   outline: 2px solid #4ecdc4;
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* 선택 텍스트 스타일 */
@@ -113,4 +117,53 @@ input:focus {
 ::-moz-selection {
   background-color: #4ecdc4;
   color: white;
+}
+
+/* 모바일 반응형 기본 설정 */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  
+  /* 작은 화면에서 스크롤바 숨김 */
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+}
+
+/* 터치 디바이스 최적화 */
+@media (hover: none) and (pointer: coarse) {
+  /* 터치 디바이스에서 호버 효과 제거 */
+  button:hover {
+    transform: none !important;
+  }
+}
+
+/* 안전 영역 설정 (iPhone X 이상) */
+@supports (padding: max(0px)) {
+  .App {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+  body {
+    background-color: white;
+  }
+  
+  .game-page,
+  .home-page,
+  .result-page {
+    background: white !important;
+  }
 }
