@@ -201,7 +201,7 @@ const HomePage: React.FC = () => {
             />
             <div className="input-guide">
               <span className="guide-text">최소 2명, 최대 10명까지 참가 가능</span>
-              <span className="guide-text">참가자 추가는 콤마(,)를 입력해서 추가하세요.</span>
+              <span className="guide-text">참가자 추가는 쉼표(,)를 입력해서 추가하세요.</span>
             </div>
           </div>
           
