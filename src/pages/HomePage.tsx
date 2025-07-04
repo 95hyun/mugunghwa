@@ -189,11 +189,6 @@ const HomePage: React.FC = () => {
             />
             <div className="input-guide">
               <span className="guide-text">최소 2명, 최대 10명까지 참가 가능</span>
-              {players.length > 0 && (
-                <span className="player-list-preview">
-                  {players.map(p => p.name).join(', ')}
-                </span>
-              )}
             </div>
           </div>
           
