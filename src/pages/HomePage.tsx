@@ -7,45 +7,51 @@ import { Player } from '../types/game';
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
-  const [playerNames, setPlayerNames] = useState<string[]>(['', '']);
+  const [playerInput, setPlayerInput] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [runningAnimation, setRunningAnimation] = useState<1 | 2>(1);
   const navigate = useNavigate();
 
-  const addPlayer = () => {
-    if (playerNames.length < 10) {
-      setPlayerNames([...playerNames, '']);
-      setError('');
-    } else {
+  // 콤마로 구분된 참가자 이름 파싱
+  const parsePlayerNames = (input: string): string[] => {
+    return input
+      .split(',')
+      .map(name => name.trim())
+      .filter(name => name.length > 0);
+  };
+
+  // 참가자 입력 처리
+  const handlePlayerInput = (value: string) => {
+    setPlayerInput(value);
+    
+    const names = parsePlayerNames(value);
+    
+    // 유효성 검증
+    if (names.length > 10) {
       setError('최대 10명까지만 참가할 수 있습니다.');
+      return;
     }
-  };
-
-  const removePlayer = (index: number) => {
-    if (playerNames.length > 2) {
-      const newNames = playerNames.filter((_, i) => i !== index);
-      setPlayerNames(newNames);
-      setError('');
-    }
-  };
-
-  const updatePlayerName = (index: number, name: string) => {
-    const newNames = [...playerNames];
-    newNames[index] = name;
-    setPlayerNames(newNames);
     
     // 중복 이름 체크
-    const duplicates = newNames.filter((n, i) => n && n === name && i !== index);
+    const duplicates = names.filter((name, index) => names.indexOf(name) !== index);
     if (duplicates.length > 0) {
-      setError('중복된 이름이 있습니다.');
-    } else {
-      setError('');
+      setError(`중복된 이름이 있습니다: ${duplicates.join(', ')}`);
+      return;
     }
+    
+    // 이름 길이 체크
+    const longNames = names.filter(name => name.length > 10);
+    if (longNames.length > 0) {
+      setError(`이름이 너무 깁니다 (10자 이하): ${longNames.join(', ')}`);
+      return;
+    }
+    
+    setError('');
   };
 
   // 실시간 플레이어 객체 생성
   const players: Player[] = useMemo(() => {
-    const validNames = playerNames.filter(name => name.trim() !== '');
+    const validNames = parsePlayerNames(playerInput);
     const playerColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'];
     
     return validNames.map((name, index) => ({
@@ -57,19 +63,30 @@ const HomePage: React.FC = () => {
       rank: null,
       color: playerColors[index % playerColors.length]
     }));
-  }, [playerNames]);
+  }, [playerInput]);
 
   // 게임 시작
   const startGame = () => {
-    const validNames = playerNames.filter(name => name.trim() !== '');
+    const validNames = parsePlayerNames(playerInput);
     
     if (validNames.length < 2) {
       setError('최소 2명의 참가자가 필요합니다.');
       return;
     }
 
+    if (validNames.length > 10) {
+      setError('최대 10명까지만 참가할 수 있습니다.');
+      return;
+    }
+
+    // 중복 체크
     if (validNames.length !== new Set(validNames).size) {
       setError('중복된 이름이 있습니다.');
+      return;
+    }
+
+    // 에러가 있으면 게임 시작 방지
+    if (error) {
       return;
     }
 
@@ -164,46 +181,23 @@ const HomePage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <div className="section-header">
-            <h3 className="section-title">참가자 설정</h3>
-            <button
-              className="add-player-btn"
-              onClick={addPlayer}
-              disabled={playerNames.length >= 10}
-              title="참가자 추가"
-            >
-              <span className="plus-icon">+</span>
-            </button>
-          </div>
+          <h3 className="section-title">참가자 설정</h3>
           
-          <div className="players-list">
-            {playerNames.map((name, index) => (
-              <motion.div 
-                key={index}
-                className="player-input-row"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 + 1.0 }}
-              >
-                <div className="player-number">{index + 1}</div>
-                <div className="input-wrapper">
-                  <Input
-                    value={name}
-                    onChange={(value) => updatePlayerName(index, value)}
-                    placeholder={`참가자 ${index + 1} 이름`}
-                    maxLength={10}
-                  />
-                </div>
-                <button
-                  className="remove-player-btn"
-                  onClick={() => removePlayer(index)}
-                  disabled={playerNames.length <= 2}
-                  title="참가자 삭제"
-                >
-                  <span className="minus-icon">−</span>
-                </button>
-              </motion.div>
-            ))}
+          <div className="player-input-container">
+            <Input
+              value={playerInput}
+              onChange={handlePlayerInput}
+              placeholder="참가자 이름을 콤마(,)로 구분해서 입력하세요. 예: 홍길동, 김상복, 오지헌"
+              maxLength={200}
+            />
+            <div className="input-guide">
+              <span className="guide-text">현재 참가자: {players.length}명</span>
+              {players.length > 0 && (
+                <span className="player-list-preview">
+                  {players.map(p => p.name).join(', ')}
+                </span>
+              )}
+            </div>
           </div>
           
           {error && (
