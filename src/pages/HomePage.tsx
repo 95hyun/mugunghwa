@@ -229,7 +229,7 @@ const HomePage: React.FC = () => {
                 <div key={player.id} className="player-preview-card">
                   <div className="player-preview-number">{idx + 1}</div>
                   <img
-                    src={`/character/running_man_${runningAnimation}.png`}
+                    src={`/character/running_man_${runningAnimation}.webp`}
                     alt={`${player.name} 아바타`}
                     className="player-preview-image"
                   />

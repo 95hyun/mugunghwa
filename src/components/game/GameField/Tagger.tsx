@@ -11,7 +11,7 @@ const Tagger: React.FC<TaggerProps> = ({ isItLooking }) => {
       <AnimatePresence mode="wait">
         <motion.img 
           key={isItLooking ? "front" : "back"}
-          src={isItLooking ? "/character/gaksital_front.png" : "/character/gaksital_back.png"}
+          src={isItLooking ? "/character/gaksital_front.webp" : "/character/gaksital_back.webp"}
           alt={isItLooking ? "술래 정면" : "술래 뒤돌아보기"}
           className="tagger-image"
           initial={{ opacity: 0, scale: 0.8 }}
