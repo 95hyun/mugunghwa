@@ -623,28 +623,26 @@
   outline-offset: 2px;
 }
 
-/* 게임 준비 섹션 스타일 */
-.preparation-section {
-  margin-top: 30px;
-  padding: 25px;
-  background: rgba(255, 255, 255, 0.95);
+/* 참가자 미리보기 섹션 */
+.player-preview-section {
+  margin: 20px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-radius: 15px;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e9ecef;
+  border: 2px solid #dee2e6;
 }
 
-.preparation-section h3 {
+.preview-title {
   color: #333;
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-size: 16px;
   font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
-.preparation-section p {
-  color: #666;
-  margin-bottom: 20px;
-  font-size: 14px;
+/* 게임 규칙 섹션 */
+.game-rules-section {
+  margin: 20px 0;
 }
 
 .player-preview-list {
@@ -711,30 +709,25 @@
   text-align: left !important;
   line-height: 1.6;
   font-size: 14px;
-  margin-bottom: 20px;
+  margin: 0;
 }
 
 .game-rules strong {
   color: #333;
 }
 
-.preparation-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-}
+/* 기존 preparation-actions 제거 */
 
 /* 모바일 최적화 */
 @media (max-width: 768px) {
-  .preparation-section {
-    padding: 20px;
-    margin-top: 25px;
+  .player-preview-section {
+    padding: 15px;
+    margin: 15px 0;
   }
   
-  .preparation-section h3 {
-    font-size: 18px;
+  .preview-title {
+    font-size: 14px;
+    margin-bottom: 12px;
   }
   
   .player-preview-card {
@@ -757,21 +750,17 @@
     padding: 15px;
     font-size: 13px;
   }
-  
-  .preparation-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
 }
 
 @media (max-width: 480px) {
-  .preparation-section {
-    padding: 15px;
-    margin-top: 20px;
+  .player-preview-section {
+    padding: 12px;
+    margin: 12px 0;
   }
   
-  .preparation-section h3 {
-    font-size: 16px;
+  .preview-title {
+    font-size: 13px;
+    margin-bottom: 10px;
   }
   
   .player-preview-card {
@@ -792,6 +781,10 @@
   .game-rules {
     padding: 12px;
     font-size: 12px;
+  }
+  
+  .game-rules-section {
+    margin: 15px 0;
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button';
@@ -9,8 +9,6 @@ import './HomePage.css';
 const HomePage: React.FC = () => {
   const [playerNames, setPlayerNames] = useState<string[]>(['', '']);
   const [error, setError] = useState<string>('');
-  const [showPreparation, setShowPreparation] = useState<boolean>(false);
-  const [players, setPlayers] = useState<Player[]>([]);
   const [runningAnimation, setRunningAnimation] = useState<1 | 2>(1);
   const navigate = useNavigate();
 
@@ -45,8 +43,24 @@ const HomePage: React.FC = () => {
     }
   };
 
-  // 게임 준비 모드로 전환
-  const showGamePreparation = () => {
+  // 실시간 플레이어 객체 생성
+  const players: Player[] = useMemo(() => {
+    const validNames = playerNames.filter(name => name.trim() !== '');
+    const playerColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'];
+    
+    return validNames.map((name, index) => ({
+      id: `player-${index + 1}`,
+      name,
+      position: 0,
+      isEliminated: false,
+      eliminatedRound: null,
+      rank: null,
+      color: playerColors[index % playerColors.length]
+    }));
+  }, [playerNames]);
+
+  // 게임 시작
+  const startGame = () => {
     const validNames = playerNames.filter(name => name.trim() !== '');
     
     if (validNames.length < 2) {
@@ -59,51 +73,17 @@ const HomePage: React.FC = () => {
       return;
     }
 
-    // 플레이어 객체 생성
-    const playerColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'];
-    const newPlayers: Player[] = validNames.map((name, index) => ({
-      id: `player-${index + 1}`,
-      name,
-      position: 0,
-      isEliminated: false,
-      eliminatedRound: null,
-      rank: null,
-      color: playerColors[index % playerColors.length]
-    }));
-
-    setPlayers(newPlayers);
-    setShowPreparation(true);
-    setError('');
-  };
-
-  // 게임 시작
-  const startGame = () => {
-    const validNames = playerNames.filter(name => name.trim() !== '');
     navigate('/game', { state: { playerNames: validNames } });
   };
 
-  // 참가자 설정 화면으로 돌아가기
-  const backToPlayerSetup = () => {
-    setShowPreparation(false);
-    setPlayers([]);
-  };
-
-  // 달리기 애니메이션 효과 (게임 준비 모드일 때만)
+  // 달리기 애니메이션 효과 (항상 실행)
   useEffect(() => {
-    let animationInterval: NodeJS.Timeout;
+    const animationInterval = setInterval(() => {
+      setRunningAnimation(prev => prev === 1 ? 2 : 1);
+    }, 500); // 0.5초마다 애니메이션 프레임 변경
     
-    if (showPreparation) {
-      animationInterval = setInterval(() => {
-        setRunningAnimation(prev => prev === 1 ? 2 : 1);
-      }, 500); // 0.5초마다 애니메이션 프레임 변경
-    }
-    
-    return () => {
-      if (animationInterval) {
-        clearInterval(animationInterval);
-      }
-    };
-  }, [showPreparation]);
+    return () => clearInterval(animationInterval);
+  }, []);
 
   return (
     <div className="home-page">
@@ -185,28 +165,15 @@ const HomePage: React.FC = () => {
           )}
         </div>
 
-        {!showPreparation && (
-          <div className="actions">
-            <Button
-              onClick={showGamePreparation}
-              variant="primary"
-              size="large"
-            >
-              게임 시작
-            </Button>
-          </div>
-        )}
-
-        {showPreparation && (
+        {/* 참가자 미리보기 섭션 - 항상 표시 */}
+        {players.length > 0 && (
           <motion.div 
-            className="preparation-section"
-            initial={{ opacity: 0, y: 20 }}
+            className="player-preview-section"
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.3 }}
           >
-            <h3>게임 준비</h3>
-            <p>참가자 {players.length}명이 준비되었습니다.</p>
-            
+            <h4 className="preview-title">참가자 미리보기</h4>
             <div className="player-preview-list">
               {players.map((player, idx) => (
                 <div key={player.id} className="player-preview-card">
@@ -225,38 +192,33 @@ const HomePage: React.FC = () => {
                 </div>
               ))}
             </div>
-            
-            <p className="game-rules">
-              🎯 <strong>게임 규칙:</strong><br/>
-              • 술래가 뒤돌고 "무궁화 꽃이 피었습니다"를 외치는 동안 이동 가능<br/>
-              • 술래가 돌아볼 때 움직이면 탈락!<br/>
-              • 먼저 골인하거나 마지막까지 살아남으면 승리!
-            </p>
-            
-            <div className="preparation-actions">
-              <Button
-                onClick={backToPlayerSetup}
-                variant="secondary"
-                size="medium"
-              >
-                뒤로가기
-              </Button>
-              <Button
-                onClick={startGame}
-                variant="primary"
-                size="large"
-              >
-                게임 시작
-              </Button>
-            </div>
           </motion.div>
         )}
+
+        {/* 게임 규칙 - 항상 표시 */}
+        <div className="game-rules-section">
+          <p className="game-rules">
+            🎯 <strong>게임 규칙:</strong><br/>
+            • 술래가 뒤돌고 "무궁화 꽃이 피었습니다"를 외치는 동안 이동 가능<br/>
+            • 술래가 돌아볼 때 움직이면 탈락!<br/>
+            • 먼저 골인하거나 마지막까지 살아남으면 승리!
+          </p>
+        </div>
+
+        {/* 게임 시작 버튼 */}
+        <div className="actions">
+          <Button
+            onClick={startGame}
+            variant="primary"
+            size="large"
+          >
+            게임 시작
+          </Button>
+        </div>
         
-        {!showPreparation && (
-          <div className="game-info">
-            <p>ℹ️ 최소 2명, 최대 10명까지 참가 가능</p>
-          </div>
-        )}
+        <div className="game-info">
+          <p>ℹ️ 최소 2명, 최대 10명까지 참가 가능</p>
+        </div>
       </motion.div>
     </div>
   );
