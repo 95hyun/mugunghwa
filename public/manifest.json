@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "mugunghwa_logo.webp",
+      "src": "logo.webp",
       "type": "image/webp",
       "sizes": "192x192"
     },
     {
-      "src": "mugunghwa_logo.webp",
+      "src": "logo.webp",
       "type": "image/webp",
       "sizes": "512x512"
     }

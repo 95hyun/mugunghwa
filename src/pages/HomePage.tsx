@@ -111,6 +111,7 @@ const HomePage: React.FC = () => {
       <meta property="og:title" content="무궁화 꽃이 피었습니다 - 순서 추첨 웹게임" />
       <meta property="og:description" content="친구들과 함께 즐기는 재미있는 순서 추첨 게임" />
       <meta property="og:url" content="https://mugunhwarun.netlify.app/" />
+      <meta property="og:image" content="https://mugunhwarun.netlify.app/logo.webp" />
       
       <div className="home-page">
         <motion.div 
