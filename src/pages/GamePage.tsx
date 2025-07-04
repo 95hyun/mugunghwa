@@ -432,7 +432,8 @@ const GamePage: React.FC = () => {
         navigate('/result', { 
           state: { 
             gameResult: finalState,
-            playerNames: initialPlayers.map((p: Player) => p.name) 
+            players: finalState.players,
+            playerNames: finalState.players.map((p: Player) => p.name) 
           } 
         });
       }, 2000);

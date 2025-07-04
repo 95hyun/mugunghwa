@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { GameState } from '../types/game';
+import { GameState, Player } from '../types/game';
 import Button from '../components/common/Button';
 import './ResultPage.css';
 
@@ -9,6 +9,7 @@ const ResultPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const gameResult: GameState = location.state?.gameResult;
+  const players: Player[] = location.state?.players || [];
   const playerNames: string[] = location.state?.playerNames || [];
   
   const [showScrollHint, setShowScrollHint] = useState(false);
@@ -99,7 +100,16 @@ const ResultPage: React.FC = () => {
   };
 
   const restartGame = () => {
-    navigate('/game', { state: { playerNames: playerNames } });
+    // 플레이어 데이터를 초기 상태로 리셋
+    const resetPlayers = players.map((player: Player) => ({
+      ...player,
+      position: 0,
+      isEliminated: false,
+      eliminatedRound: null,
+      rank: null
+    }));
+    
+    navigate('/game', { state: { players: resetPlayers } });
   };
 
   const scrollToBottom = () => {
