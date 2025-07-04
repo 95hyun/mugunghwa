@@ -9,9 +9,9 @@ const GamePage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  const playerNames = useMemo(() => 
-    location.state?.playerNames || [], 
-    [location.state?.playerNames]
+  const initialPlayers = useMemo(() => 
+    location.state?.players || [], 
+    [location.state?.players]
   );
   
   const [gameState, setGameState] = useState<GameState>({
@@ -87,29 +87,18 @@ const GamePage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (playerNames.length === 0) {
+    if (initialPlayers.length === 0) {
       navigate('/');
       return;
     }
 
-    // 플레이어 초기화
-    const colors = ['#444', '#666', '#888', '#555', '#777', '#999', '#333', '#aaa', '#bbb', '#ccc'];
-    const initialPlayers: Player[] = playerNames.map((name: string, index: number) => ({
-      id: `player-${index}`,
-      name,
-      position: 0,
-      isEliminated: false,
-      eliminatedRound: null,
-      rank: null,
-      color: colors[index % colors.length]
-    }));
-
+    // 플레이어 초기화 - 홈페이지에서 받은 데이터 사용
     setGameState(prev => ({
       ...prev,
       players: initialPlayers,
       gamePhase: 'playing'
     }));
-  }, [playerNames, navigate]);
+  }, [initialPlayers, navigate]);
 
   // 컴포넌트 언마운트 시 모든 timer 정리
   useEffect(() => {
@@ -479,7 +468,7 @@ const GamePage: React.FC = () => {
         navigate('/result', { 
           state: { 
             gameResult: finalState,
-            playerNames: playerNames 
+            playerNames: initialPlayers.map((p: Player) => p.name) 
           } 
         });
       }, 2000);

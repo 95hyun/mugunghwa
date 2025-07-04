@@ -8,6 +8,7 @@ interface PlayerProps {
   isRunning: boolean;
   runningAnimation: 1 | 2;
   countdownValue: number | string | null;
+  isLeader: boolean;
 }
 
 const Player: React.FC<PlayerProps> = ({ 
@@ -15,7 +16,8 @@ const Player: React.FC<PlayerProps> = ({
   isMoving, 
   isRunning, 
   runningAnimation, 
-  countdownValue 
+  countdownValue,
+  isLeader
 }) => {
   return (
     <motion.div
@@ -54,10 +56,13 @@ const Player: React.FC<PlayerProps> = ({
           boxShadow: `0 0 8px ${player.color}` 
         }}
       >
-        {player.name}
+        #{player.id.split('-')[1]} {player.name}
       </span>
       {player.position >= 200 && (
         <span className="winner-crown">👑</span>
+      )}
+      {isLeader && player.position < 200 && (
+        <span className="leader-crown">🥇</span>
       )}
       {isMoving && (
         <span className="caught-indicator">💥</span>

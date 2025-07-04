@@ -135,6 +135,15 @@
   animation: bounce 1s ease-in-out infinite;
 }
 
+.leader-crown {
+  position: absolute;
+  top: -35px;
+  left: -10px;
+  font-size: 14px;
+  animation: bounce 1.2s ease-in-out infinite;
+  z-index: 5;
+}
+
 .caught-indicator {
   position: absolute;
   top: -35px;
@@ -324,7 +333,8 @@
   }
   
   .winner-crown,
-  .caught-indicator {
+  .caught-indicator,
+  .leader-crown {
     font-size: 14px;
     top: -30px;
   }
@@ -381,7 +391,8 @@
   }
   
   .winner-crown,
-  .caught-indicator {
+  .caught-indicator,
+  .leader-crown {
     font-size: 12px;
     top: -28px;
   }
@@ -437,7 +448,8 @@
   }
 
   .winner-crown,
-  .caught-indicator {
+  .caught-indicator,
+  .leader-crown {
     font-size: 10px;
     top: -26px;
   }

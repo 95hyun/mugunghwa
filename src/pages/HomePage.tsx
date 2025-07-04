@@ -90,7 +90,7 @@ const HomePage: React.FC = () => {
       return;
     }
 
-    navigate('/game', { state: { playerNames: validNames } });
+    navigate('/game', { state: { players: players } });
   };
 
   // 달리기 애니메이션 효과 (항상 실행)
@@ -184,7 +184,7 @@ const HomePage: React.FC = () => {
             <Input
               value={playerInput}
               onChange={handlePlayerInput}
-              placeholder="참가자 이름을 콤마(,)로 구분해서 입력하세요. 예: 홍길동, 김상복, 오지헌"
+              placeholder="참가자 이름을 콤마(,)로 구분해서 입력하세요. 예: 홍길동, 김영희, 박철수"
               maxLength={200}
             />
             <div className="input-guide">
