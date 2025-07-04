@@ -125,7 +125,7 @@ const ResultPage: React.FC = () => {
     if (!gameResult) return '';
     const sorted = [...gameResult.players].sort((a, b) => (a.rank || 999) - (b.rank || 999));
     const rankText = sorted.map((p, i) => `#${p.rank} ${p.name}`).join(', ');
-    return `[무궁화 꽃이 피었습니다 결과]\n${rankText}`;
+    return `[무궁화 꽃이 피었습니다 결과]\n${rankText}\n\n추첨 결과는 아래 링크를 통해 생성되었습니다.\nhttps://mugunghwarun.netlify.app`;
   };
 
   // 클립보드 복사 및 플로팅 문구 표시
