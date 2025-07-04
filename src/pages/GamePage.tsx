@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Player, GameState } from '../types/game';
 import { GameHeader, CountdownOverlay, SyllableOverlay, ResultLoadingScreen, LiveRankings, CaughtAlert, SafeAlert, GameField, type FinishedPlayer } from '../components/game';
@@ -51,13 +51,6 @@ const GamePage: React.FC = () => {
       }
     };
   }, [isShowingSyllables, currentlyRunningPlayers.size]);
-  
-  // 게임 자동 시작 (HomePage에서 바로 게임 시작)
-  useEffect(() => {
-    if (gameState.gamePhase === 'playing' && gameState.players.length > 0) {
-      startGame();
-    }
-  }, [gameState.gamePhase, gameState.players.length]);
   
   // Interval 및 Timeout 관리를 위한 ref
   const moveIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -153,23 +146,6 @@ const GamePage: React.FC = () => {
     console.log('Currently running players:', Array.from(currentlyRunningPlayers));
     console.log('Is showing syllables:', isShowingSyllables);
   }, [runningAnimation, playersMoving, currentlyRunningPlayers, isShowingSyllables]);
-
-  const startGame = () => {
-    // 모든 기존 timer 정리
-    clearAllTimers();
-    
-    setFinishedOrder([]); // 골인 순서 초기화
-    setPlayersMoving(new Set()); // 움직이는 플레이어 초기화
-    setCurrentlyRunningPlayers(new Set()); // 달리기 플레이어 초기화
-    setCountdownValue(null); // 카운트다운 초기화
-    setGameState(prev => ({
-      ...prev,
-      gamePhase: 'playing'
-    }));
-    
-    // 카운트다운 시작
-    startCountdown();
-  };
 
   const startCountdown = () => {
     setCountdownValue(3); // 3부터 시작
@@ -516,6 +492,31 @@ const GamePage: React.FC = () => {
       gamePhase: 'finished' as const
     };
   };
+
+  const startGame = useCallback(() => {
+    // 모든 기존 timer 정리
+    clearAllTimers();
+    
+    setFinishedOrder([]); // 골인 순서 초기화
+    setPlayersMoving(new Set()); // 움직이는 플레이어 초기화
+    setCurrentlyRunningPlayers(new Set()); // 달리기 플레이어 초기화
+    setCountdownValue(null); // 카운트다운 초기화
+    setGameState(prev => ({
+      ...prev,
+      gamePhase: 'playing'
+    }));
+    
+    // 카운트다운 시작
+    startCountdown();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 게임 자동 시작 (HomePage에서 바로 게임 시작)
+  useEffect(() => {
+    if (gameState.gamePhase === 'playing' && gameState.players.length > 0) {
+      startGame();
+    }
+  }, [gameState.gamePhase, gameState.players.length, startGame]);
 
   const activePlayers = gameState.players.filter(p => !p.isEliminated);
   const winners = activePlayers.filter(p => p.position >= 200);
