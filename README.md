@@ -38,28 +38,6 @@
 - **Build**: Create React App
 - **Deployment**: Netlify
 
-## 🚀 로컬 실행
-
-```bash
-# 저장소 클론
-git clone https://github.com/yourusername/mugunghwa.git
-
-# 의존성 설치
-npm install
-
-# 개발 서버 실행
-npm start
-```
-
-## 📦 빌드 및 배포
-
-```bash
-# 프로덕션 빌드
-npm run build
-
-# 빌드 결과물은 build/ 폴더에 생성됩니다
-```
-
 ## 🎨 주요 개선사항
 
 ### 성능 최적화
