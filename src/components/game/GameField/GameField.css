@@ -68,10 +68,11 @@
   border: 3px solid transparent;
   border-radius: 50%;
   transition: all 0.2s ease;
-}
-
-.player-image.running {
-  animation: runningMotion 0.4s ease-in-out infinite;
+  /* GPU 가속 활성화 */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 /* 플레이어 좌우 배치 */
@@ -118,16 +119,6 @@
   75% { transform: translateY(5px); }
 }
 
-@keyframes runningMotion {
-  0%, 100% { 
-    transform: scale(1) rotate(0deg); 
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3)) hue-rotate(0deg);
-  }
-  50% { 
-    transform: scale(1.05) rotate(2deg); 
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3)) hue-rotate(10deg);
-  }
-}
 
 .player-name {
   position: absolute;

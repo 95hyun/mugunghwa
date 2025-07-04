@@ -37,9 +37,9 @@ const Player: React.FC<PlayerProps> = ({
       transition={{ duration: 0.5 }}
     >
       <img 
-        src="/character/running_man_1.png"
+        src={isRunning || isMoving ? '/character/running_man_2.png' : '/character/running_man_1.png'}
         alt={`${player.name} 아바타`}
-        className={`player-image ${isRunning || isMoving ? 'running' : ''}`}
+        className="player-image"
       />
       <span 
         className="player-name"
