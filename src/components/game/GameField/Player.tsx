@@ -37,7 +37,15 @@ const Player: React.FC<PlayerProps> = ({
       transition={{ duration: 0.5 }}
     >
       <img 
-        src={isRunning || isMoving ? '/character/running_man_2.webp' : '/character/running_man_1.webp'}
+        src={
+          player.position >= 200 
+            ? '/character/winnerman.webp'
+            : player.isEliminated 
+              ? '/character/deadman.webp'
+              : isRunning || isMoving 
+                ? '/character/running_man_2.webp' 
+                : '/character/running_man_1.webp'
+        }
         alt={`${player.name} 아바타`}
         className="player-image"
       />
