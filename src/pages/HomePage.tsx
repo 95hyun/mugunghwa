@@ -162,44 +162,23 @@ const HomePage: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* 2. 참가자 미리보기 섭션 */}
-        {players.length > 0 && (
-          <motion.div 
-            className="player-preview-section"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <h3 className="section-title">참가자 미리보기</h3>
-            <div className="player-preview-list">
-              {players.map((player, idx) => (
-                <div key={player.id} className="player-preview-card">
-                  <div className="player-preview-number">{idx + 1}</div>
-                  <img
-                    src={`/character/running_man_${runningAnimation}.png`}
-                    alt={`${player.name} 아바타`}
-                    className="player-preview-image"
-                  />
-                  <div 
-                    className="player-preview-name" 
-                    style={{ backgroundColor: player.color }}
-                  >
-                    {player.name}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* 3. 참가자 설정 섭션 */}
+        {/* 2. 참가자 설정 섭션 */}
         <motion.div 
           className="players-section"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <h3 className="section-title">참가자 설정</h3>
+          <div className="game-start-button-container">
+            <Button
+              onClick={startGame}
+              variant="primary"
+              size="medium"
+              disabled={players.length < 2}
+            >
+              게임 시작
+            </Button>
+          </div>
           
           <div className="player-input-container">
             <Input
@@ -209,7 +188,7 @@ const HomePage: React.FC = () => {
               maxLength={200}
             />
             <div className="input-guide">
-              <span className="guide-text">현재 참가자: {players.length}명</span>
+              <span className="guide-text">최소 2명, 최대 10명까지 참가 가능</span>
               {players.length > 0 && (
                 <span className="player-list-preview">
                   {players.map(p => p.name).join(', ')}
@@ -229,31 +208,41 @@ const HomePage: React.FC = () => {
           )}
         </motion.div>
 
-        {/* 4. 게임 시작 버튼 */}
+        {/* 3. 참가자 미리보기 섭션 - 항상 표시 */}
         <motion.div 
-          className="actions"
+          className="player-preview-section"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2 }}
+          transition={{ duration: 0.3 }}
         >
-          <Button
-            onClick={startGame}
-            variant="primary"
-            size="large"
-          >
-            게임 시작
-          </Button>
+          
+          {players.length > 0 ? (
+            <div className="player-preview-list">
+              {players.map((player, idx) => (
+                <div key={player.id} className="player-preview-card">
+                  <div className="player-preview-number">{idx + 1}</div>
+                  <img
+                    src={`/character/running_man_${runningAnimation}.png`}
+                    alt={`${player.name} 아바타`}
+                    className="player-preview-image"
+                  />
+                  <div 
+                    className="player-preview-name" 
+                    style={{ backgroundColor: player.color }}
+                  >
+                    {player.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="empty-preview">
+              <span className="empty-text">참가자가 설정되지 않았습니다</span>
+            </div>
+          )}
         </motion.div>
+
         
-        {/* 5. 안내 문구 */}
-        <motion.div 
-          className="game-info"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4 }}
-        >
-          <p>ℹ️ 최소 2명, 최대 10명까지 참가 가능</p>
-        </motion.div>
       </motion.div>
     </div>
   );
