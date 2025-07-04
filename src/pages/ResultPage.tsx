@@ -70,13 +70,13 @@ const ResultPage: React.FC = () => {
     return null;
   }
   
-  const getRankEmoji = (rank: number | null) => {
+  const getRankEmoji = (rank: number | null, isEliminated: boolean) => {
     if (!rank || rank === 0) return '❓';
     switch (rank) {
       case 1: return '🥇';
       case 2: return '🥈';
       case 3: return '🥉';
-      default: return '🏃‍♂️';
+      default: return isEliminated ? '💀' : '🏃‍♂️';
     }
   };
 
@@ -172,7 +172,7 @@ const ResultPage: React.FC = () => {
                 transition={{ delay: index * 0.1 + 0.4 }}
               >
                 <div className="rank-section">
-                  <span className="rank-emoji">{getRankEmoji(player.rank)}</span>
+                  <span className="rank-emoji">{getRankEmoji(player.rank, player.isEliminated)}</span>
                   <span className="rank-text">{getRankText(player.rank)}</span>
                 </div>
                 
