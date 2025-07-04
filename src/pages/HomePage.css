@@ -512,41 +512,11 @@
 /* 게임 규칙 섹션 - 최상단 배치 */
 .game-rules-section {
   margin: 25px 0 30px 0;
-  padding: 24px;
+  padding: 20px;
   background: #ffffff;
   border-radius: 16px;
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* 규칙 헤더 */
-.rules-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.rules-icon {
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
-  filter: grayscale(0);
-}
-
-.rules-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1f2937;
-  margin: 0;
-  letter-spacing: -0.025em;
 }
 
 /* 규칙 그리드 */
@@ -694,24 +664,7 @@
   
   .game-rules-section {
     margin: 20px 0 25px 0;
-    padding: 20px;
-  }
-  
-  .rules-header {
-    gap: 10px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-  }
-  
-  .rules-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
-    border-radius: 10px;
-  }
-  
-  .rules-title {
-    font-size: 18px;
+    padding: 16px;
   }
   
   .rules-grid {
@@ -797,24 +750,7 @@
   
   .game-rules-section {
     margin: 15px 0 20px 0;
-    padding: 16px;
-  }
-  
-  .rules-header {
-    gap: 8px;
-    margin-bottom: 14px;
-    padding-bottom: 10px;
-  }
-  
-  .rules-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
-    border-radius: 8px;
-  }
-  
-  .rules-title {
-    font-size: 16px;
+    padding: 14px;
   }
   
   .rules-grid {

@@ -135,11 +135,6 @@ const HomePage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <div className="rules-header">
-            <span className="rules-icon">🎯</span>
-            <h3 className="rules-title">게임 방법</h3>
-          </div>
-          
           <div className="rules-grid">
             <div className="rule-item">
               <div className="rule-icon">🏃‍♂️</div>
