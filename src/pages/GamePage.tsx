@@ -236,7 +236,19 @@ const GamePage: React.FC = () => {
     setGameState(prev => {
       const newPlayers = prev.players.map(player => {
         if (player.isEliminated || player.position >= 200) return player;
-        const shouldMove = Math.random() < 0.4;
+        // 도착선 근처(80% = position 160) 플레이어는 달리기 확률 대폭 증가
+        const progressPercentage = player.position / 200; // 0.0 ~ 1.0
+        let moveChance = 0.25; // 기본 달리기 확률
+        
+        if (progressPercentage >= 0.8) {
+          // 80% 이상 진행 시 xx% 확률로 대폭 증가
+          moveChance = 0.75;
+        } else if (progressPercentage >= 0.6) {
+          // 60% 이상 진행 시 xx% 확률로 점진적 증가
+          moveChance = 0.4;
+        }
+        
+        const shouldMove = Math.random() < moveChance;
         if (shouldMove) {
           const moveDistance = Math.random() * 3 + 2;
           const newPosition = Math.min(200, player.position + moveDistance);
