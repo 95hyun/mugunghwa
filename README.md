@@ -1,239 +1,79 @@
-# 🏃‍♂️ 무궁화 꽃이 피었습니다 - 등수 추첨 웹서비스
+# 🌺 무궁화 꽃이 피었습니다
 
-React + TypeScript로 개발된 무궁화 꽃이 피었습니다 게임을 모티브로 한 등수 추첨 웹서비스입니다.
-mugunghwarun.netlify.app
+> 웹으로 즐기는 클래식 게임! 친구들과 함께 스릴 넘치는 등수 추첨 게임을 경험해보세요.
 
-## 🎯 프로젝트 개요
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-brightgreen)](https://mugunhwarun.netlify.app)
+[![React](https://img.shields.io/badge/React-19.1.0-blue)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue)](https://www.typescriptlang.org/)
 
-사용자가 지인들끼리 등수를 랜덤으로 얻고 싶을 때 사용하는 웹 서비스입니다. 
-참가자들이 출발선에서 시작하여 "무궁화 꽃이 피었습니다"가 외쳐지는 동안 랜덤으로 전진하고, 
-술래가 뒤를 돌아봤을 때 걸린 사람이 탈락하는 방식으로 최종 등수가 결정됩니다.
+## 🎮 게임 소개
 
-## 🛠 기술 스택
+전통적인 "무궁화 꽃이 피었습니다" 게임을 현대적인 웹 환경에서 재해석한 등수 추첨 게임입니다. 
+AI가 플레이어들의 움직임을 시뮬레이션하여 예측 불가능한 재미를 선사합니다.
 
-- **Frontend**: React 19.1.0, TypeScript 4.9.5
-- **Routing**: React Router DOM 7.6.3
-- **Animation**: Framer Motion 12.23.0
-- **Styling**: CSS3, Custom CSS
-- **Build Tool**: Create React App
-- **Deployment**: Netlify (예정)
+### 🔗 플레이하기
+**👉 [mugunhwarun.netlify.app](https://mugunhwarun.netlify.app)**
 
-## 📁 프로젝트 구조
+## ✨ 주요 기능
 
-```
-src/
-├── components/           # 재사용 가능한 컴포넌트
-│   └── common/          # 공통 컴포넌트
-│       ├── Button.tsx   # 버튼 컴포넌트
-│       ├── Input.tsx    # 입력 컴포넌트
-│       └── index.ts     # export 관리
-├── hooks/               # 커스텀 훅
-│   ├── useGameLogic.ts  # 게임 로직 관리
-│   ├── useAnimation.ts  # 애니메이션 제어
-│   └── useSound.ts      # 사운드 관리
-├── pages/               # 페이지 컴포넌트
-│   ├── HomePage.tsx     # 홈 페이지 (이름 입력)
-│   ├── GamePage.tsx     # 게임 진행 페이지
-│   └── ResultPage.tsx   # 결과 페이지
-├── types/               # TypeScript 타입 정의
-│   └── game.ts          # 게임 관련 타입
-├── utils/               # 유틸리티 함수
-│   ├── gameEngine.ts    # 게임 엔진
-│   └── randomUtils.ts   # 랜덤 로직
-└── App.tsx              # 메인 앱 컴포넌트
-```
+- 🏃‍♂️ **2-10명 참가자 지원** - 다양한 인원으로 게임 가능
+- 🎨 **개인별 색상 및 번호** - 플레이어 구분이 쉬운 UI/UX
+- 🏆 **실시간 선두 표시** - 게임 상황을 한눈에 파악
+- 📱 **반응형 디자인** - 모바일/PC 모든 환경에서 최적화
+- ⚡ **성능 최적화** - 부드러운 애니메이션과 빠른 반응속도
+- 🔄 **빠른 재시작** - 동일 멤버로 즉시 재경기 가능
 
-## 🚀 개발 진행 상황
+## 🎯 게임 규칙
 
-### ✅ Phase 1 완료 (기본 구조)
-- [x] Create React App 설정
-- [x] 폴더 구조 생성
-- [x] TypeScript 타입 정의
-- [x] 기본 컴포넌트 제작 (Button, Input)
-- [x] 페이지 컴포넌트 생성 (Home, Game, Result)
-- [x] 라우팅 설정 (React Router)
-- [x] 게임 엔진 구현
-- [x] 커스텀 훅 개발
-- [x] 전역 스타일 설정
+1. **이동 단계**: "무궁화 꽃이 피었습니다" 외치는 동안 자유롭게 이동
+2. **정지 단계**: 술래가 돌아보는 순간 움직이면 즉시 탈락
+3. **승리 조건**: 가장 먼저 골인하거나 마지막까지 살아남기
 
-### ✅ Phase 2 완료 (핵심 게임 로직 개선)
-- [x] 실제 무궁화 꽃이 피었습니다 로직 구현
-- [x] 음절별 랜덤 속도 표시 시스템
-- [x] 술래 뒤돌기/돌아보기 정확한 구현
-- [x] 움직임 감지 및 탈락 시스템
-- [x] 골인 시스템 (100% 도달 시 즉시 승리)
-- [x] 연속 게임 진행 (승부가 날 때까지 반복)
-- [x] 결과 페이지 간소화 (등수 + 거리만 표시)
-- [x] 새로하기/재시작 버튼 구현
-- [x] 라운드 개념 제거 (자연스러운 게임 플로우)
-- [x] 시각적 피드백 개선 (걸린 플레이어 표시)
+## 🛠️ 기술 스택
 
-### 🚧 다음 단계 (Phase 3)
-- [ ] 고급 애니메이션 구현
-- [ ] 사운드 시스템 추가
-- [ ] 게임 설정 페이지
-- [ ] PWA 지원
-- [ ] 배포 설정
+- **Frontend**: React 19, TypeScript, Framer Motion
+- **Styling**: CSS Modules, 반응형 디자인
+- **Build**: Create React App
+- **Deployment**: Netlify
 
-## 🎮 주요 기능
-
-### 1. 홈페이지
-- 참가자 이름 입력 (최대 10명)
-- 중복 이름 체크 및 입력 유효성 검사
-- 게임 규칙 안내
-
-### 2. 게임 페이지
-- **실제 게임 로직**: 술래가 뒤돌고 음절을 외칠 때만 이동 가능
-- **음절 시스템**: "무궁화 꽃이 피었습니다"를 한 음절씩 랜덤 속도로 표시
-- **움직임 감지**: 술래가 돌아볼 때 움직이는 플레이어 실시간 감지
-- **즉시 탈락**: 걸린 플레이어 즉시 표시 및 탈락 처리
-- **골인 시스템**: 100% 지점 도달 시 즉시 승리
-- **연속 진행**: 승부가 날 때까지 자동으로 게임 반복
-- **시각적 피드백**: 걸린 플레이어, 골인자 등 상태별 표시
-
-### 3. 결과 페이지
-- **간결한 표시**: 등수와 도달 거리만 표시
-- **새로하기**: 처음부터 새로운 참가자로 게임 시작
-- **재시작**: 같은 참가자들로 새 게임 진행
-- **시각적 랭킹**: 등수별 아이콘 및 색상 구분
-
-### 4. 게임 엔진
-- **다중 게임 모드**: Normal, Fast, Slow, Intense
-- **밸런스 조정**: 라운드별 난이도 증가
-- **통계 시스템**: 실시간 게임 분석
-- **시뮬레이션**: 게임 결과 미리보기 기능
-
-## 🎨 디자인 특징
-
-- **컬러 팔레트**: 한국 전통색 기반의 밝고 활기찬 색상
-- **애니메이션**: Framer Motion을 활용한 부드러운 전환 효과
-- **반응형**: 데스크탑과 모바일 모두 최적화
-- **접근성**: 키보드 네비게이션과 스크린 리더 지원
-
-## 📱 설치 및 실행
+## 🚀 로컬 실행
 
 ```bash
 # 저장소 클론
-git clone <repository-url>
+git clone https://github.com/yourusername/mugunghwa.git
 
 # 의존성 설치
 npm install
 
 # 개발 서버 실행
 npm start
-
-# 빌드
-npm run build
-
-# 테스트 실행
-npm test
 ```
 
-## 🎯 게임 규칙 (실제 무궁화 꽃이 피었습니다)
-
-1. **준비**: 참가자 이름을 입력하고 게임을 시작합니다.
-2. **게임 진행**: 
-   - 술래가 뒤를 돌고 "무궁화 꽃이 피었습니다"를 한 음절씩 외칩니다
-   - 음절이 나오는 동안만 플레이어들이 랜덤하게 전진할 수 있습니다 (30% 확률)
-   - 술래가 모든 음절을 외치고 돌아볼 때 일부 플레이어는 계속 움직일 수 있습니다
-3. **탈락 조건**: 
-   - 술래가 돌아볼 때 움직이고 있는 플레이어는 즉시 탈락합니다
-   - 움직이지 않는 플레이어는 안전합니다
-4. **승리 조건**: 
-   - **골인**: 100% 지점에 먼저 도달하면 즉시 승리
-   - **생존**: 모든 플레이어가 탈락하고 마지막까지 살아남으면 승리
-5. **게임 종료**: 
-   - 누군가 골인하거나 활성 플레이어가 1명 이하 남을 때까지 반복
-6. **등수 결정**: 골인자 1등 > 생존자 2등 > 탈락 순서 역순으로 등수 결정
-
-## 🔧 개발 환경
-
-- **Node.js**: 16.x 이상
-- **npm**: 8.x 이상
-- **Browser**: Chrome, Firefox, Safari, Edge (최신 버전)
-
-## 📋 타입 정의
-
-```typescript
-interface Player {
-  id: string;
-  name: string;
-  position: number;        // 현재 위치 (0-100)
-  isEliminated: boolean;   // 탈락 여부
-  eliminatedRound: number | null; // 탈락 라운드
-  rank: number | null;     // 최종 등수
-  color: string;          // 플레이어 색상
-}
-
-interface GameState {
-  players: Player[];
-  currentRound: number;
-  gamePhase: 'preparation' | 'playing' | 'paused' | 'finished';
-  isItLooking: boolean;    // 술래가 뒤돌아보는 중인지
-  gameSpeed: number;       // 게임 속도 설정
-  totalRounds: number;     // 총 라운드 수
-}
-```
-
-## 🎈 애니메이션 효과
-
-- **텍스트 애니메이션**: "무궁화 꽃이 피었습니다" 타이포그래피
-- **플레이어 이동**: 부드러운 위치 변경 애니메이션
-- **탈락 효과**: 스케일, 투명도, 회전을 조합한 탈락 표현
-- **술래 애니메이션**: 3D 회전을 통한 돌아보기 효과
-
-## 🚀 배포
-
-이 프로젝트는 Netlify를 통해 배포됩니다.
+## 📦 빌드 및 배포
 
 ```bash
-# 빌드 명령어
+# 프로덕션 빌드
 npm run build
 
-# 배포 폴더
-build/
+# 빌드 결과물은 build/ 폴더에 생성됩니다
 ```
 
-## 🤝 기여하기
+## 🎨 주요 개선사항
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+### 성능 최적화
+- Console.log 제거로 PC 브라우저 성능 대폭 향상
+- CSS 애니메이션으로 GPU 가속 활용
+- 불필요한 리렌더링 최소화
 
-## 📄 라이선스
+### 게임 밸런스
+- 도착선 근처 플레이어 이동 확률 증가 (긴장감 극대화)
+- 단계별 확률 조정: 기본 25% → 중반 40% → 마지막 75%
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 개발자
-
-- **개발**: AI Assistant & Human Developer
-- **디자인**: Custom CSS with Korean Traditional Colors
-- **애니메이션**: Framer Motion
+### 사용자 경험
+- 플레이어별 고유 색상과 번호로 구분 용이
+- 실시간 선두 표시 (🥇)
+- 결과 공유 기능 및 빠른 재시작
 
 ---
 
-### 🎯 다음 개발 목표
-
-1. **애니메이션 시스템 완성**
-   - 플레이어 이동 애니메이션 구현
-   - 탈락 효과 애니메이션 추가
-   - 술래 돌아보기 3D 애니메이션
-
-2. **게임 로직 개선**
-   - 게임 밸런스 조정
-   - 다양한 게임 모드 추가
-   - 통계 및 기록 기능
-
-3. **사용자 경험 향상**
-   - 사운드 효과 추가
-   - 더 많은 시각적 피드백
-   - 접근성 개선
-
-4. **성능 최적화**
-   - 코드 스플리팅
-   - 이미지 최적화
-   - 메모리 사용량 최적화
-
-현재 **Phase 1**이 완료되었으며, 모든 기본 구조와 컴포넌트가 구현되었습니다! 🎉
+💡 **재미있게 즐기셨나요?** [피드백이나 제안사항을 남겨주세요!](https://github.com/yourusername/mugunghwa/issues)
