@@ -10,7 +10,6 @@ const ResultPage: React.FC = () => {
   const navigate = useNavigate();
   const gameResult: GameState = location.state?.gameResult;
   const players: Player[] = location.state?.players || [];
-  const playerNames: string[] = location.state?.playerNames || [];
   
   const [showScrollHint, setShowScrollHint] = useState(false);
   const resultsListRef = useRef<HTMLDivElement>(null);
