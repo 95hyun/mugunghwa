@@ -144,9 +144,13 @@
   white-space: nowrap;
 }
 
-/* 플레이어 설정 섹션 */
+/* 참가자 설정 섹션 */
 .players-section {
-  margin-bottom: 25px;
+  margin: 20px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+  border-radius: 15px;
+  border: 2px solid #e0e0e0;
 }
 
 .section-header {
@@ -156,11 +160,12 @@
   margin-bottom: 18px;
 }
 
-.section-header h3 {
+.section-header .section-title {
   color: #333;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 600;
   margin: 0;
+  text-align: left;
 }
 
 .add-player-btn {
@@ -278,7 +283,8 @@
 .actions {
   display: flex;
   justify-content: center;
-  margin-bottom: 15px;
+  margin: 25px 0 20px 0;
+  padding: 0 20px;
 }
 
 .game-info {
@@ -286,6 +292,10 @@
   color: #666;
   font-size: 13px;
   opacity: 0.8;
+  margin-bottom: 10px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 10px;
 }
 
 .game-info p {
@@ -357,7 +367,7 @@
     font-size: 11px;
   }
   
-  .section-header h3 {
+  .section-header .section-title {
     font-size: 16px;
   }
   
@@ -445,7 +455,7 @@
     font-size: 10px;
   }
   
-  .section-header h3 {
+  .section-header .section-title {
     font-size: 15px;
   }
   
@@ -623,6 +633,24 @@
   outline-offset: 2px;
 }
 
+/* 공통 섹션 타이틀 스타일 */
+.section-title {
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* 게임 규칙 섹션 - 최상단 배치 */
+.game-rules-section {
+  margin: 25px 0 30px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #fff8dc 0%, #f0f8e8 100%);
+  border-radius: 15px;
+  border: 2px solid #dde4d1;
+}
+
 /* 참가자 미리보기 섹션 */
 .player-preview-section {
   margin: 20px 0;
@@ -630,19 +658,6 @@
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-radius: 15px;
   border: 2px solid #dee2e6;
-}
-
-.preview-title {
-  color: #333;
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-/* 게임 규칙 섹션 */
-.game-rules-section {
-  margin: 20px 0;
 }
 
 .player-preview-list {
@@ -720,14 +735,24 @@
 
 /* 모바일 최적화 */
 @media (max-width: 768px) {
+  .section-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .game-rules-section {
+    margin: 20px 0 25px 0;
+    padding: 15px;
+  }
+  
   .player-preview-section {
     padding: 15px;
     margin: 15px 0;
   }
   
-  .preview-title {
-    font-size: 14px;
-    margin-bottom: 12px;
+  .players-section {
+    padding: 15px;
+    margin: 15px 0;
   }
   
   .player-preview-card {
@@ -753,14 +778,24 @@
 }
 
 @media (max-width: 480px) {
+  .section-title {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .game-rules-section {
+    margin: 15px 0 20px 0;
+    padding: 12px;
+  }
+  
   .player-preview-section {
     padding: 12px;
     margin: 12px 0;
   }
   
-  .preview-title {
-    font-size: 13px;
-    margin-bottom: 10px;
+  .players-section {
+    padding: 12px;
+    margin: 12px 0;
   }
   
   .player-preview-card {

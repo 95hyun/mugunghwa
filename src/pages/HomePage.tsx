@@ -111,9 +111,61 @@ const HomePage: React.FC = () => {
           등수 추첨 게임
         </motion.p>
 
-        <div className="players-section">
+        {/* 1. 게임 규칙 - 최상단 배치 */}
+        <motion.div 
+          className="game-rules-section"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <h3 className="section-title">게임 규칙</h3>
+          <p className="game-rules">
+            🎯 <strong>게임 방법:</strong><br/>
+            • 술래가 뒤돌고 "무궁화 꽃이 피었습니다"를 외치는 동안 이동 가능<br/>
+            • 술래가 돌아볼 때 움직이면 탈락!<br/>
+            • 먼저 골인하거나 마지막까지 살아남으면 승리!
+          </p>
+        </motion.div>
+
+        {/* 2. 참가자 미리보기 섭션 */}
+        {players.length > 0 && (
+          <motion.div 
+            className="player-preview-section"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h3 className="section-title">참가자 미리보기</h3>
+            <div className="player-preview-list">
+              {players.map((player, idx) => (
+                <div key={player.id} className="player-preview-card">
+                  <div className="player-preview-number">{idx + 1}</div>
+                  <img
+                    src={`/character/running_man_${runningAnimation}.png`}
+                    alt={`${player.name} 아바타`}
+                    className="player-preview-image"
+                  />
+                  <div 
+                    className="player-preview-name" 
+                    style={{ backgroundColor: player.color }}
+                  >
+                    {player.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* 3. 참가자 설정 섭션 */}
+        <motion.div 
+          className="players-section"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
           <div className="section-header">
-            <h3>참가자 설정</h3>
+            <h3 className="section-title">참가자 설정</h3>
             <button
               className="add-player-btn"
               onClick={addPlayer}
@@ -131,7 +183,7 @@ const HomePage: React.FC = () => {
                 className="player-input-row"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.1 + 1.0 }}
               >
                 <div className="player-number">{index + 1}</div>
                 <div className="input-wrapper">
@@ -163,50 +215,15 @@ const HomePage: React.FC = () => {
               {error}
             </motion.div>
           )}
-        </div>
+        </motion.div>
 
-        {/* 참가자 미리보기 섭션 - 항상 표시 */}
-        {players.length > 0 && (
-          <motion.div 
-            className="player-preview-section"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <h4 className="preview-title">참가자 미리보기</h4>
-            <div className="player-preview-list">
-              {players.map((player, idx) => (
-                <div key={player.id} className="player-preview-card">
-                  <div className="player-preview-number">{idx + 1}</div>
-                  <img
-                    src={`/character/running_man_${runningAnimation}.png`}
-                    alt={`${player.name} 아바타`}
-                    className="player-preview-image"
-                  />
-                  <div 
-                    className="player-preview-name" 
-                    style={{ backgroundColor: player.color }}
-                  >
-                    {player.name}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* 게임 규칙 - 항상 표시 */}
-        <div className="game-rules-section">
-          <p className="game-rules">
-            🎯 <strong>게임 규칙:</strong><br/>
-            • 술래가 뒤돌고 "무궁화 꽃이 피었습니다"를 외치는 동안 이동 가능<br/>
-            • 술래가 돌아볼 때 움직이면 탈락!<br/>
-            • 먼저 골인하거나 마지막까지 살아남으면 승리!
-          </p>
-        </div>
-
-        {/* 게임 시작 버튼 */}
-        <div className="actions">
+        {/* 4. 게임 시작 버튼 */}
+        <motion.div 
+          className="actions"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+        >
           <Button
             onClick={startGame}
             variant="primary"
@@ -214,11 +231,17 @@ const HomePage: React.FC = () => {
           >
             게임 시작
           </Button>
-        </div>
+        </motion.div>
         
-        <div className="game-info">
+        {/* 5. 안내 문구 */}
+        <motion.div 
+          className="game-info"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4 }}
+        >
           <p>ℹ️ 최소 2명, 최대 10명까지 참가 가능</p>
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   );
