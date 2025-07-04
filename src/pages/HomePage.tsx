@@ -149,7 +149,7 @@ const HomePage: React.FC = () => {
               <div className="rule-icon">🏃‍♂️</div>
               <div className="rule-content">
                 <div className="rule-text">술래가 "무궁화 꽃이 피었습니다" 외칠 때</div>
-                <div className="rule-sub">자유롭게 이동 가능</div>
+                <div className="rule-sub">랜덤하게 이동합니다</div>
               </div>
             </div>
             
@@ -198,6 +198,7 @@ const HomePage: React.FC = () => {
             />
             <div className="input-guide">
               <span className="guide-text">최소 2명, 최대 10명까지 참가 가능</span>
+              <span className="guide-text">참가자 추가는 콤마(,)를 입력해서 추가하세요.</span>
             </div>
           </div>
           
