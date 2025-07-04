@@ -439,14 +439,15 @@ const GamePage: React.FC = () => {
         gamePhase: 'finished' as const
       };
 
-      // 결과 페이지로 이동
+      // 결과 페이지로 이동 (history replace로 뒤로가기 방지)
       setTimeout(() => {
         navigate('/result', { 
           state: { 
             gameResult: finalState,
             players: finalState.players,
             playerNames: finalState.players.map((p: Player) => p.name) 
-          } 
+          },
+          replace: true
         });
       }, 2000);
 
