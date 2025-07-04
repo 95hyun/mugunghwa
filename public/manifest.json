@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "무궁화게임",
+  "name": "무궁화 꽃이 피었습니다 - 온라인 등수 추첨 게임",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,18 +8,19 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "mugunghwa_logo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "mugunghwa_logo.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#ff6b6b",
+  "background_color": "#ffffff",
+  "description": "친구들과 함께 즐기는 무궁화 꽃이 피었습니다 등수 추첨 게임"
 }

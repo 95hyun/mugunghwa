@@ -1,3 +1,21 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+# 주요 페이지 허용
+Allow: /game
+Allow: /result
+
+# 정적 파일 허용
+Allow: /static/
+Allow: /character/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.ico
+
+# 사이트맵 위치
+Sitemap: https://mugunhwarun.netlify.app/sitemap.xml
+
+# 크롤링 지연 시간 (0.5초)
+Crawl-delay: 0.5
