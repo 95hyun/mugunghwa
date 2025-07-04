@@ -8,7 +8,6 @@ interface GameFieldProps {
   isItLooking: boolean;
   playersMoving: Set<string>;
   currentlyRunningPlayers: Set<string>;
-  runningAnimation: 1 | 2;
   countdownValue: number | string | null;
 }
 
@@ -17,7 +16,6 @@ const GameField: React.FC<GameFieldProps> = ({
   isItLooking,
   playersMoving,
   currentlyRunningPlayers,
-  runningAnimation,
   countdownValue
 }) => {
   return (
@@ -27,7 +25,6 @@ const GameField: React.FC<GameFieldProps> = ({
         isItLooking={isItLooking}
         playersMoving={playersMoving}
         currentlyRunningPlayers={currentlyRunningPlayers}
-        runningAnimation={runningAnimation}
         countdownValue={countdownValue}
       />
     </div>

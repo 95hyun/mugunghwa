@@ -30,27 +30,8 @@ const GamePage: React.FC = () => {
   const [playersMoving, setPlayersMoving] = useState<Set<string>>(new Set());
   const [syllableSpeed, setSyllableSpeed] = useState<'normal' | 'fast' | 'slow'>('normal');
   const [finishedOrder, setFinishedOrder] = useState<string[]>([]); // 골인 순서만 저장
-  const [runningAnimation, setRunningAnimation] = useState<1 | 2>(1); // 달리기 애니메이션 상태
   const [currentlyRunningPlayers, setCurrentlyRunningPlayers] = useState<Set<string>>(new Set()); // 현재 달리고 있는 플레이어들
   const [countdownValue, setCountdownValue] = useState<number | string | null>(null); // 카운트다운 상태 (3, 2, 1, "시작!", null)
-  
-  // 달리기 애니메이션을 위한 주기적 리렌더링 - 음절이 외쳐지는 동안에만
-  useEffect(() => {
-    let animationInterval: NodeJS.Timeout;
-    
-    if (isShowingSyllables || currentlyRunningPlayers.size > 0) {
-      animationInterval = setInterval(() => {
-        // 강제 리렌더링을 위한 더미 상태 업데이트
-        setRunningAnimation(prev => prev === 1 ? 2 : 1);
-      }, 200);
-    }
-    
-    return () => {
-      if (animationInterval) {
-        clearInterval(animationInterval);
-      }
-    };
-  }, [isShowingSyllables, currentlyRunningPlayers.size]);
   
   // Interval 및 Timeout 관리를 위한 ref
   const moveIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -128,13 +109,6 @@ const GamePage: React.FC = () => {
     };
   }, []);
 
-  // 달리기 애니메이션 디버깅
-  useEffect(() => {
-    console.log('Running animation state:', runningAnimation);
-    console.log('Players moving (caught):', Array.from(playersMoving));
-    console.log('Currently running players:', Array.from(currentlyRunningPlayers));
-    console.log('Is showing syllables:', isShowingSyllables);
-  }, [runningAnimation, playersMoving, currentlyRunningPlayers, isShowingSyllables]);
 
   const startCountdown = () => {
     setCountdownValue(3); // 3부터 시작
@@ -283,7 +257,6 @@ const GamePage: React.FC = () => {
           // 새로 골인한 플레이어 - 즉시 finishedOrder 업데이트
           setFinishedOrder(currentOrder => {
             if (!currentOrder.includes(player.id)) {
-              console.log(`${player.name}이 ${currentOrder.length + 1}등으로 골인!`);
               return [...currentOrder, player.id];
             }
             return currentOrder;
@@ -304,8 +277,6 @@ const GamePage: React.FC = () => {
       return updated;
     });
     
-    console.log('이번에 움직인 플레이어:', Array.from(movedPlayers));
-    console.log('현재 달리고 있는 플레이어:', Array.from(movedPlayers));
   };
 
   const taggerTurnsAround = () => {
@@ -350,12 +321,10 @@ const GamePage: React.FC = () => {
       nextRoundTimeoutRef.current = null;
     }
     
-    console.log('탈락 처리 - 걸린 플레이어:', Array.from(caughtPlayerIds)); // 디버깅용
     
     setGameState(prev => {
       const newPlayers = prev.players.map(player => {
         if (caughtPlayerIds.has(player.id)) {
-          console.log(`${player.name} 탈락 처리됨`); // 디버깅용
           return {
             ...player,
             isEliminated: true,
@@ -410,7 +379,6 @@ const GamePage: React.FC = () => {
     
     // 최신 골인 순서를 가져와서 등수 계산
     setFinishedOrder(currentFinishedOrder => {
-      console.log('게임 종료 - 골인 순서:', currentFinishedOrder);
       
       const finalPlayers = [...state.players];
       let currentRank = 1;
@@ -420,7 +388,6 @@ const GamePage: React.FC = () => {
         const playerIndex = finalPlayers.findIndex(p => p.id === playerId);
         if (playerIndex !== -1) {
           finalPlayers[playerIndex] = { ...finalPlayers[playerIndex], rank: currentRank };
-          console.log(`${finalPlayers[playerIndex].name}에게 ${currentRank}등 할당`);
           currentRank++;
         }
       });
@@ -437,7 +404,6 @@ const GamePage: React.FC = () => {
         const playerIndex = finalPlayers.findIndex(p => p.id === player.id);
         if (playerIndex !== -1) {
           finalPlayers[playerIndex] = { ...finalPlayers[playerIndex], rank: currentRank };
-          console.log(`${player.name}에게 ${currentRank}등 할당`);
           currentRank++;
         }
       });
@@ -450,12 +416,10 @@ const GamePage: React.FC = () => {
         const playerIndex = finalPlayers.findIndex(p => p.id === player.id);
         if (playerIndex !== -1) {
           finalPlayers[playerIndex] = { ...finalPlayers[playerIndex], rank: currentRank };
-          console.log(`${player.name}에게 ${currentRank}등 할당`);
           currentRank++;
         }
       });
 
-      console.log('최종 플레이어들:', finalPlayers);
 
       const finalState = {
         ...state,
@@ -544,7 +508,6 @@ const GamePage: React.FC = () => {
             isItLooking={gameState.isItLooking}
             playersMoving={playersMoving}
             currentlyRunningPlayers={currentlyRunningPlayers}
-            runningAnimation={runningAnimation}
             countdownValue={countdownValue}
           />
 

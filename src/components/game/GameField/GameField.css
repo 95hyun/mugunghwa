@@ -70,6 +70,10 @@
   transition: all 0.2s ease;
 }
 
+.player-image.running {
+  animation: runningMotion 0.4s ease-in-out infinite;
+}
+
 /* 플레이어 좌우 배치 */
 .player:nth-child(1) { left: 15%; }
 .player:nth-child(2) { left: 30%; }
@@ -112,6 +116,17 @@
   0%, 100% { transform: translateY(0); }
   25% { transform: translateY(-5px); }
   75% { transform: translateY(5px); }
+}
+
+@keyframes runningMotion {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg); 
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3)) hue-rotate(0deg);
+  }
+  50% { 
+    transform: scale(1.05) rotate(2deg); 
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3)) hue-rotate(10deg);
+  }
 }
 
 .player-name {

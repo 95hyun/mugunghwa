@@ -6,7 +6,6 @@ interface PlayerProps {
   player: PlayerType;
   isMoving: boolean;
   isRunning: boolean;
-  runningAnimation: 1 | 2;
   countdownValue: number | string | null;
   isLeader: boolean;
 }
@@ -15,7 +14,6 @@ const Player: React.FC<PlayerProps> = ({
   player, 
   isMoving, 
   isRunning, 
-  runningAnimation, 
   countdownValue,
   isLeader
 }) => {
@@ -39,14 +37,9 @@ const Player: React.FC<PlayerProps> = ({
       transition={{ duration: 0.5 }}
     >
       <img 
-        src={
-          // 음절이 외쳐지는 동안 움직인 플레이어들 또는 술래가 돌아볼 때 걸린 플레이어들
-          isRunning || isMoving
-            ? `/character/running_man_${runningAnimation}.png`
-            : '/character/running_man_1.png'
-        }
+        src="/character/running_man_1.png"
         alt={`${player.name} 아바타`}
-        className="player-image"
+        className={`player-image ${isRunning || isMoving ? 'running' : ''}`}
       />
       <span 
         className="player-name"

@@ -10,7 +10,6 @@ interface RaceTrackProps {
   isItLooking: boolean;
   playersMoving: Set<string>;
   currentlyRunningPlayers: Set<string>;
-  runningAnimation: 1 | 2;
   countdownValue: number | string | null;
 }
 
@@ -19,7 +18,6 @@ const RaceTrack: React.FC<RaceTrackProps> = ({
   isItLooking,
   playersMoving,
   currentlyRunningPlayers,
-  runningAnimation,
   countdownValue
 }) => {
   // 선두 계산: 살아있고 아직 승리하지 않은 플레이어들 중 최고 position
@@ -35,7 +33,6 @@ const RaceTrack: React.FC<RaceTrackProps> = ({
           player={player}
           isMoving={playersMoving.has(player.id)}
           isRunning={currentlyRunningPlayers.has(player.id)}
-          runningAnimation={runningAnimation}
           countdownValue={countdownValue}
           isLeader={hasLeader && !player.isEliminated && player.position < 200 && player.position === maxPosition}
         />
