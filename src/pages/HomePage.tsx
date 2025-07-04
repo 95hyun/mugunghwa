@@ -135,13 +135,36 @@ const HomePage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <h3 className="section-title">게임 규칙</h3>
-          <p className="game-rules">
-            🎯 <strong>게임 방법:</strong><br/>
-            • 술래가 뒤돌고 "무궁화 꽃이 피었습니다"를 외치는 동안 이동 가능<br/>
-            • 술래가 돌아볼 때 움직이면 탈락!<br/>
-            • 먼저 골인하거나 마지막까지 살아남으면 승리!
-          </p>
+          <div className="rules-header">
+            <span className="rules-icon">🎯</span>
+            <h3 className="rules-title">게임 방법</h3>
+          </div>
+          
+          <div className="rules-grid">
+            <div className="rule-item">
+              <div className="rule-icon">🏃‍♂️</div>
+              <div className="rule-content">
+                <div className="rule-text">술래가 "무궁화 꽃이 피었습니다" 외칠 때</div>
+                <div className="rule-sub">자유롭게 이동 가능</div>
+              </div>
+            </div>
+            
+            <div className="rule-item">
+              <div className="rule-icon danger">⚠️</div>
+              <div className="rule-content">
+                <div className="rule-text">술래가 돌아보는 순간 움직이면</div>
+                <div className="rule-sub">즉시 탈락!</div>
+              </div>
+            </div>
+            
+            <div className="rule-item">
+              <div className="rule-icon success">🏆</div>
+              <div className="rule-content">
+                <div className="rule-text">가장 먼저 골인하거나</div>
+                <div className="rule-sub">마지막까지 살아남으면 승리</div>
+              </div>
+            </div>
+          </div>
         </motion.div>
 
         {/* 2. 참가자 미리보기 섭션 */}
