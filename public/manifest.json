@@ -1,6 +1,6 @@
 {
   "short_name": "무궁화게임",
-  "name": "무궁화 꽃이 피었습니다 - 온라인 등수 추첨 게임",
+  "name": "무궁화 꽃이 피었습니다 - 순서 추첨 웹게임",
   "icons": [
     {
       "src": "favicon.ico",
@@ -22,5 +22,5 @@
   "display": "standalone",
   "theme_color": "#ff6b6b",
   "background_color": "#ffffff",
-  "description": "친구들과 함께 즐기는 무궁화 꽃이 피었습니다 등수 추첨 게임"
+  "description": "친구들과 함께 즐기는 무궁화 꽃이 피었습니다 순서 추첨 게임"
 }
