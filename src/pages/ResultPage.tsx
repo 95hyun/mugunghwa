@@ -141,7 +141,11 @@ const ResultPage: React.FC = () => {
   };
 
   return (
-    <div className="result-page">
+    <>
+      <title>게임 결과 | 무궁화 꽃이 피었습니다</title>
+      <meta name="description" content="무궁화 꽃이 피었습니다 게임 결과를 확인하세요. 누가 1등을 했을까요?" />
+      
+      <div className="result-page">
       <motion.div 
         className="result-container"
         initial={{ opacity: 0, y: 30 }}
@@ -245,7 +249,8 @@ const ResultPage: React.FC = () => {
           <div className="floating-copy-toast">게임 결과가 클립보드에 복사되었습니다!</div>
         )}
       </motion.div>
-    </div>
+      </div>
+    </>
   );
 };
 

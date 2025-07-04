@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import { Player } from '../types/game';
@@ -105,15 +104,13 @@ const HomePage: React.FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>무궁화 꽃이 피었습니다 | 온라인 등수 추첨 게임</title>
-        <meta name="description" content="친구들과 함께 즐기는 무궁화 꽃이 피었습니다 게임! 2-10명이 참가할 수 있는 온라인 등수 추첨 게임. 지금 바로 무료로 플레이하세요." />
-        <meta name="keywords" content="무궁화꽃이피었습니다, 등수추첨, 온라인게임, 친구게임, 무료게임, 웹게임" />
-        <link rel="canonical" href="https://mugunhwarun.netlify.app/" />
-        <meta property="og:title" content="무궁화 꽃이 피었습니다 - 온라인 등수 추첨 게임" />
-        <meta property="og:description" content="친구들과 함께 즐기는 재미있는 등수 추첨 게임" />
-        <meta property="og:url" content="https://mugunhwarun.netlify.app/" />
-      </Helmet>
+      <title>무궁화 꽃이 피었습니다 | 온라인 등수 추첨 게임</title>
+      <meta name="description" content="친구들과 함께 즐기는 무궁화 꽃이 피었습니다 게임! 2-10명이 참가할 수 있는 온라인 등수 추첨 게임. 지금 바로 무료로 플레이하세요." />
+      <meta name="keywords" content="무궁화꽃이피었습니다, 등수추첨, 온라인게임, 친구게임, 무료게임, 웹게임" />
+      <link rel="canonical" href="https://mugunhwarun.netlify.app/" />
+      <meta property="og:title" content="무궁화 꽃이 피었습니다 - 온라인 등수 추첨 게임" />
+      <meta property="og:description" content="친구들과 함께 즐기는 재미있는 등수 추첨 게임" />
+      <meta property="og:url" content="https://mugunhwarun.netlify.app/" />
       
       <div className="home-page">
         <motion.div 

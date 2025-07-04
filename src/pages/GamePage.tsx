@@ -498,7 +498,11 @@ const GamePage: React.FC = () => {
   }).filter((player): player is FinishedPlayer => player !== null);
 
   return (
-    <div className="game-page">
+    <>
+      <title>게임 진행 중 | 무궁화 꽃이 피었습니다</title>
+      <meta name="description" content="무궁화 꽃이 피었습니다 게임이 진행 중입니다. 술래가 돌아보기 전에 골인하세요!" />
+      
+      <div className="game-page">
       <GameHeader 
         activePlayers={activePlayers.length}
         winners={winners.length}
@@ -536,7 +540,8 @@ const GamePage: React.FC = () => {
       {gameState.gamePhase === 'finished' && (
         <ResultLoadingScreen />
       )}
-    </div>
+      </div>
+    </>
   );
 };
 
