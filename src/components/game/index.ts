@@ -2,7 +2,7 @@
 export { default as GameHeader } from './GameHeader/GameHeader';
 export { default as CountdownOverlay } from './CountdownOverlay/CountdownOverlay';
 export { default as SyllableOverlay } from './SyllableOverlay/SyllableOverlay';
-export { default as PreparationScreen } from './PreparationScreen/PreparationScreen';
+// export { default as PreparationScreen } from './PreparationScreen/PreparationScreen'; // 제거됨 - HomePage로 통합
 export { default as ResultLoadingScreen } from './ResultLoadingScreen/ResultLoadingScreen';
 export { default as LiveRankings } from './GameOverlays/LiveRankings';
 export { default as CaughtAlert } from './GameOverlays/CaughtAlert';

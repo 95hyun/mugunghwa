@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Player, GameState } from '../types/game';
-import { GameHeader, CountdownOverlay, SyllableOverlay, PreparationScreen, ResultLoadingScreen, LiveRankings, CaughtAlert, SafeAlert, GameField, type FinishedPlayer } from '../components/game';
+import { GameHeader, CountdownOverlay, SyllableOverlay, ResultLoadingScreen, LiveRankings, CaughtAlert, SafeAlert, GameField, type FinishedPlayer } from '../components/game';
 import './GamePage.css';
 import './GameFloating.css';
 
@@ -17,7 +17,7 @@ const GamePage: React.FC = () => {
   const [gameState, setGameState] = useState<GameState>({
     players: [],
     currentRound: 0,
-    gamePhase: 'preparation',
+    gamePhase: 'playing',
     isItLooking: false,
     gameSpeed: 3,
     totalRounds: 0
@@ -52,22 +52,12 @@ const GamePage: React.FC = () => {
     };
   }, [isShowingSyllables, currentlyRunningPlayers.size]);
   
-  // 준비화면 달리기 애니메이션 (게임 준비 상태일 때만)
+  // 게임 자동 시작 (HomePage에서 바로 게임 시작)
   useEffect(() => {
-    let preparationAnimationInterval: NodeJS.Timeout;
-    
-    if (gameState.gamePhase === 'preparation') {
-      preparationAnimationInterval = setInterval(() => {
-        setRunningAnimation(prev => prev === 1 ? 2 : 1);
-      }, 500); // 0.5초마다 애니메이션 프레임 변경
+    if (gameState.gamePhase === 'playing' && gameState.players.length > 0) {
+      startGame();
     }
-    
-    return () => {
-      if (preparationAnimationInterval) {
-        clearInterval(preparationAnimationInterval);
-      }
-    };
-  }, [gameState.gamePhase]);
+  }, [gameState.gamePhase, gameState.players.length]);
   
   // Interval 및 Timeout 관리를 위한 ref
   const moveIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -124,7 +114,7 @@ const GamePage: React.FC = () => {
     setGameState(prev => ({
       ...prev,
       players: initialPlayers,
-      gamePhase: 'preparation'
+      gamePhase: 'playing'
     }));
   }, [playerNames, navigate]);
 
@@ -546,14 +536,6 @@ const GamePage: React.FC = () => {
         activePlayers={activePlayers.length}
         winners={winners.length}
       />
-
-      {gameState.gamePhase === 'preparation' && (
-        <PreparationScreen 
-          players={gameState.players}
-          onStartGame={startGame}
-          runningAnimation={runningAnimation}
-        />
-      )}
 
       {gameState.gamePhase === 'playing' && (
         <>

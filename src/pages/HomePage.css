@@ -623,6 +623,178 @@
   outline-offset: 2px;
 }
 
+/* 게임 준비 섹션 스타일 */
+.preparation-section {
+  margin-top: 30px;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+}
+
+.preparation-section h3 {
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.preparation-section p {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.player-preview-list {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 12px 0;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+  justify-content: center;
+}
+
+.player-preview-list::-webkit-scrollbar {
+  display: none;
+}
+
+.player-preview-card {
+  min-width: 80px;
+  max-width: 120px;
+  background: #f8f8f8;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.player-preview-number {
+  font-size: 13px;
+  font-weight: bold;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.player-preview-image {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 4px;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.player-preview-name {
+  font-size: 12px;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin-top: 2px;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.game-rules {
+  background: #f8f9fa;
+  padding: 18px;
+  border-radius: 12px;
+  border-left: 4px solid #4ecdc4;
+  text-align: left !important;
+  line-height: 1.6;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.game-rules strong {
+  color: #333;
+}
+
+.preparation-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .preparation-section {
+    padding: 20px;
+    margin-top: 25px;
+  }
+  
+  .preparation-section h3 {
+    font-size: 18px;
+  }
+  
+  .player-preview-card {
+    min-width: 64px;
+    max-width: 90px;
+    padding: 6px 4px;
+  }
+  
+  .player-preview-image {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .player-preview-name {
+    font-size: 11px;
+    padding: 1px 4px;
+  }
+  
+  .game-rules {
+    padding: 15px;
+    font-size: 13px;
+  }
+  
+  .preparation-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .preparation-section {
+    padding: 15px;
+    margin-top: 20px;
+  }
+  
+  .preparation-section h3 {
+    font-size: 16px;
+  }
+  
+  .player-preview-card {
+    min-width: 65px;
+    max-width: 65px;
+    padding: 8px 5px;
+  }
+  
+  .player-preview-image {
+    width: 26px;
+    height: 26px;
+  }
+  
+  .player-preview-name {
+    font-size: 9px;
+  }
+  
+  .game-rules {
+    padding: 12px;
+    font-size: 12px;
+  }
+}
+
 /* 애니메이션 최적화 */
 .player-preview-image {
   will-change: transform;
