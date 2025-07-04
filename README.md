@@ -1,6 +1,7 @@
 # 🌺 무궁화 꽃이 피었습니다
 
-> 웹으로 즐기는 클래식 게임! 친구들과 함께 스릴 넘치는 등수 추첨 게임을 경험해보세요.
+> 모임에서 순서를 정하거나, 추첨을 해야한다구요? 
+> 웹으로 즐기는 클래식 게임! 지인과 함께 스릴 넘치는 등수 추첨 게임을 경험해보세요.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-brightgreen)](https://mugunhwarun.netlify.app)
 [![React](https://img.shields.io/badge/React-19.1.0-blue)](https://reactjs.org/)
@@ -9,7 +10,8 @@
 ## 🎮 게임 소개
 
 전통적인 "무궁화 꽃이 피었습니다" 게임을 현대적인 웹 환경에서 재해석한 등수 추첨 게임입니다. 
-AI가 플레이어들의 움직임을 시뮬레이션하여 예측 불가능한 재미를 선사합니다.
+술래가 "무궁화 꽃이 피었습니다"를 외치는 동안 전진해서 골인하세요! 잡히면 사망!
+조작할 수 없어요! 운에 맡기세요!
 
 ### 🔗 플레이하기
 **👉 [mugunhwarun.netlify.app](https://mugunhwarun.netlify.app)**
