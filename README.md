@@ -17,7 +17,7 @@
 > 조작할 수 없어요! 운에 맡기세요!
 
 ### 🔗 플레이하기
-**👉 [mugunhwarun.netlify.app](https://mugunhwarun.netlify.app)**
+**👉 [mugunhwarun.netlify.app](https://mugunhwarun.netlify.app/)**
 
 ## ✨ 주요 기능
 
